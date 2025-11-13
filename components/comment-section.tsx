@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import { MessageSquare, User, Send, Reply } from "lucide-react"
+import { MessageSquare, User, Send, Reply, X } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
 import { tr } from "date-fns/locale"
 
@@ -90,39 +90,44 @@ export function CommentSection({ postId, comments }: CommentSectionProps) {
   }
 
   const CommentItem = ({ comment, isReply = false }: { comment: Comment; isReply?: boolean }) => (
-    <div className={`${isReply ? "ml-12" : ""}`}>
-      <div className="flex gap-x-3">
-        {comment.author.image ? (
-          <Image
-            src={comment.author.image}
-            alt={comment.author.name || "Kullanıcı"}
-            width={40}
-            height={40}
-            className="rounded-full"
-          />
-        ) : (
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700">
-            <User className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-          </div>
-        )}
-        <div className="flex-1">
-          <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-800">
-            <div className="mb-2 flex items-center justify-between">
-              <span className="font-semibold text-gray-900 dark:text-white">
+    <div className={`${isReply ? "ml-12 mt-4" : ""} animate-in fade-in slide-in-from-bottom duration-500`}>
+      <div className="flex gap-4">
+        <div className="relative flex-shrink-0">
+          {comment.author.image ? (
+            <>
+              <div className="absolute inset-0 bg-primary/20 rounded-full blur-sm" />
+              <Image
+                src={comment.author.image}
+                alt={comment.author.name || "Kullanıcı"}
+                width={40}
+                height={40}
+                className="relative rounded-full ring-2 ring-primary/20"
+              />
+            </>
+          ) : (
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-purple-500">
+              <User className="h-5 w-5 text-white" />
+            </div>
+          )}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="rounded-2xl glass-card p-5 hover:shadow-lg transition-all duration-300">
+            <div className="mb-3 flex items-start justify-between gap-2">
+              <span className="font-bold text-foreground">
                 {comment.author.name || "Anonim"}
               </span>
-              <span className="text-xs text-gray-500 dark:text-gray-400">
+              <span className="text-xs text-muted-foreground whitespace-nowrap">
                 {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true, locale: tr })}
               </span>
             </div>
-            <p className="text-gray-700 dark:text-gray-300">{comment.content}</p>
+            <p className="text-foreground leading-relaxed">{comment.content}</p>
           </div>
           {!isReply && session && (
             <button
               onClick={() => setReplyTo(replyTo === comment.id ? null : comment.id)}
-              className="mt-2 inline-flex items-center gap-x-1 text-sm text-blue-600 hover:text-blue-500 dark:text-blue-400"
+              className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors duration-200 group"
             >
-              <Reply className="h-3 w-3" />
+              <Reply className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
               Yanıtla
             </button>
           )}
@@ -132,33 +137,34 @@ export function CommentSection({ postId, comments }: CommentSectionProps) {
                 e.preventDefault()
                 handleSubmitReply(comment.id)
               }}
-              className="mt-3"
+              className="mt-4 animate-in fade-in slide-in-from-top duration-300"
             >
               <textarea
                 value={replyContent}
                 onChange={(e) => setReplyContent(e.target.value)}
                 placeholder="Yanıtınızı yazın..."
                 rows={3}
-                className="block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                className="block w-full rounded-xl border-2 border-border glass px-4 py-3 text-foreground shadow-sm placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200"
               />
-              <div className="mt-2 flex justify-end gap-x-2">
+              <div className="mt-3 flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => {
                     setReplyTo(null)
                     setReplyContent("")
                   }}
-                  className="rounded-md px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                  className="btn-ghost"
                 >
+                  <X className="h-4 w-4" />
                   İptal
                 </button>
                 <button
                   type="submit"
                   disabled={loading || !replyContent.trim()}
-                  className="inline-flex items-center gap-x-1 rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-blue-500 disabled:opacity-50"
+                  className="btn-primary"
                 >
-                  <Send className="h-3 w-3" />
-                  Gönder
+                  <Send className="h-4 w-4" />
+                  {loading ? "Gönderiliyor..." : "Gönder"}
                 </button>
               </div>
             </form>
@@ -166,7 +172,7 @@ export function CommentSection({ postId, comments }: CommentSectionProps) {
         </div>
       </div>
       {comment.replies && comment.replies.length > 0 && (
-        <div className="mt-4 space-y-4">
+        <div className="mt-4 space-y-4 border-l-2 border-border/50 pl-4">
           {comment.replies.map((reply) => (
             <CommentItem key={reply.id} comment={reply} isReply />
           ))}
@@ -176,39 +182,74 @@ export function CommentSection({ postId, comments }: CommentSectionProps) {
   )
 
   return (
-    <div className="border-t border-gray-200 pt-8 dark:border-gray-700">
-      <div className="mb-6 flex items-center gap-x-2">
-        <MessageSquare className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Yorumlar ({comments.length})
-        </h2>
+    <div className="border-t border-border/50 pt-12">
+      <div className="mb-8 flex items-center gap-3">
+        <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-purple-500 shadow-lg shadow-primary/25">
+          <MessageSquare className="h-6 w-6 text-white" />
+        </div>
+        <div>
+          <h2 className="text-2xl lg:text-3xl font-bold text-foreground">
+            Yorumlar
+          </h2>
+          <p className="text-sm text-muted-foreground mt-0.5">
+            {comments.length} yorum yapıldı
+          </p>
+        </div>
       </div>
 
       {/* New Comment Form */}
       {session ? (
-        <form onSubmit={handleSubmitComment} className="mb-8">
-          <textarea
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Yorumunuzu yazın..."
-            rows={4}
-            className="block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-          />
-          <div className="mt-3 flex justify-end">
-            <button
-              type="submit"
-              disabled={loading || !newComment.trim()}
-              className="inline-flex items-center gap-x-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <Send className="h-4 w-4" />
-              {loading ? "Gönderiliyor..." : "Yorum Yap"}
-            </button>
+        <form onSubmit={handleSubmitComment} className="mb-10">
+          <div className="flex gap-4">
+            <div className="relative flex-shrink-0">
+              {session.user.image ? (
+                <>
+                  <div className="absolute inset-0 bg-primary/20 rounded-full blur-sm" />
+                  <Image
+                    src={session.user.image}
+                    alt={session.user.name || "User"}
+                    width={40}
+                    height={40}
+                    className="relative rounded-full ring-2 ring-primary/30"
+                  />
+                </>
+              ) : (
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-purple-500">
+                  <User className="h-5 w-5 text-white" />
+                </div>
+              )}
+            </div>
+            <div className="flex-1">
+              <textarea
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Yorumunuzu yazın..."
+                rows={4}
+                className="block w-full rounded-xl border-2 border-border glass px-4 py-3 text-foreground shadow-lg placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200"
+              />
+              <div className="mt-3 flex justify-end">
+                <button
+                  type="submit"
+                  disabled={loading || !newComment.trim()}
+                  className="btn-primary"
+                >
+                  <Send className="h-4 w-4" />
+                  {loading ? "Gönderiliyor..." : "Yorum Yap"}
+                </button>
+              </div>
+            </div>
           </div>
         </form>
       ) : (
-        <div className="mb-8 rounded-lg border border-gray-200 bg-gray-50 p-4 text-center dark:border-gray-700 dark:bg-gray-800">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Yorum yapmak için giriş yapmalısınız.
+        <div className="mb-10 rounded-2xl glass-card p-8 text-center">
+          <div className="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center mb-4 shadow-lg shadow-primary/25">
+            <MessageSquare className="h-8 w-8 text-white" />
+          </div>
+          <p className="text-lg font-semibold text-foreground mb-2">
+            Yorum yapmak için giriş yapın
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Düşüncelerinizi paylaşmak için hesabınıza giriş yapmanız gerekmektedir.
           </p>
         </div>
       )}
@@ -216,12 +257,24 @@ export function CommentSection({ postId, comments }: CommentSectionProps) {
       {/* Comments List */}
       <div className="space-y-6">
         {comments.length > 0 ? (
-          comments.map((comment) => <CommentItem key={comment.id} comment={comment} />)
+          comments.map((comment, index) => (
+            <div 
+              key={comment.id}
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <CommentItem comment={comment} />
+            </div>
+          ))
         ) : (
-          <div className="py-12 text-center">
-            <MessageSquare className="mx-auto h-12 w-12 text-gray-400" />
-            <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-              Henüz yorum yapılmamış. İlk yorumu siz yapın!
+          <div className="py-16 text-center rounded-2xl glass-card">
+            <div className="mx-auto w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/10 to-purple-500/10 flex items-center justify-center mb-6">
+              <MessageSquare className="h-10 w-10 text-primary" />
+            </div>
+            <p className="text-lg font-semibold text-foreground mb-2">
+              Henüz yorum yok
+            </p>
+            <p className="text-sm text-muted-foreground max-w-md mx-auto">
+              Bu habere ilk yorumu yapan siz olun! Düşüncelerinizi bizimle paylaşın.
             </p>
           </div>
         )}
