@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import Parser from "rss-parser"
-import { generateNewsContent, generateNewsTitle, generateExcerpt } from "@/lib/openai"
+import { generateNewsContent, generateNewsTitle, generateExcerpt } from "@/lib/gemini"
 
 const parser = new Parser()
 

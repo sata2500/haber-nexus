@@ -26,7 +26,7 @@ Bu proje **Salih TANRISEVEN** adına geliştirilmiştir.
 | **Veritabanı** | [PostgreSQL](https://www.postgresql.org/) ([Vercel Postgres](https://vercel.com/storage/postgres)) | Güçlü, ilişkisel ve ölçeklenebilir bir veritabanı çözümü. |
 | **ORM** | [Prisma](https://www.prisma.io/) | Veritabanı şeması yönetimi ve sorgulamaları için modern ve tip güvenli bir araç. |
 | **Authentication** | [NextAuth.js](https://next-auth.js.org/) | Google, e-posta/parola gibi çeşitli kimlik doğrulama yöntemlerini kolayca entegre etmek için. |
-| **Yapay Zeka** | [OpenAI API](https://openai.com/api/) | İçerik üretimi, özetleme, araştırma ve başlık oluşturma gibi görevler için. |
+| **Yapay Zeka** | [Google Gemini API](https://ai.google.dev/gemini-api) | İçerik üretimi, özetleme, araştırma ve başlık oluşturma gibi görevler için. |
 | **Deployment** | [Vercel](https://vercel.com/) | Next.js ile tam entegre, CI/CD süreçlerini otomatikleştiren ve global CDN sunan bir platform. |
 | **UI Bileşenleri** | [Shadcn/ui](https://ui.shadcn.com/) & [Lucide React](https://lucide.dev/) | Erişilebilir ve özelleştirilebilir UI bileşenleri ve ikonlar. |
 | **Tema Yönetimi** | [next-themes](https://github.com/pacocoursey/next-themes) | Aydınlık ve karanlık mod geçişlerini kolayca yönetmek için. |
@@ -59,13 +59,14 @@ DATABASE_URL="YOUR_DATABASE_URL"
 # NextAuth Ayarları
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="your-secret-key-here-change-in-production"
+AUTH_SECRET="your-secret-key-here-change-in-production"
 
 # Google OAuth Kimlik Bilgileri
 GOOGLE_CLIENT_ID="YOUR_GOOGLE_CLIENT_ID"
 GOOGLE_CLIENT_SECRET="YOUR_GOOGLE_CLIENT_SECRET"
 
-# OpenAI API Anahtarı
-OPENAI_API_KEY="YOUR_OPENAI_API_KEY"
+# Google Gemini API Anahtarı
+GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
 ```
 
 ### 4. Veritabanı Migrasyonu
