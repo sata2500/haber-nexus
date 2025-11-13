@@ -1,44 +1,45 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Clock, TrendingUp } from 'lucide-react'
+import { Article, Media, Category, User } from '@/types'
 
-// Geçici mock data - sonra Payload CMS'den gelecek
-const featuredNews = {
-  id: 1,
-  title: 'Yapay Zeka Teknolojisinde Yeni Dönem: Google Gemini 2.0 Tanıtıldı',
-  excerpt: 'Google, yapay zeka modellerinde çığır açan Gemini 2.0 versiyonunu tanıttı. Yeni model, önceki versiyona göre 10 kat daha hızlı ve daha doğru sonuçlar üretiyor.',
-  image: '/placeholder-hero.jpg',
-  category: 'Teknoloji',
-  author: 'Ahmet Yılmaz',
-  date: '13 Kasım 2025',
-  readTime: '5 dk',
-  slug: 'yapay-zeka-teknolojisinde-yeni-donem',
+interface HeroSectionProps {
+  featuredArticle: Article | null
+  trendingArticles: Article[]
 }
 
-const trendingNews = [
-  {
-    id: 2,
-    title: 'Ekonomide Yeni Gelişmeler: Merkez Bankası Faiz Kararını Açıkladı',
-    category: 'Ekonomi',
-    date: '13 Kasım 2025',
-    slug: 'ekonomide-yeni-gelismeler',
-  },
-  {
-    id: 3,
-    title: 'Dünya Kupası Elemeleri: Türkiye Kritik Maça Hazırlanıyor',
-    category: 'Spor',
-    date: '13 Kasım 2025',
-    slug: 'dunya-kupasi-elemeleri',
-  },
-  {
-    id: 4,
-    title: 'İklim Zirvesi Sonuçlandı: Tarihi Kararlar Alındı',
-    category: 'Dünya',
-    date: '13 Kasım 2025',
-    slug: 'iklim-zirvesi-sonuclandi',
-  },
-]
+export function HeroSection({ featuredArticle, trendingArticles }: HeroSectionProps) {
+  // Eğer featured article yoksa, placeholder göster
+  if (!featuredArticle) {
+    return (
+      <section className="bg-background border-b border-border">
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">Henüz öne çıkan haber bulunmuyor.</p>
+          </div>
+        </div>
+      </section>
+    )
+  }
 
-export function HeroSection() {
+  const featuredImage = typeof featuredArticle.featuredImage === 'object' 
+    ? featuredArticle.featuredImage as Media 
+    : null
+  const category = typeof featuredArticle.category === 'object'
+    ? featuredArticle.category as Category
+    : null
+  const author = typeof featuredArticle.author === 'object'
+    ? featuredArticle.author as User
+    : null
+
+  const publishedDate = featuredArticle.publishedAt 
+    ? new Date(featuredArticle.publishedAt).toLocaleDateString('tr-TR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    : ''
+
   return (
     <section className="bg-background border-b border-border">
       <div className="container mx-auto px-4 py-8">
@@ -46,11 +47,21 @@ export function HeroSection() {
           {/* Featured News */}
           <div className="lg:col-span-2">
             <Link
-              href={`/haber/${featuredNews.slug}`}
+              href={`/haber/${featuredArticle.slug}`}
               className="group block relative overflow-hidden rounded-xl bg-muted aspect-[16/9] lg:aspect-[21/9]"
             >
-              {/* Placeholder Image */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600" />
+              {/* Featured Image */}
+              {featuredImage?.url ? (
+                <Image
+                  src={featuredImage.url}
+                  alt={featuredImage.alt || featuredArticle.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600" />
+              )}
               
               {/* Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
@@ -58,24 +69,26 @@ export function HeroSection() {
               {/* Content */}
               <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="px-3 py-1 bg-blue-600 rounded-full text-xs font-medium">
-                    {featuredNews.category}
-                  </span>
+                  {category && (
+                    <span className="px-3 py-1 bg-blue-600 rounded-full text-xs font-medium">
+                      {category.name}
+                    </span>
+                  )}
                   <span className="flex items-center gap-1 text-sm text-white/80">
                     <Clock className="h-4 w-4" />
-                    {featuredNews.readTime}
+                    {featuredArticle.views} görüntülenme
                   </span>
                 </div>
                 <h2 className="text-2xl lg:text-3xl font-bold mb-2 group-hover:text-blue-400 transition-colors">
-                  {featuredNews.title}
+                  {featuredArticle.title}
                 </h2>
                 <p className="text-white/80 text-sm lg:text-base mb-3 line-clamp-2">
-                  {featuredNews.excerpt}
+                  {featuredArticle.excerpt}
                 </p>
                 <div className="flex items-center gap-3 text-sm text-white/70">
-                  <span>{featuredNews.author}</span>
-                  <span>•</span>
-                  <span>{featuredNews.date}</span>
+                  {author && <span>{author.name || author.email}</span>}
+                  {author && <span>•</span>}
+                  <span>{publishedDate}</span>
                 </div>
               </div>
             </Link>
@@ -89,30 +102,50 @@ export function HeroSection() {
                 Trend Haberler
               </h3>
             </div>
-            {trendingNews.map((news, index) => (
-              <Link
-                key={news.id}
-                href={`/haber/${news.slug}`}
-                className="group block p-4 rounded-lg bg-card hover:bg-accent transition-colors border border-border"
-              >
-                <div className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
-                    {index + 1}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <span className="inline-block px-2 py-0.5 bg-primary/10 text-primary rounded text-xs font-medium mb-2">
-                      {news.category}
-                    </span>
-                    <h4 className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-1">
-                      {news.title}
-                    </h4>
-                    <p className="text-xs text-muted-foreground">
-                      {news.date}
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            ))}
+            {trendingArticles.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Henüz trend haber bulunmuyor.</p>
+            ) : (
+              trendingArticles.map((article, index) => {
+                const articleCategory = typeof article.category === 'object'
+                  ? article.category as Category
+                  : null
+                
+                const articleDate = article.publishedAt 
+                  ? new Date(article.publishedAt).toLocaleDateString('tr-TR', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })
+                  : ''
+
+                return (
+                  <Link
+                    key={article.id}
+                    href={`/haber/${article.slug}`}
+                    className="group block p-4 rounded-lg bg-card hover:bg-accent transition-colors border border-border"
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
+                        {index + 1}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        {articleCategory && (
+                          <span className="inline-block px-2 py-0.5 bg-primary/10 text-primary rounded text-xs font-medium mb-2">
+                            {articleCategory.name}
+                          </span>
+                        )}
+                        <h4 className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-1">
+                          {article.title}
+                        </h4>
+                        <p className="text-xs text-muted-foreground">
+                          {articleDate}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                )
+              })
+            )}
           </div>
         </div>
       </div>

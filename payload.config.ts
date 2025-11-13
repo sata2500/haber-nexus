@@ -5,11 +5,11 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 // Collections
-import { Users } from './collections/Users.js'
-import { Articles } from './collections/Articles.js'
-import { Categories } from './collections/Categories.js'
-import { Tags } from './collections/Tags.js'
-import { Media } from './collections/Media.js'
+import { Users } from './collections/Users'
+import { Articles } from './collections/Articles'
+import { Categories } from './collections/Categories'
+import { Tags } from './collections/Tags'
+import { Media } from './collections/Media'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)

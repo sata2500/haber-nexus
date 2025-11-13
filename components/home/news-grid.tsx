@@ -1,80 +1,18 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Clock } from 'lucide-react'
-
-// Geçici mock data
-const newsItems = [
-  {
-    id: 1,
-    title: 'Teknoloji Şirketleri Yapay Zeka Yarışında Hız Kesmiyor',
-    excerpt: 'Dünya devleri yapay zeka alanındaki yatırımlarını artırırken, rekabet giderek kızışıyor.',
-    category: 'Teknoloji',
-    author: 'Mehmet Demir',
-    date: '13 Kasım 2025',
-    readTime: '4 dk',
-    slug: 'teknoloji-sirketleri-yapay-zeka',
-  },
-  {
-    id: 2,
-    title: 'Ekonomide Büyüme Beklentileri Yükseldi',
-    excerpt: 'Uzmanlar, yılın son çeyreğinde ekonomik büyümenin hızlanacağını öngörüyor.',
-    category: 'Ekonomi',
-    author: 'Ayşe Kaya',
-    date: '13 Kasım 2025',
-    readTime: '3 dk',
-    slug: 'ekonomide-buyume-beklentileri',
-  },
-  {
-    id: 3,
-    title: 'Yeni Eğitim Reformu Mecliste Kabul Edildi',
-    excerpt: 'Eğitim sisteminde köklü değişiklikler getiren yasa paketi onaylandı.',
-    category: 'Gündem',
-    author: 'Can Öztürk',
-    date: '13 Kasım 2025',
-    readTime: '5 dk',
-    slug: 'yeni-egitim-reformu',
-  },
-  {
-    id: 4,
-    title: 'Dünya Kupası Hazırlıkları Devam Ediyor',
-    excerpt: 'Milli takım, kritik maç öncesi son antrenmanlarını yaptı.',
-    category: 'Spor',
-    author: 'Emre Yıldız',
-    date: '13 Kasım 2025',
-    readTime: '3 dk',
-    slug: 'dunya-kupasi-hazirliklari',
-  },
-  {
-    id: 5,
-    title: 'Yenilenebilir Enerjide Rekor Artış',
-    excerpt: 'Türkiye, yenilenebilir enerji kapasitesini son bir yılda yüzde 25 artırdı.',
-    category: 'Ekonomi',
-    author: 'Zeynep Arslan',
-    date: '12 Kasım 2025',
-    readTime: '4 dk',
-    slug: 'yenilenebilir-enerjide-rekor',
-  },
-  {
-    id: 6,
-    title: 'Sanat Dünyasından Önemli Gelişme',
-    excerpt: 'Ünlü ressam, yeni sergisini İstanbul\'da açtı.',
-    category: 'Kültür-Sanat',
-    author: 'Deniz Şahin',
-    date: '12 Kasım 2025',
-    readTime: '3 dk',
-    slug: 'sanat-dunyasindan-gelisme',
-  },
-]
+import { Article, Media, Category, User } from '@/types'
 
 interface NewsGridProps {
   title: string
-  category?: string
+  category?: Category
+  articles: Article[]
 }
 
-export function NewsGrid({ title, category }: NewsGridProps) {
-  // Eğer kategori belirtilmişse filtrele
-  const filteredNews = category
-    ? newsItems.filter(item => item.category === category)
-    : newsItems
+export function NewsGrid({ title, category, articles }: NewsGridProps) {
+  if (articles.length === 0) {
+    return null
+  }
 
   return (
     <section className="py-12">
@@ -85,7 +23,7 @@ export function NewsGrid({ title, category }: NewsGridProps) {
           </h2>
           {category && (
             <Link
-              href={`/kategori/${category.toLowerCase()}`}
+              href={`/kategori/${category.slug}`}
               className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
             >
               Tümünü Gör →
@@ -94,44 +32,75 @@ export function NewsGrid({ title, category }: NewsGridProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredNews.map((news) => (
-            <Link
-              key={news.id}
-              href={`/haber/${news.slug}`}
-              className="group block rounded-xl overflow-hidden bg-card border border-border hover:shadow-lg transition-all"
-            >
-              {/* Image Placeholder */}
-              <div className="aspect-[16/9] bg-gradient-to-br from-blue-500 to-purple-600 relative overflow-hidden">
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
-              </div>
+          {articles.map((article) => {
+            const featuredImage = typeof article.featuredImage === 'object' 
+              ? article.featuredImage as Media 
+              : null
+            const articleCategory = typeof article.category === 'object'
+              ? article.category as Category
+              : null
+            const author = typeof article.author === 'object'
+              ? article.author as User
+              : null
 
-              {/* Content */}
-              <div className="p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-medium">
-                    {news.category}
-                  </span>
-                  <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <Clock className="h-3 w-3" />
-                    {news.readTime}
-                  </span>
+            const publishedDate = article.publishedAt 
+              ? new Date(article.publishedAt).toLocaleDateString('tr-TR', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })
+              : ''
+
+            return (
+              <Link
+                key={article.id}
+                href={`/haber/${article.slug}`}
+                className="group block rounded-xl overflow-hidden bg-card border border-border hover:shadow-lg transition-all"
+              >
+                {/* Image */}
+                <div className="aspect-[16/9] bg-muted relative overflow-hidden">
+                  {featuredImage?.url ? (
+                    <Image
+                      src={featuredImage.url}
+                      alt={featuredImage.alt || article.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600" />
+                  )}
                 </div>
 
-                <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-2">
-                  {news.title}
-                </h3>
+                {/* Content */}
+                <div className="p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    {articleCategory && (
+                      <span className="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-medium">
+                        {articleCategory.name}
+                      </span>
+                    )}
+                    <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <Clock className="h-3 w-3" />
+                      {article.views} görüntülenme
+                    </span>
+                  </div>
 
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                  {news.excerpt}
-                </p>
+                  <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                    {article.title}
+                  </h3>
 
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{news.author}</span>
-                  <span>{news.date}</span>
+                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                    {article.excerpt}
+                  </p>
+
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    {author && <span>{author.name || author.email}</span>}
+                    <span>{publishedDate}</span>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            )
+          })}
         </div>
       </div>
     </section>
