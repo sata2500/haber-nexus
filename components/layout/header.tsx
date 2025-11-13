@@ -1,18 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { useTheme } from 'next-themes'
-import { Moon, Sun, Menu, Search, User } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { Menu, Search, User } from 'lucide-react'
+import { useState } from 'react'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 export function Header() {
-  const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   const categories = [
     { name: 'Gündem', href: '/kategori/gundem' },
@@ -78,19 +72,7 @@ export function Header() {
             </button>
 
             {/* Theme Toggle */}
-            {mounted && (
-              <button
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-                aria-label="Tema değiştir"
-              >
-                {theme === 'dark' ? (
-                  <Sun className="h-5 w-5" />
-                ) : (
-                  <Moon className="h-5 w-5" />
-                )}
-              </button>
-            )}
+            <ThemeToggle />
 
             {/* User Menu */}
             <button
