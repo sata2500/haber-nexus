@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Calendar, User, Eye } from "lucide-react"
+import { Calendar, User, Eye, ArrowRight } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
 import { tr } from "date-fns/locale"
 
@@ -26,71 +26,89 @@ interface PostCardProps {
 
 export function PostCard({ post }: PostCardProps) {
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-gray-900">
-      <Link href={`/haber/${post.slug}`} className="relative aspect-video overflow-hidden bg-gray-100 dark:bg-gray-800">
+    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 hover:shadow-xl card-hover">
+      {/* Image Container */}
+      <Link href={`/haber/${post.slug}`} className="relative aspect-video overflow-hidden bg-muted">
         {post.coverImage ? (
           <Image
             src={post.coverImage}
             alt={post.title}
             fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className="object-cover transition-transform duration-500 group-hover:scale-110"
           />
         ) : (
-          <div className="flex h-full items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">
-            <span className="text-4xl font-bold text-white opacity-50">HN</span>
+          <div className="flex h-full items-center justify-center bg-gradient-to-br from-primary to-primary/60">
+            <span className="text-5xl font-bold text-primary-foreground opacity-30">HN</span>
           </div>
         )}
+        
+        {/* Overlay Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        
+        {/* Category Badge */}
         {post.category && (
-          <span className="absolute left-3 top-3 rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold text-white">
+          <span className="absolute left-4 top-4 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground shadow-lg backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
             {post.category.name}
           </span>
         )}
+        
+        {/* Read More Button (appears on hover) */}
+        <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+          <div className="flex items-center gap-2 bg-white dark:bg-gray-900 text-foreground px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+            <span>Devamını Oku</span>
+            <ArrowRight className="h-4 w-4" />
+          </div>
+        </div>
       </Link>
 
+      {/* Content */}
       <div className="flex flex-1 flex-col p-6">
         <Link href={`/haber/${post.slug}`}>
-          <h3 className="mb-2 text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 transition-colors">
+          <h3 className="mb-3 text-xl font-bold text-foreground line-clamp-2 group-hover:text-primary transition-colors duration-200">
             {post.title}
           </h3>
         </Link>
 
         {post.excerpt && (
-          <p className="mb-4 text-sm text-gray-600 line-clamp-3 dark:text-gray-400">
+          <p className="mb-4 text-sm text-muted-foreground line-clamp-3 leading-relaxed">
             {post.excerpt}
           </p>
         )}
 
-        <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-4 dark:border-gray-800">
-          <div className="flex items-center gap-x-2">
+        {/* Footer */}
+        <div className="mt-auto flex items-center justify-between border-t border-border pt-4">
+          {/* Author */}
+          <div className="flex items-center gap-3">
             {post.author.image ? (
               <Image
                 src={post.author.image}
                 alt={post.author.name || "Yazar"}
-                width={24}
-                height={24}
-                className="rounded-full"
+                width={32}
+                height={32}
+                className="rounded-full ring-2 ring-primary/20"
               />
             ) : (
-              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700">
-                <User className="h-3 w-3 text-gray-500 dark:text-gray-400" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+                <User className="h-4 w-4 text-primary" />
               </div>
             )}
-            <span className="text-xs text-gray-600 dark:text-gray-400">
+            <span className="text-sm font-medium text-foreground">
               {post.author.name || "Anonim"}
             </span>
           </div>
 
-          <div className="flex items-center gap-x-4 text-xs text-gray-500 dark:text-gray-400">
+          {/* Meta Info */}
+          <div className="flex items-center gap-4 text-xs text-muted-foreground">
             {post.publishedAt && (
-              <div className="flex items-center gap-x-1">
-                <Calendar className="h-3 w-3" />
+              <div className="flex items-center gap-1.5 hover:text-primary transition-colors">
+                <Calendar className="h-3.5 w-3.5" />
                 <time dateTime={post.publishedAt.toISOString()}>
                   {formatDistanceToNow(post.publishedAt, { addSuffix: true, locale: tr })}
                 </time>
               </div>
             )}
-            <div className="flex items-center gap-x-1">
-              <Eye className="h-3 w-3" />
+            <div className="flex items-center gap-1.5 hover:text-primary transition-colors">
+              <Eye className="h-3.5 w-3.5" />
               <span>{post.viewCount}</span>
             </div>
           </div>

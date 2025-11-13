@@ -1,14 +1,16 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { useSession, signIn, signOut } from "next-auth/react"
 import { ThemeToggle } from "./theme-toggle"
-import { Menu, X, User, LogOut, LayoutDashboard } from "lucide-react"
+import { Menu, X, User, LogOut, LayoutDashboard, ChevronDown } from "lucide-react"
 import { useState } from "react"
 
 export function Header() {
   const { data: session } = useSession()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
 
   const navigation = [
     { name: "Ana Sayfa", href: "/" },
@@ -20,19 +22,23 @@ export function Header() {
   ]
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-gray-950/95 dark:supports-[backdrop-filter]:bg-gray-950/60">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300">
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8" aria-label="Global">
+        {/* Logo */}
         <div className="flex lg:flex-1">
-          <Link href="/" className="-m-1.5 p-1.5">
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <Link href="/" className="-m-1.5 p-1.5 group">
+            <span className="text-2xl font-bold gradient-text hover:scale-105 transition-transform duration-200 inline-block">
               Haber Nexus
             </span>
           </Link>
         </div>
-        <div className="flex lg:hidden">
+
+        {/* Mobile menu button */}
+        <div className="flex lg:hidden gap-2">
+          <ThemeToggle />
           <button
             type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-gray-200"
+            className="inline-flex items-center justify-center rounded-lg p-2.5 text-foreground hover:bg-accent transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             <span className="sr-only">Menüyü aç</span>
@@ -43,47 +49,85 @@ export function Header() {
             )}
           </button>
         </div>
+
+        {/* Desktop navigation */}
         <div className="hidden lg:flex lg:gap-x-8">
           {navigation.map((item) => (
             <Link
               key={item.name}
               href={item.href}
-              className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 dark:text-gray-100 dark:hover:text-blue-400 transition-colors"
+              className="text-sm font-semibold leading-6 text-foreground hover:text-primary transition-colors duration-200 relative group"
             >
               {item.name}
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
             </Link>
           ))}
         </div>
+
+        {/* Desktop actions */}
         <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-4 items-center">
           <ThemeToggle />
+          
           {session ? (
-            <div className="flex items-center gap-x-4">
-              {(session.user.role === "ADMIN" || session.user.role === "REPORTER") && (
-                <Link
-                  href="/dashboard"
-                  className="inline-flex items-center gap-x-1.5 text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 dark:text-gray-100 dark:hover:text-blue-400"
-                >
-                  <LayoutDashboard className="h-4 w-4" />
-                  Dashboard
-                </Link>
+            <div className="relative">
+              <button
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-foreground hover:bg-accent transition-all duration-200"
+              >
+                {session.user.image ? (
+                  <Image
+                    src={session.user.image}
+                    alt={session.user.name || "User"}
+                    width={32}
+                    height={32}
+                    className="h-8 w-8 rounded-full ring-2 ring-primary/20"
+                  />
+                ) : (
+                  <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <User className="h-4 w-4 text-primary" />
+                  </div>
+                )}
+                <span className="hidden xl:inline">{session.user.name}</span>
+                <ChevronDown className="h-4 w-4" />
+              </button>
+
+              {userMenuOpen && (
+                <div className="absolute right-0 mt-2 w-56 rounded-xl bg-card shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-gray-700 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="py-1">
+                    <div className="px-4 py-3 border-b border-border">
+                      <p className="text-sm font-medium text-foreground">{session.user.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{session.user.email}</p>
+                    </div>
+                    
+                    {(session.user.role === "ADMIN" || session.user.role === "REPORTER") && (
+                      <Link
+                        href="/dashboard"
+                        className="flex items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-accent transition-colors"
+                        onClick={() => setUserMenuOpen(false)}
+                      >
+                        <LayoutDashboard className="h-4 w-4" />
+                        <span>Dashboard</span>
+                      </Link>
+                    )}
+                    
+                    <button
+                      onClick={() => {
+                        signOut()
+                        setUserMenuOpen(false)
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-error hover:bg-error/10 transition-colors"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>Çıkış Yap</span>
+                    </button>
+                  </div>
+                </div>
               )}
-              <div className="flex items-center gap-x-2">
-                <span className="text-sm text-gray-700 dark:text-gray-300">
-                  {session.user.name}
-                </span>
-                <button
-                  onClick={() => signOut()}
-                  className="inline-flex items-center gap-x-1.5 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 transition-colors"
-                >
-                  <LogOut className="h-4 w-4" />
-                  Çıkış
-                </button>
-              </div>
             </div>
           ) : (
             <button
               onClick={() => signIn("google")}
-              className="inline-flex items-center gap-x-1.5 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors"
+              className="btn-primary inline-flex items-center gap-2"
             >
               <User className="h-4 w-4" />
               Giriş Yap
@@ -94,41 +138,61 @@ export function Header() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden">
-          <div className="space-y-2 px-4 pb-3 pt-2">
+        <div className="lg:hidden border-t border-border animate-in slide-in-from-top duration-300">
+          <div className="space-y-1 px-4 pb-3 pt-2">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800"
+                className="block rounded-lg px-3 py-2.5 text-base font-medium text-foreground hover:bg-accent transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.name}
               </Link>
             ))}
-            <div className="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 pt-4 pb-3 px-3">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Tema</span>
-              <ThemeToggle />
-            </div>
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-4 pb-3">
+            
+            <div className="border-t border-border pt-4 pb-3">
               {session ? (
                 <div className="space-y-2">
+                  <div className="flex items-center gap-3 px-3 py-2">
+                    {session.user.image ? (
+                      <Image
+                        src={session.user.image}
+                        alt={session.user.name || "User"}
+                        width={40}
+                        height={40}
+                        className="h-10 w-10 rounded-full ring-2 ring-primary/20"
+                      />
+                    ) : (
+                      <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <User className="h-5 w-5 text-primary" />
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-sm font-medium text-foreground">{session.user.name}</p>
+                      <p className="text-xs text-muted-foreground">{session.user.email}</p>
+                    </div>
+                  </div>
+                  
                   {(session.user.role === "ADMIN" || session.user.role === "REPORTER") && (
                     <Link
                       href="/dashboard"
-                      className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800"
+                      className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-base font-medium text-foreground hover:bg-accent transition-colors"
                       onClick={() => setMobileMenuOpen(false)}
                     >
+                      <LayoutDashboard className="h-5 w-5" />
                       Dashboard
                     </Link>
                   )}
+                  
                   <button
                     onClick={() => {
                       signOut()
                       setMobileMenuOpen(false)
                     }}
-                    className="w-full text-left block rounded-md px-3 py-2 text-base font-medium text-red-600 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-base font-medium text-error hover:bg-error/10 transition-colors"
                   >
+                    <LogOut className="h-5 w-5" />
                     Çıkış Yap
                   </button>
                 </div>
@@ -138,8 +202,9 @@ export function Header() {
                     signIn("google")
                     setMobileMenuOpen(false)
                   }}
-                  className="w-full text-left block rounded-md px-3 py-2 text-base font-medium text-blue-600 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  className="w-full btn-primary flex items-center justify-center gap-2"
                 >
+                  <User className="h-5 w-5" />
                   Giriş Yap
                 </button>
               )}
