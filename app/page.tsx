@@ -1,65 +1,144 @@
-import Image from "next/image";
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
+import { PostCard } from "@/components/post-card"
+import { prisma } from "@/lib/prisma"
+import { Search, TrendingUp } from "lucide-react"
 
-export default function Home() {
+export const dynamic = 'force-dynamic'
+
+async function getLatestPosts() {
+  try {
+    const posts = await prisma.post.findMany({
+      where: {
+        status: "PUBLISHED",
+      },
+      include: {
+        author: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
+        category: {
+          select: {
+            name: true,
+            slug: true,
+          },
+        },
+      },
+      orderBy: {
+        publishedAt: "desc",
+      },
+      take: 12,
+    })
+    return posts
+  } catch (error) {
+    console.error("Error fetching posts:", error)
+    return []
+  }
+}
+
+async function getFeaturedPost() {
+  try {
+    const post = await prisma.post.findFirst({
+      where: {
+        status: "PUBLISHED",
+      },
+      include: {
+        author: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
+        category: {
+          select: {
+            name: true,
+            slug: true,
+          },
+        },
+      },
+      orderBy: {
+        viewCount: "desc",
+      },
+    })
+    return post
+  } catch (error) {
+    console.error("Error fetching featured post:", error)
+    return null
+  }
+}
+
+export default async function Home() {
+  const [latestPosts, featuredPost] = await Promise.all([
+    getLatestPosts(),
+    getFeaturedPost(),
+  ])
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <div className="flex min-h-screen flex-col">
+      <Header />
+
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 py-12">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-6xl">
+                Güncel Haberler ve Analizler
+              </h1>
+              <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
+                Türkiye ve dünyadan son dakika haberleri, derinlemesine analizler ve uzman görüşleri
+              </p>
+              
+              {/* Search Bar */}
+              <div className="mt-10 flex justify-center">
+                <div className="relative w-full max-w-2xl">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                    <Search className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Haber ara..."
+                    className="block w-full rounded-full border-0 py-4 pl-12 pr-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:bg-gray-800 dark:text-white dark:ring-gray-700"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Featured Post */}
+        {featuredPost && (
+          <section className="mx-auto max-w-7xl px-6 lg:px-8 py-12">
+            <div className="flex items-center gap-x-2 mb-6">
+              <TrendingUp className="h-6 w-6 text-blue-600" />
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Öne Çıkan Haber</h2>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+              <PostCard post={featuredPost} />
+            </div>
+          </section>
+        )}
+
+        {/* Latest Posts */}
+        <section className="mx-auto max-w-7xl px-6 lg:px-8 py-12">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Son Haberler</h2>
+          {latestPosts.length > 0 ? (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {latestPosts.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500 dark:text-gray-400">Henüz yayınlanmış haber bulunmamaktadır.</p>
+            </div>
+          )}
+        </section>
       </main>
+
+      <Footer />
     </div>
-  );
+  )
 }

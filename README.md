@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Haber Nexus - Yapay Zeka Destekli Haber Platformu
 
-## Getting Started
+![Haber Nexus](https://i.imgur.com/example.png) <!-- Replace with a real screenshot -->
 
-First, run the development server:
+Haber Nexus, Türkiye ve global pazarlar için tasarlanmış, son teknolojilerle donatılmış, yapay zeka destekli, interaktif ve modern bir haber ve içerik platformudur. Bu proje, sadece güncel haberleri sunmakla kalmaz, aynı zamanda kullanıcıların çeşitli konularda bilgi edinebileceği, tartışmalara katılabileceği ve kendi içeriklerini üretebileceği bir sosyal etkileşim alanı oluşturmayı hedefler.
+
+Bu proje **Salih TANRISEVEN** adına geliştirilmiştir.
+
+## ✨ Temel Özellikler
+
+- **Modern Arayüz:** `Next.js` ve `Tailwind CSS` ile oluşturulmuş, hızlı, mobil uyumlu ve şık bir kullanıcı arayüzü.
+- **Aydınlık/Karanlık Mod:** `next-themes` ile kullanıcı tercihine göre tema desteği.
+- **Yapay Zeka Destekli İçerik:** `OpenAI API` kullanılarak RSS beslemelerinden otomatik olarak profesyonel haber içerikleri, başlıklar ve özetler üretilir.
+- **Gelişmiş Yönetim Paneli (Dashboard):** Admin ve muhabirler için içerik yönetimi, RSS kaynağı yönetimi ve kullanıcı yönetimi (admin) arayüzleri.
+- **Kimlik Doğrulama:** `NextAuth.js` ile Google üzerinden güvenli ve kolay giriş.
+- **Kullanıcı Rolleri:** `ADMIN`, `REPORTER` ve `USER` olmak üzere üç farklı kullanıcı rolü ile yetkilendirme.
+- **Etkileşim:** Kullanıcıların içeriklere yorum yapabilmesi ve birbirlerinin yorumlarına yanıt verebilmesi.
+- **Veritabanı:** `Prisma` ORM ile yönetilen, `Vercel Postgres` üzerinde çalışan güçlü bir PostgreSQL veritabanı.
+
+## 🚀 Teknoloji Stack
+
+| Kategori | Teknoloji/Kütüphane | Açıklama |
+|---|---|---|
+| **Framework** | [Next.js](https://nextjs.org/) | React tabanlı, sunucu tarafı render ve statik site oluşturma yetenekleri sunan modern bir framework. |
+| **Styling** | [Tailwind CSS](https://tailwindcss.com/) | Hızlı ve modern arayüz geliştirmeyi sağlayan, "utility-first" bir CSS framework'ü. |
+| **Veritabanı** | [PostgreSQL](https://www.postgresql.org/) ([Vercel Postgres](https://vercel.com/storage/postgres)) | Güçlü, ilişkisel ve ölçeklenebilir bir veritabanı çözümü. |
+| **ORM** | [Prisma](https://www.prisma.io/) | Veritabanı şeması yönetimi ve sorgulamaları için modern ve tip güvenli bir araç. |
+| **Authentication** | [NextAuth.js](https://next-auth.js.org/) | Google, e-posta/parola gibi çeşitli kimlik doğrulama yöntemlerini kolayca entegre etmek için. |
+| **Yapay Zeka** | [OpenAI API](https://openai.com/api/) | İçerik üretimi, özetleme, araştırma ve başlık oluşturma gibi görevler için. |
+| **Deployment** | [Vercel](https://vercel.com/) | Next.js ile tam entegre, CI/CD süreçlerini otomatikleştiren ve global CDN sunan bir platform. |
+| **UI Bileşenleri** | [Shadcn/ui](https://ui.shadcn.com/) & [Lucide React](https://lucide.dev/) | Erişilebilir ve özelleştirilebilir UI bileşenleri ve ikonlar. |
+| **Tema Yönetimi** | [next-themes](https://github.com/pacocoursey/next-themes) | Aydınlık ve karanlık mod geçişlerini kolayca yönetmek için. |
+
+## 🛠️ Kurulum ve Başlatma
+
+Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyin.
+
+### 1. Projeyi Klonlama
+
+```bash
+git clone https://github.com/sata2500/haber-nexus.git
+cd haber-nexus
+```
+
+### 2. Bağımlılıkları Yükleme
+
+```bash
+npm install
+```
+
+### 3. Ortam Değişkenlerini Ayarlama
+
+Proje kök dizininde `.env` adında bir dosya oluşturun ve aşağıdaki değişkenleri kendi bilgilerinizle doldurun. `.env.example` dosyasını referans alabilirsiniz.
+
+```env
+# Veritabanı Bağlantısı (Vercel Postgres veya yerel PostgreSQL)
+DATABASE_URL="YOUR_DATABASE_URL"
+
+# NextAuth Ayarları
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-secret-key-here-change-in-production"
+
+# Google OAuth Kimlik Bilgileri
+GOOGLE_CLIENT_ID="YOUR_GOOGLE_CLIENT_ID"
+GOOGLE_CLIENT_SECRET="YOUR_GOOGLE_CLIENT_SECRET"
+
+# OpenAI API Anahtarı
+OPENAI_API_KEY="YOUR_OPENAI_API_KEY"
+```
+
+### 4. Veritabanı Migrasyonu
+
+Prisma şemasını veritabanınıza uygulamak için aşağıdaki komutu çalıştırın.
+
+```bash
+npx prisma migrate dev
+```
+
+### 5. Geliştirme Sunucusunu Başlatma
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Uygulama artık [http://localhost:3000](http://localhost:3000) adresinde çalışıyor olacaktır.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📦 Build ve Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Proje, Vercel platformuna kolayca deploy edilebilir. Vercel'e deploy etmeden önce, projenin hatasız bir şekilde build olduğundan emin olmak için aşağıdaki komutu çalıştırabilirsiniz.
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+Bu komut, projenin production için optimize edilmiş bir versiyonunu oluşturur. Herhangi bir hata almazsanız, projenizi GitHub reponuz üzerinden Vercel'e bağlayarak otomatik olarak deploy edebilirsiniz.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🤝 Katkıda Bulunma
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Bu proje Salih TANRISEVEN adına geliştirilmektedir. Katkıda bulunmak isterseniz, lütfen bir issue açın veya bir pull request gönderin.
 
-## Deploy on Vercel
+## 📄 Lisans
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Bu proje [MIT Lisansı](LICENSE) ile lisanslanmıştır.
