@@ -2,7 +2,7 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { PostCard } from "@/components/post-card"
 import { prisma } from "@/lib/prisma"
-import { Search, TrendingUp, Sparkles, Clock, Zap } from "lucide-react"
+import { Search, TrendingUp, Sparkles, Clock, Zap, Newspaper, BarChart3 } from "lucide-react"
 
 export const dynamic = 'force-dynamic'
 
@@ -81,58 +81,78 @@ export default async function Home() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20 lg:py-28">
+        <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 py-20 lg:py-32">
           {/* Decorative Elements */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
-            <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-purple-500/10 blur-3xl" />
+            <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-primary/10 blur-3xl animate-pulse" />
+            <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-purple-500/10 blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-96 w-96 rounded-full bg-pink-500/5 blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
           </div>
+
+          {/* Grid Pattern */}
+          <div className="absolute inset-0 bg-grid-pattern opacity-[0.02] dark:opacity-[0.05]" />
 
           <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
             <div className="text-center">
               {/* Badge */}
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary animate-in fade-in slide-in-from-top duration-500">
-                <Sparkles className="h-4 w-4" />
+              <div className="mb-8 inline-flex items-center gap-2 rounded-full glass px-6 py-3 text-sm font-bold text-primary animate-in fade-in slide-in-from-top duration-500 shadow-lg hover:scale-105 transition-transform duration-300">
+                <Sparkles className="h-5 w-5 animate-pulse" />
                 <span>Yapay Zeka Destekli Haber Platformu</span>
               </div>
 
               {/* Heading */}
-              <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl animate-in fade-in slide-in-from-bottom duration-700">
+              <h1 className="text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl lg:text-7xl xl:text-8xl animate-in fade-in slide-in-from-bottom duration-700 leading-tight">
                 Güncel Haberler ve{" "}
                 <span className="gradient-text">Analizler</span>
               </h1>
               
-              <p className="mt-6 text-lg leading-8 text-muted-foreground max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom duration-700 delay-100">
-                Türkiye ve dünyadan son dakika haberleri, derinlemesine analizler ve uzman görüşleri
+              <p className="mt-8 text-lg sm:text-xl leading-8 text-muted-foreground max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom duration-700 delay-100">
+                Türkiye ve dünyadan son dakika haberleri, derinlemesine analizler ve uzman görüşleri. 
+                Her an, her yerde, güvenilir haber kaynağınız.
               </p>
               
               {/* Search Bar */}
-              <div className="mt-10 flex justify-center animate-in fade-in scale-in duration-700 delay-200">
+              <div className="mt-12 flex justify-center animate-in fade-in scale-in duration-700 delay-200">
                 <div className="relative w-full max-w-2xl">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-5">
-                    <Search className="h-5 w-5 text-muted-foreground" />
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-6">
+                    <Search className="h-6 w-6 text-muted-foreground" />
                   </div>
                   <input
                     type="text"
                     placeholder="Haber ara..."
-                    className="block w-full rounded-2xl border border-border bg-card/50 backdrop-blur-sm py-4 pl-14 pr-4 text-foreground shadow-lg ring-1 ring-border placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
+                    className="block w-full rounded-2xl border-2 border-border glass py-5 pl-16 pr-6 text-foreground shadow-2xl shadow-primary/10 ring-2 ring-transparent placeholder:text-muted-foreground focus:ring-primary focus:border-primary transition-all duration-300 text-lg hover:shadow-primary/20"
                   />
                 </div>
               </div>
 
               {/* Stats */}
-              <div className="mt-12 flex flex-wrap justify-center gap-8 animate-in fade-in slide-in-from-bottom duration-700 delay-300">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Zap className="h-5 w-5 text-primary" />
-                  <span><strong className="text-foreground">1000+</strong> Haber</span>
+              <div className="mt-16 flex flex-wrap justify-center gap-8 lg:gap-12 animate-in fade-in slide-in-from-bottom duration-700 delay-300">
+                <div className="group flex items-center gap-3 glass px-6 py-4 rounded-2xl hover:scale-105 transition-all duration-300 hover:shadow-xl">
+                  <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
+                    <Newspaper className="h-6 w-6 text-primary" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-2xl font-bold text-foreground">1000+</div>
+                    <div className="text-sm text-muted-foreground">Haber</div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Clock className="h-5 w-5 text-primary" />
-                  <span><strong className="text-foreground">7/24</strong> Güncel</span>
+                <div className="group flex items-center gap-3 glass px-6 py-4 rounded-2xl hover:scale-105 transition-all duration-300 hover:shadow-xl">
+                  <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
+                    <Clock className="h-6 w-6 text-primary" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-2xl font-bold text-foreground">7/24</div>
+                    <div className="text-sm text-muted-foreground">Güncel</div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Sparkles className="h-5 w-5 text-primary" />
-                  <span><strong className="text-foreground">AI</strong> Destekli</span>
+                <div className="group flex items-center gap-3 glass px-6 py-4 rounded-2xl hover:scale-105 transition-all duration-300 hover:shadow-xl">
+                  <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
+                    <Sparkles className="h-6 w-6 text-primary" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-2xl font-bold text-foreground">AI</div>
+                    <div className="text-sm text-muted-foreground">Destekli</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -141,19 +161,38 @@ export default async function Home() {
 
         {/* Featured Post */}
         {featuredPost && (
-          <section className="mx-auto max-w-7xl px-6 lg:px-8 py-16">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <TrendingUp className="h-6 w-6 text-primary" />
+          <section className="mx-auto max-w-7xl px-6 lg:px-8 py-20">
+            <div className="flex items-center gap-3 mb-10">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-purple-500 shadow-lg shadow-primary/25">
+                <TrendingUp className="h-7 w-7 text-white" />
               </div>
-              <h2 className="text-3xl font-bold text-foreground">Öne Çıkan Haber</h2>
+              <div>
+                <h2 className="text-3xl lg:text-4xl font-bold text-foreground">Öne Çıkan Haber</h2>
+                <p className="text-sm text-muted-foreground mt-1">En çok okunan ve trend olan içerik</p>
+              </div>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-              <PostCard post={featuredPost} />
-              <div className="hidden lg:block space-y-4">
-                <div className="rounded-2xl border border-border bg-card p-6">
-                  <h3 className="text-lg font-semibold text-foreground mb-4">En Çok Okunanlar</h3>
-                  <p className="text-sm text-muted-foreground">Yakında...</p>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2">
+                <PostCard post={featuredPost} />
+              </div>
+              <div className="space-y-6">
+                <div className="rounded-2xl glass-card p-6 hover:shadow-xl transition-all duration-300">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 rounded-lg bg-primary/10">
+                      <BarChart3 className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-bold text-foreground">En Çok Okunanlar</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">Yakında en popüler haberler burada listelenecek...</p>
+                </div>
+                <div className="rounded-2xl glass-card p-6 hover:shadow-xl transition-all duration-300">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 rounded-lg bg-purple-500/10">
+                      <Sparkles className="h-5 w-5 text-purple-500" />
+                    </div>
+                    <h3 className="text-lg font-bold text-foreground">Editörün Seçtikleri</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">Editörlerimizin özenle seçtiği haberler...</p>
                 </div>
               </div>
             </div>
@@ -161,11 +200,18 @@ export default async function Home() {
         )}
 
         {/* Latest Posts */}
-        <section className="mx-auto max-w-7xl px-6 lg:px-8 py-16 bg-muted/30">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold text-foreground">Son Haberler</h2>
-            <button className="text-sm font-semibold text-primary hover:text-primary/80 transition-colors">
-              Tümünü Gör →
+        <section className="relative mx-auto max-w-7xl px-6 lg:px-8 py-20 overflow-hidden">
+          {/* Background Decoration */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-muted/20 to-transparent -z-10" />
+          
+          <div className="flex items-center justify-between mb-10">
+            <div>
+              <h2 className="text-3xl lg:text-4xl font-bold text-foreground">Son Haberler</h2>
+              <p className="text-sm text-muted-foreground mt-2">En güncel haberler ve gelişmeler</p>
+            </div>
+            <button className="btn-ghost group">
+              <span>Tümünü Gör</span>
+              <span className="inline-block group-hover:translate-x-1 transition-transform duration-200">→</span>
             </button>
           </div>
           
@@ -175,19 +221,21 @@ export default async function Home() {
                 <div 
                   key={post.id} 
                   className="animate-in fade-in slide-in-from-bottom duration-500"
-                  style={{ animationDelay: `${index * 100}ms` }}
+                  style={{ animationDelay: `${index * 50}ms` }}
                 >
                   <PostCard post={post} />
                 </div>
               ))}
             </div>
           ) : (
-            <div className="text-center py-20 rounded-2xl border border-border bg-card">
-              <div className="mx-auto w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
-                <Search className="h-8 w-8 text-muted-foreground" />
+            <div className="text-center py-24 rounded-2xl glass-card">
+              <div className="mx-auto w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center mb-6 shadow-xl shadow-primary/25">
+                <Search className="h-10 w-10 text-white" />
               </div>
-              <p className="text-lg font-medium text-foreground mb-2">Henüz haber yok</p>
-              <p className="text-sm text-muted-foreground">Yakında yeni haberler eklenecek.</p>
+              <p className="text-xl font-bold text-foreground mb-2">Henüz haber yok</p>
+              <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                Yakında yeni haberler eklenecek. Güncel içerikler için bizi takip etmeye devam edin.
+              </p>
             </div>
           )}
         </section>
