@@ -7,6 +7,8 @@ import type { Adapter } from "next-auth/adapters"
 
 export const authConfig: NextAuthConfig = {
   adapter: PrismaAdapter(prisma) as Adapter,
+  trustHost: true,
+  debug: process.env.NODE_ENV === "development",
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
