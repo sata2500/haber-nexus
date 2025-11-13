@@ -17,7 +17,7 @@ export function ThemeToggle() {
   if (!mounted) {
     return (
       <button
-        className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+        className="p-2 rounded-lg hover:bg-accent transition-colors"
         aria-label="Tema değiştir"
       >
         <Sun className="h-5 w-5" />
@@ -38,7 +38,7 @@ export function ThemeToggle() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+        className="p-2 rounded-lg hover:bg-accent transition-colors"
         aria-label="Tema değiştir"
         aria-expanded={isOpen}
       >
@@ -54,7 +54,7 @@ export function ThemeToggle() {
           />
 
           {/* Dropdown Menu */}
-          <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-zinc-900 rounded-lg shadow-lg border border-zinc-200 dark:border-zinc-800 py-1 z-20">
+          <div className="absolute right-0 mt-2 w-40 bg-popover rounded-lg shadow-lg border border-border py-1 z-20">
             {themes.map(({ value, label, icon: Icon }) => (
               <button
                 key={value}
@@ -62,16 +62,16 @@ export function ThemeToggle() {
                   setTheme(value)
                   setIsOpen(false)
                 }}
-                className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors ${
+                className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-accent transition-colors ${
                   theme === value
-                    ? 'text-blue-600 dark:text-blue-400 font-medium'
-                    : 'text-zinc-700 dark:text-zinc-300'
+                    ? 'text-primary font-medium'
+                    : 'text-foreground'
                 }`}
               >
                 <Icon className="h-4 w-4" />
                 {label}
                 {theme === value && (
-                  <span className="ml-auto text-blue-600 dark:text-blue-400">✓</span>
+                  <span className="ml-auto text-primary">✓</span>
                 )}
               </button>
             ))}

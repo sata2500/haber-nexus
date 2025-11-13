@@ -80,13 +80,13 @@ export function NewsGrid({ title, category }: NewsGridProps) {
     <section className="py-12">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+          <h2 className="text-2xl font-bold text-foreground">
             {title}
           </h2>
           {category && (
             <Link
               href={`/kategori/${category.toLowerCase()}`}
-              className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+              className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
             >
               Tümünü Gör →
             </Link>
@@ -98,7 +98,7 @@ export function NewsGrid({ title, category }: NewsGridProps) {
             <Link
               key={news.id}
               href={`/haber/${news.slug}`}
-              className="group block rounded-xl overflow-hidden bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:shadow-lg dark:hover:shadow-zinc-900/50 transition-all"
+              className="group block rounded-xl overflow-hidden bg-card border border-border hover:shadow-lg transition-all"
             >
               {/* Image Placeholder */}
               <div className="aspect-[16/9] bg-gradient-to-br from-blue-500 to-purple-600 relative overflow-hidden">
@@ -108,24 +108,24 @@ export function NewsGrid({ title, category }: NewsGridProps) {
               {/* Content */}
               <div className="p-5">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded text-xs font-medium">
+                  <span className="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-medium">
                     {news.category}
                   </span>
-                  <span className="flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400">
+                  <span className="flex items-center gap-1 text-xs text-muted-foreground">
                     <Clock className="h-3 w-3" />
                     {news.readTime}
                   </span>
                 </div>
 
-                <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+                <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-2">
                   {news.title}
                 </h3>
 
-                <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4 line-clamp-2">
+                <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
                   {news.excerpt}
                 </p>
 
-                <div className="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>{news.author}</span>
                   <span>{news.date}</span>
                 </div>
