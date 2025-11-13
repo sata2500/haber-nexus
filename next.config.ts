@@ -13,7 +13,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  allowedDevOrigins: ['https://3000-irg7tzszkngwg36nkp1ey-d864798d.manus-asia.computer'],
+  // Vercel deployment için
+  ...(process.env.VERCEL && {
+    output: 'standalone',
+  }),
 };
 
 export default withPayload(nextConfig)
