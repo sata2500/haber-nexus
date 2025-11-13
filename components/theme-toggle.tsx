@@ -5,7 +5,7 @@ import { Moon, Sun, Monitor } from "lucide-react"
 import { useTheme } from "next-themes"
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = React.useState(false)
   const [isOpen, setIsOpen] = React.useState(false)
 
@@ -39,8 +39,16 @@ export function ThemeToggle() {
     { value: 'system', label: 'Sistem', icon: Monitor },
   ]
 
-  const currentTheme = themes.find(t => t.value === theme) || themes[2]
-  const Icon = currentTheme.icon
+  // resolvedTheme kullanarak gerçek aktif temayı belirle
+  // theme === 'system' ise resolvedTheme'i kullan, değilse theme'i kullan
+  const activeTheme = theme === 'system' ? resolvedTheme : theme
+  
+  // Button'da gösterilecek icon'u belirle
+  const DisplayIcon = theme === 'system' 
+    ? Monitor 
+    : activeTheme === 'dark' 
+      ? Moon 
+      : Sun
 
   return (
     <div className="relative theme-toggle-container">
@@ -49,7 +57,7 @@ export function ThemeToggle() {
         className="inline-flex items-center justify-center rounded-lg p-2.5 hover:bg-accent/50 transition-all duration-200 hover:scale-105 active:scale-95"
         aria-label="Tema değiştir"
       >
-        <Icon className="h-5 w-5 transition-transform duration-300" />
+        <DisplayIcon className="h-5 w-5 transition-transform duration-300" />
       </button>
 
       {isOpen && (
@@ -84,6 +92,15 @@ export function ThemeToggle() {
               )
             })}
           </div>
+          
+          {/* Sistem teması seçiliyse, aktif sistem temasını göster */}
+          {theme === 'system' && (
+            <div className="px-4 py-2 border-t border-border/50 bg-muted/30">
+              <p className="text-xs text-muted-foreground">
+                Sistem teması: <span className="font-semibold text-foreground">{resolvedTheme === 'dark' ? 'Koyu' : 'Açık'}</span>
+              </p>
+            </div>
+          )}
         </div>
       )}
     </div>
