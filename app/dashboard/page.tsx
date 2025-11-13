@@ -4,6 +4,20 @@ import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import { FileText, Users, Eye, TrendingUp, Plus, ArrowUpRight, Sparkles } from "lucide-react"
 
+interface Post {
+  id: string
+  title: string
+  status: string
+  viewCount: number
+  category: {
+    name: string
+  } | null
+  author: {
+    name: string | null
+    image: string | null
+  }
+}
+
 export default async function DashboardPage() {
   const session = await auth()
 
@@ -202,7 +216,7 @@ export default async function DashboardPage() {
         </div>
         <div className="divide-y divide-border/50">
           {userPosts.length > 0 ? (
-            userPosts.map((post, index) => (
+            userPosts.map((post: Post, index: number) => (
               <div 
                 key={post.id} 
                 className="px-6 py-4 hover:bg-accent/30 transition-colors duration-200 animate-in fade-in slide-in-from-bottom"

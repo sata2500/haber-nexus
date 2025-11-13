@@ -4,6 +4,24 @@ import { PostCard } from "@/components/post-card"
 import { prisma } from "@/lib/prisma"
 import { Search, TrendingUp, Sparkles, Clock, Zap, Newspaper, BarChart3 } from "lucide-react"
 
+interface Post {
+  id: string
+  title: string
+  slug: string
+  excerpt: string | null
+  coverImage: string | null
+  publishedAt: Date | null
+  viewCount: number
+  author: {
+    name: string | null
+    image: string | null
+  }
+  category: {
+    name: string
+    slug: string
+  } | null
+}
+
 export const dynamic = 'force-dynamic'
 
 async function getLatestPosts() {
@@ -217,7 +235,7 @@ export default async function Home() {
           
           {latestPosts.length > 0 ? (
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {latestPosts.map((post, index) => (
+              {latestPosts.map((post: Post, index: number) => (
                 <div 
                   key={post.id} 
                   className="animate-in fade-in slide-in-from-bottom duration-500"

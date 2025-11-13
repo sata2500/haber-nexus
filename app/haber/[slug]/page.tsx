@@ -196,7 +196,7 @@ export default async function PostPage({ params }: PageProps) {
             {/* Content */}
             <div className="prose prose-lg dark:prose-invert max-w-none animate-in fade-in slide-in-from-bottom duration-700 delay-500">
               <div className="space-y-6 text-foreground leading-relaxed">
-                {post.content.split('\n').map((paragraph, index) => (
+                {post.content.split('\n').map((paragraph: string, index: number) => (
                   paragraph.trim() && (
                     <p key={index} className="text-base sm:text-lg leading-relaxed">
                       {paragraph}

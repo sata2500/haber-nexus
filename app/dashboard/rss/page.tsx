@@ -6,6 +6,16 @@ import { Plus, RefreshCw, Trash2, Check, X } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
 import { tr } from "date-fns/locale"
 
+interface RssFeed {
+  id: string
+  name: string
+  url: string
+  isActive: boolean
+  createdAt: Date
+  updatedAt: Date
+  lastFetched: Date | null
+}
+
 export default async function RssPage() {
   const session = await auth()
 
@@ -54,7 +64,7 @@ export default async function RssPage() {
 
       <div className="grid grid-cols-1 gap-6">
         {rssFeeds.length > 0 ? (
-          rssFeeds.map((feed) => (
+          rssFeeds.map((feed: RssFeed) => (
             <div
               key={feed.id}
               className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"

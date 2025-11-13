@@ -6,6 +6,22 @@ import { Plus, Edit, Trash2, Eye } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
 import { tr } from "date-fns/locale"
 
+interface Post {
+  id: string
+  title: string
+  status: string
+  viewCount: number
+  createdAt: Date
+  authorId: string
+  category: {
+    name: string
+  } | null
+  author: {
+    name: string | null
+    image: string | null
+  }
+}
+
 export default async function PostsPage() {
   const session = await auth()
 
@@ -79,7 +95,7 @@ export default async function PostsPage() {
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
             {posts.length > 0 ? (
-              posts.map((post) => (
+              posts.map((post: Post) => (
                 <tr key={post.id}>
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="flex items-center">
