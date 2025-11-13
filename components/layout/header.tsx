@@ -1,0 +1,134 @@
+'use client'
+
+import Link from 'next/link'
+import { useTheme } from 'next-themes'
+import { Moon, Sun, Menu, Search, User } from 'lucide-react'
+import { useState, useEffect } from 'react'
+
+export function Header() {
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const categories = [
+    { name: 'Gündem', href: '/kategori/gundem' },
+    { name: 'Dünya', href: '/kategori/dunya' },
+    { name: 'Ekonomi', href: '/kategori/ekonomi' },
+    { name: 'Teknoloji', href: '/kategori/teknoloji' },
+    { name: 'Spor', href: '/kategori/spor' },
+    { name: 'Kültür-Sanat', href: '/kategori/kultur-sanat' },
+  ]
+
+  return (
+    <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-zinc-950/95 dark:supports-[backdrop-filter]:bg-zinc-950/60">
+      {/* Top Bar */}
+      <div className="border-b border-zinc-200 dark:border-zinc-800">
+        <div className="container mx-auto px-4">
+          <div className="flex h-10 items-center justify-between text-sm">
+            <div className="flex items-center gap-4 text-zinc-600 dark:text-zinc-400">
+              <span>{new Date().toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <Link href="/hakkimizda" className="hover:text-zinc-900 dark:hover:text-zinc-100">
+                Hakkımızda
+              </Link>
+              <Link href="/iletisim" className="hover:text-zinc-900 dark:hover:text-zinc-100">
+                İletişim
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Header */}
+      <div className="container mx-auto px-4">
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-2">
+            <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              HaberNexus
+            </div>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-6">
+            {categories.map((category) => (
+              <Link
+                key={category.name}
+                href={category.href}
+                className="text-sm font-medium text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100 transition-colors"
+              >
+                {category.name}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Right Actions */}
+          <div className="flex items-center gap-2">
+            {/* Search Button */}
+            <button
+              className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+              aria-label="Ara"
+            >
+              <Search className="h-5 w-5" />
+            </button>
+
+            {/* Theme Toggle */}
+            {mounted && (
+              <button
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                aria-label="Tema değiştir"
+              >
+                {theme === 'dark' ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </button>
+            )}
+
+            {/* User Menu */}
+            <button
+              className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+              aria-label="Kullanıcı menüsü"
+            >
+              <User className="h-5 w-5" />
+            </button>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+              aria-label="Menü"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t border-zinc-200 dark:border-zinc-800">
+          <nav className="container mx-auto px-4 py-4 flex flex-col space-y-3">
+            {categories.map((category) => (
+              <Link
+                key={category.name}
+                href={category.href}
+                className="text-sm font-medium text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100 py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {category.name}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      )}
+    </header>
+  )
+}
