@@ -3,6 +3,9 @@ import { authOptions } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Home } from "lucide-react"
+import Link from "next/link"
 
 export default async function AdminDashboard() {
   const session = await getServerSession(authOptions)
@@ -49,11 +52,19 @@ export default async function AdminDashboard() {
   
   return (
     <div className="container mx-auto py-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <p className="text-muted-foreground mt-2">
-          Hoş geldiniz, {session.user?.name}
-        </p>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+          <p className="text-muted-foreground mt-2">
+            Hoş geldiniz, {session.user?.name}
+          </p>
+        </div>
+        <Link href="/">
+          <Button variant="outline" size="sm">
+            <Home className="h-4 w-4 mr-2" />
+            Ana Sayfa
+          </Button>
+        </Link>
       </div>
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

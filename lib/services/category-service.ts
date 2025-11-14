@@ -1,3 +1,4 @@
+import "server-only"
 import { prisma } from "@/lib/prisma"
 import { cache } from "react"
 
@@ -12,7 +13,7 @@ import { cache } from "react"
 /**
  * Navbar için kategorileri getirir
  * - Sadece aktif kategoriler
- * - Navbar'da gösterilecek kategoriler (showInNav: true veya order <= 5)
+ * - Navbar'da gösterilecek kategoriler (order <= 7)
  * - Sıralama: order alanına göre
  */
 export const getNavbarCategories = cache(async () => {
@@ -32,7 +33,7 @@ export const getNavbarCategories = cache(async () => {
       orderBy: {
         order: "asc",
       },
-      take: 5, // Navbar'da maksimum 5 kategori göster
+      take: 7, // Navbar'da maksimum 7 kategori göster (tüm kategoriler)
     })
 
     return categories
