@@ -45,6 +45,9 @@ model User {
   createdAutomations ContentAutomation[] @relation("CreatedAutomations")
   drafts             ContentDraft[]      @relation("AuthorDrafts")
   
+  // Editor Relations
+  editorReviews      Article[]           @relation("EditorReviews")
+  
   @@index([email])
   @@index([username])
   @@index([role])
@@ -145,6 +148,13 @@ model Article {
   authorId        String
   author          User          @relation(fields: [authorId], references: [id])
   
+  // Editor Review
+  editorId        String?
+  editor          User?         @relation("EditorReviews", fields: [editorId], references: [id])
+  editorFeedback  String?       @db.Text
+  submittedAt     DateTime?
+  reviewedAt      DateTime?
+  
   // AI features
   aiGenerated     Boolean       @default(false)
   aiSummary       String?       @db.Text
@@ -196,6 +206,8 @@ model Article {
   @@index([qualityScore])
   @@index([sentimentType])
   @@index([detectedLanguage])
+  @@index([editorId])
+  @@index([submittedAt])
 }
 
 model ArticleTranslation {

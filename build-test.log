@@ -1,0 +1,39 @@
+
+> haber-nexus@0.1.0 build /home/ubuntu/haber-nexus
+> prisma generate && next build
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v6.19.0) to ./node_modules/.pnpm/@prisma+client@6.19.0_prisma@6.19.0_typescript@5.9.3__typescript@5.9.3/node_modules/@prisma/client in 242ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+   ▲ Next.js 16.0.3 (Turbopack)
+   - Environments: .env
+
+ ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 5.7s
+   Running TypeScript ...
+Failed to compile.
+
+./app/editor/page.tsx:249:18
+Type error: Cannot find name 'Calendar'.
+
+[0m [90m 247 |[39m             [33m<[39m[33mCardHeader[39m[33m>[39m
+ [90m 248 |[39m               [33m<[39m[33mCardTitle[39m className[33m=[39m[32m"flex items-center gap-2"[39m[33m>[39m
+[31m[1m>[22m[39m[90m 249 |[39m                 [33m<[39m[33mCalendar[39m className[33m=[39m[32m"h-5 w-5"[39m [33m/[39m[33m>[39m
+ [90m     |[39m                  [31m[1m^[22m[39m
+ [90m 250 |[39m                 [33mİçerik[39m [33mTakvimi[39m
+ [90m 251 |[39m               [33m<[39m[33m/[39m[33mCardTitle[39m[33m>[39m
+ [90m 252 |[39m             [33m<[39m[33m/[39m[33mCardHeader[39m[33m>[39m[0m
+Next.js build worker exited with code: 1 and signal: null
+ ELIFECYCLE  Command failed with exit code 1.

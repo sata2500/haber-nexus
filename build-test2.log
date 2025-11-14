@@ -1,0 +1,96 @@
+
+> haber-nexus@0.1.0 build /home/ubuntu/haber-nexus
+> prisma generate && next build
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v6.19.0) to ./node_modules/.pnpm/@prisma+client@6.19.0_prisma@6.19.0_typescript@5.9.3__typescript@5.9.3/node_modules/@prisma/client in 270ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Need your database queries to be 1000x faster? Accelerate offers you that and more: https://pris.ly/tip-2-accelerate
+
+   ▲ Next.js 16.0.3 (Turbopack)
+   - Environments: .env
+
+ ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 5.5s
+   Running TypeScript ...
+   Collecting page data using 5 workers ...
+   Generating static pages using 5 workers (0/24) ...
+   Generating static pages using 5 workers (6/24) 
+   Generating static pages using 5 workers (12/24) 
+   Generating static pages using 5 workers (18/24) 
+ ✓ Generating static pages using 5 workers (24/24) in 2.9s
+   Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /about
+├ ƒ /admin
+├ ƒ /admin/articles
+├ ƒ /admin/articles/[id]/edit
+├ ƒ /admin/articles/new
+├ ƒ /admin/categories
+├ ƒ /admin/categories/[id]/edit
+├ ƒ /admin/categories/new
+├ ƒ /admin/content-creator
+├ ƒ /admin/drafts
+├ ƒ /admin/rss-feeds
+├ ƒ /admin/rss-feeds/new
+├ ƒ /admin/users
+├ ƒ /admin/users/[id]/edit
+├ ƒ /api/ai/advanced
+├ ƒ /api/ai/analytics
+├ ƒ /api/ai/test
+├ ƒ /api/articles
+├ ƒ /api/articles/[id]
+├ ƒ /api/auth/[...nextauth]
+├ ƒ /api/auth/change-password
+├ ƒ /api/auth/register
+├ ƒ /api/author/articles
+├ ƒ /api/bookmarks
+├ ƒ /api/categories
+├ ƒ /api/categories/[id]
+├ ƒ /api/comments
+├ ƒ /api/content/generate
+├ ƒ /api/drafts
+├ ƒ /api/drafts/[id]
+├ ƒ /api/drafts/[id]/publish
+├ ƒ /api/editor/pending
+├ ƒ /api/follows
+├ ƒ /api/likes
+├ ƒ /api/notifications
+├ ƒ /api/notifications/[id]/read
+├ ƒ /api/rss-feeds
+├ ƒ /api/rss-feeds/[id]
+├ ƒ /api/rss-feeds/[id]/scan
+├ ƒ /api/rss-feeds/scan-all
+├ ƒ /api/search
+├ ƒ /api/users
+├ ƒ /api/users/[id]
+├ ƒ /articles/[slug]
+├ ƒ /auth/signin
+├ ƒ /auth/signup
+├ ƒ /author
+├ ƒ /author/articles
+├ ƒ /categories/[slug]
+├ ƒ /contact
+├ ƒ /editor
+├ ƒ /editor/review
+├ ƒ /privacy
+├ ƒ /profile
+├ ○ /robots.txt
+├ ƒ /search
+├ ○ /sitemap.xml
+└ ƒ /terms
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
