@@ -189,7 +189,11 @@ export async function advancedProcessRssItem(
 
   // Translation
   if (options?.translateTo && options.translateTo.length > 0) {
-    advancedContent.translations = {}
+    advancedContent.translations = {} as Record<SupportedLanguage, {
+      title: string
+      excerpt: string
+      content: string
+    }>
 
     for (const targetLang of options.translateTo) {
       try {

@@ -41,6 +41,10 @@ model User {
   // Author specific
   authorProfile AuthorProfile?
   
+  // Content Automation
+  createdAutomations ContentAutomation[] @relation("CreatedAutomations")
+  drafts             ContentDraft[]      @relation("AuthorDrafts")
+  
   @@index([email])
   @@index([username])
   @@index([role])
@@ -153,6 +157,16 @@ model Article {
   metaDescription String?       @db.Text
   keywords        String[]
   
+  // AI Analytics
+  qualityScore       Float?        @default(0.5)
+  sentimentScore     Float?        @default(0)
+  sentimentType      String?       @default("neutral")
+  moderationScore    Float?        @default(1.0)
+  factCheckScore     Float?        @default(0.5)
+  detectedLanguage   String?       @default("tr")
+  coverImageAltText  String?
+  coverImageDescription String?    @db.Text
+  
   // Stats
   viewCount       Int           @default(0)
   likeCount       Int           @default(0)
@@ -169,6 +183,8 @@ model Article {
   comments        Comment[]
   likes           Like[]
   bookmarks       Bookmark[]
+  translations    ArticleTranslation[]
+  draft           ContentDraft?       @relation("DraftArticle")
   
   @@index([slug])
   @@index([authorId])
@@ -177,6 +193,29 @@ model Article {
   @@index([type])
   @@index([publishedAt])
   @@index([aiGenerated])
+  @@index([qualityScore])
+  @@index([sentimentType])
+  @@index([detectedLanguage])
+}
+
+model ArticleTranslation {
+  id              String   @id @default(cuid())
+  articleId       String
+  article         Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  
+  language        String
+  title           String
+  excerpt         String?  @db.Text
+  content         String   @db.Text
+  metaTitle       String?
+  metaDescription String?  @db.Text
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@unique([articleId, language])
+  @@index([language])
+  @@index([articleId])
 }
 
 enum ArticleType {
@@ -473,3 +512,178 @@ enum TaskStatus {
   FAILED
   CANCELLED
 }
+// Content Automation Models
+// Bu dosyayı schema.prisma'ya ekleyin
+
+model ContentAutomation {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?  @db.Text
+  
+  // Ownership
+  createdBy       String
+  creator         User     @relation("CreatedAutomations", fields: [createdBy], references: [id])
+  
+  // Type
+  type            AutomationType
+  
+  // Status
+  isActive        Boolean  @default(true)
+  status          AutomationStatus @default(IDLE)
+  
+  // Configuration
+  config          Json
+  
+  // Schedule
+  schedule        String?  // Cron expression
+  nextRunAt       DateTime?
+  lastRunAt       DateTime?
+  
+  // Stats
+  totalRuns       Int      @default(0)
+  successfulRuns  Int      @default(0)
+  failedRuns      Int      @default(0)
+  
+  // Relations
+  runs            AutomationRun[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([createdBy])
+  @@index([type])
+  @@index([isActive])
+  @@index([nextRunAt])
+  @@index([status])
+}
+
+enum AutomationType {
+  RSS_TO_ARTICLE
+  TOPIC_TO_ARTICLE
+  SCHEDULED_CONTENT
+  TREND_BASED
+  RESEARCH_BASED
+}
+
+enum AutomationStatus {
+  IDLE
+  RUNNING
+  PAUSED
+  ERROR
+}
+
+model AutomationRun {
+  id              String   @id @default(cuid())
+  
+  automationId    String
+  automation      ContentAutomation @relation(fields: [automationId], references: [id], onDelete: Cascade)
+  
+  status          RunStatus
+  
+  // Input/Output
+  input           Json?
+  output          Json?
+  
+  // Results
+  articlesCreated Int      @default(0)
+  articlesPublished Int    @default(0)
+  
+  // Error handling
+  error           String?  @db.Text
+  
+  // Timing
+  startedAt       DateTime @default(now())
+  completedAt     DateTime?
+  duration        Int?     // milliseconds
+  
+  @@index([automationId])
+  @@index([status])
+  @@index([startedAt])
+}
+
+enum RunStatus {
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model ContentDraft {
+  id              String   @id @default(cuid())
+  
+  // Ownership
+  authorId        String
+  author          User     @relation("AuthorDrafts", fields: [authorId], references: [id])
+  
+  // Content
+  topic           String
+  outline         Json?
+  research        Json?
+  draft           String?  @db.Text
+  
+  // AI Metadata
+  aiGenerated     Boolean  @default(false)
+  aiPrompt        String?  @db.Text
+  aiModel         String?
+  
+  // Status
+  status          DraftStatus @default(DRAFT)
+  
+  // Quality
+  qualityScore    Float?
+  readabilityScore Float?
+  seoScore        Float?
+  
+  // Relations
+  articleId       String?  @unique
+  article         Article? @relation("DraftArticle", fields: [articleId], references: [id])
+  sources         ResearchSource[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([authorId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum DraftStatus {
+  DRAFT
+  RESEARCHING
+  GENERATING
+  REVIEW
+  APPROVED
+  PUBLISHED
+}
+
+model ResearchSource {
+  id              String   @id @default(cuid())
+  
+  draftId         String
+  draft           ContentDraft @relation(fields: [draftId], references: [id], onDelete: Cascade)
+  
+  // Source info
+  title           String
+  url             String
+  excerpt         String?  @db.Text
+  
+  // Reliability
+  reliability     Float    @default(0.5)
+  isVerified      Boolean  @default(false)
+  
+  // Usage
+  isUsed          Boolean  @default(false)
+  citationText    String?  @db.Text
+  
+  createdAt       DateTime @default(now())
+  
+  @@index([draftId])
+  @@index([isUsed])
+}
+
+// Add to User model:
+// createdAutomations ContentAutomation[] @relation("CreatedAutomations")
+// drafts             ContentDraft[]      @relation("AuthorDrafts")
+
+// Add to Article model:
+// draft              ContentDraft?       @relation("DraftArticle")
