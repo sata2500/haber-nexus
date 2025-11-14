@@ -133,8 +133,8 @@ model Article {
   // Categorization
   type            ArticleType   @default(NEWS)
   status          ArticleStatus @default(DRAFT)
-  categoryId      String
-  category        Category      @relation(fields: [categoryId], references: [id])
+  categoryId      String?
+  category        Category?     @relation(fields: [categoryId], references: [id])
   tags            Tag[]
   
   // Author

@@ -171,7 +171,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
-                              <Badge variant="secondary">{article.category.name}</Badge>
+                              {article.category && (
+                                <Badge variant="secondary">{article.category.name}</Badge>
+                              )}
                               <Badge variant="outline">{article.type}</Badge>
                               {article.aiGenerated && (
                                 <Badge variant="outline">AI</Badge>

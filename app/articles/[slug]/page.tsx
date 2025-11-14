@@ -134,7 +134,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     notFound()
   }
 
-  const relatedArticles = await getRelatedArticles(article.categoryId, article.id)
+  const relatedArticles = article.categoryId 
+    ? await getRelatedArticles(article.categoryId, article.id)
+    : []
 
   const readingTime = Math.ceil(article.content.split(" ").length / 200)
 
@@ -149,19 +151,25 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             {/* Breadcrumb */}
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
               <Link href="/" className="hover:text-primary">Ana Sayfa</Link>
-              <span>/</span>
-              <Link href={`/categories/${article.category.slug}`} className="hover:text-primary">
-                {article.category.name}
-              </Link>
+              {article.category && (
+                <>
+                  <span>/</span>
+                  <Link href={`/categories/${article.category.slug}`} className="hover:text-primary">
+                    {article.category.name}
+                  </Link>
+                </>
+              )}
               <span>/</span>
               <span className="text-foreground">{article.title}</span>
             </div>
 
             {/* Category & Type */}
             <div className="flex items-center gap-2 mb-4">
-              <Badge variant="default">
-                {article.category.icon} {article.category.name}
-              </Badge>
+              {article.category && (
+                <Badge variant="default">
+                  {article.category.icon} {article.category.name}
+                </Badge>
+              )}
               <Badge variant="outline">{article.type}</Badge>
               {article.aiGenerated && (
                 <Badge variant="secondary">AI Destekli</Badge>
@@ -288,9 +296,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                   {relatedArticles.map((related) => (
                     <Card key={related.id} className="hover:shadow-md transition-shadow">
                       <CardContent className="pt-6">
-                        <Badge variant="secondary" className="mb-2">
-                          {related.category.name}
-                        </Badge>
+                        {related.category && (
+                          <Badge variant="secondary" className="mb-2">
+                            {related.category.name}
+                          </Badge>
+                        )}
                         <h3 className="font-semibold mb-2 line-clamp-2">
                           <a
                             href={`/articles/${related.slug}`}

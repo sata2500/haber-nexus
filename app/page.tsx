@@ -116,7 +116,7 @@ export default async function HomePage() {
                 <CardHeader className="space-y-4">
                   <div className="flex items-center gap-2">
                     <Badge variant="default">
-                      {featuredArticle.category.icon} {featuredArticle.category.name}
+                      {featuredArticle.category?.icon} {featuredArticle.category?.name}
                     </Badge>
                     {featuredArticle.aiGenerated && (
                       <Badge variant="outline" className="gap-1">
@@ -177,7 +177,9 @@ export default async function HomePage() {
                           <div className="flex items-start justify-between gap-4">
                             <div className="space-y-2 flex-1">
                               <div className="flex items-center gap-2">
-                                <Badge variant="secondary">{article.category.name}</Badge>
+                                {article.category && (
+                                  <Badge variant="secondary">{article.category.name}</Badge>
+                                )}
                                 {article.aiGenerated && (
                                   <Badge variant="outline" className="gap-1">
                                     <Sparkles className="h-3 w-3" />
