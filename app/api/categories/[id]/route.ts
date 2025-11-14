@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { revalidatePath } from "next/cache"
 import { z } from "zod"
 
 const categoryUpdateSchema = z.object({
@@ -107,6 +108,10 @@ export async function PATCH(
       },
     })
 
+    // Cache'i temizle - Kategoriler anında güncellensin
+    revalidatePath('/', 'layout')
+    revalidatePath('/categories/[slug]', 'page')
+    
     return NextResponse.json(category)
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -164,6 +169,10 @@ export async function DELETE(
     await prisma.category.delete({
       where: { id },
     })
+
+    // Cache'i temizle - Kategoriler anında güncellensin
+    revalidatePath('/', 'layout')
+    revalidatePath('/categories/[slug]', 'page')
 
     return NextResponse.json({ success: true })
   } catch (error) {

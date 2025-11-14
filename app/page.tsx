@@ -8,6 +8,12 @@ import Link from "next/link"
 import Image from "next/image"
 import { prisma } from "@/lib/prisma"
 
+/**
+ * Force dynamic rendering
+ * Kategoriler her istekte güncel çekilir
+ */
+export const dynamic = 'force-dynamic'
+
 async function getFeaturedArticle() {
   return await prisma.article.findFirst({
     where: {

@@ -19,6 +19,14 @@ export const metadata: Metadata = {
   description: "Türkiye ve dünyadan son dakika haberleri, gündem, ekonomi, spor ve teknoloji haberleri",
 };
 
+/**
+ * Force dynamic rendering
+ * 
+ * Bu ayar sayesinde kategoriler her istekte veritabanından çekilir.
+ * Admin panelden kategori eklendiğinde anında görünür.
+ */
+export const dynamic = 'force-dynamic';
+
 export default function RootLayout({
   children,
 }: Readonly<{
