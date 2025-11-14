@@ -120,3 +120,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Container padding fix */
+.container {
+  @apply px-4 md:px-6 lg:px-8;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
