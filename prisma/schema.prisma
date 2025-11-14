@@ -48,6 +48,10 @@ model User {
   // Editor Relations
   editorReviews      Article[]           @relation("EditorReviews")
   
+  // Profile Features
+  readingHistory     ReadingHistory[]
+  settings           UserSettings?
+  
   @@index([email])
   @@index([username])
   @@index([role])
@@ -195,6 +199,7 @@ model Article {
   bookmarks       Bookmark[]
   translations    ArticleTranslation[]
   draft           ContentDraft?       @relation("DraftArticle")
+  readingHistory  ReadingHistory[]
   
   @@index([slug])
   @@index([authorId])
@@ -694,9 +699,52 @@ model ResearchSource {
   @@index([isUsed])
 }
 
-// Add to User model:
-// createdAutomations ContentAutomation[] @relation("CreatedAutomations")
-// drafts             ContentDraft[]      @relation("AuthorDrafts")
+// ============================================
+// PROFILE FEATURES
+// ============================================
 
-// Add to Article model:
-// draft              ContentDraft?       @relation("DraftArticle")
+model ReadingHistory {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  articleId   String
+  article     Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  
+  // Reading metadata
+  startedAt   DateTime @default(now())
+  lastReadAt  DateTime @updatedAt
+  readDuration Int     @default(0) // seconds
+  progress    Float    @default(0) // 0-100
+  completed   Boolean  @default(false)
+  
+  @@unique([userId, articleId])
+  @@index([userId])
+  @@index([articleId])
+  @@index([lastReadAt])
+}
+
+model UserSettings {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Privacy
+  profileVisibility     String   @default("public") // public, private
+  showReadingHistory    Boolean  @default(true)
+  
+  // Notifications
+  emailNotifications    Boolean  @default(true)
+  newArticleNotif       Boolean  @default(true)
+  commentReplyNotif     Boolean  @default(true)
+  followedAuthorNotif   Boolean  @default(true)
+  
+  // Appearance
+  theme                 String   @default("system") // light, dark, system
+  fontSize              String   @default("medium") // small, medium, large
+  readingMode           String   @default("default") // default, focus
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  @@index([userId])
+}
