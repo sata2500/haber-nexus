@@ -405,6 +405,7 @@ enum NotificationType {
   MENTION
   ARTICLE
   SYSTEM
+  ROLE_CHANGE
 }
 
 // ============================================

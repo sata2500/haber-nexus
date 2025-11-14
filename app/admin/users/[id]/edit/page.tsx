@@ -91,6 +91,26 @@ export default function EditUserPage() {
 
       if (response.ok) {
         setSuccess(true)
+        
+        // Eğer rol değiştiyse kullanıcıya bildirim gönder
+        if (roleChanged) {
+          try {
+            await fetch(`/api/users/${userId}/notify-role-change`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                oldRole: ROLE_LABELS[originalRole],
+                newRole: ROLE_LABELS[formData.role],
+              }),
+            })
+          } catch (notifyError) {
+            console.error("Bildirim gönderilemedi:", notifyError)
+            // Bildirim hatası kullanıcı güncellemesini engellemez
+          }
+        }
+        
         setTimeout(() => {
           router.push("/admin/users")
         }, 1500)

@@ -58,19 +58,61 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.sub!
-        session.user.role = token.role as UserRole
+        
+        // Her session çağrısında veritabanından güncel rol bilgisini al
+        // Bu sayede rol değişiklikleri anında yansır
+        try {
+          const user = await prisma.user.findUnique({
+            where: { id: token.sub! },
+            select: { role: true, name: true, image: true, email: true }
+          })
+          
+          if (user) {
+            session.user.role = user.role as UserRole
+            session.user.name = user.name
+            session.user.image = user.image
+            session.user.email = user.email
+          } else {
+            // Kullanıcı silinmişse token'daki rolü kullan
+            session.user.role = token.role as UserRole
+          }
+        } catch (error) {
+          console.error("Error fetching user role:", error)
+          // Hata durumunda token'daki rolü kullan
+          session.user.role = token.role as UserRole
+        }
       }
       return session
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
+      // İlk giriş yapıldığında user bilgilerini token'a ekle
       if (user) {
         token.role = user.role as UserRole
       }
+      
+      // Session güncellendiğinde (update trigger) veritabanından yeni rol bilgisini al
+      if (trigger === "update") {
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.sub! },
+            select: { role: true }
+          })
+          
+          if (dbUser) {
+            token.role = dbUser.role as UserRole
+          }
+        } catch (error) {
+          console.error("Error updating token role:", error)
+        }
+      }
+      
       return token
     }
   },
   session: {
-    strategy: "jwt"
+    strategy: "jwt",
+    // Session'ın ne kadar süre geçerli olacağı (30 gün)
+    maxAge: 30 * 24 * 60 * 60,
   },
   pages: {
     signIn: "/auth/signin",
