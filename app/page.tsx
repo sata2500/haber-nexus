@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Clock, TrendingUp, Sparkles, Eye } from "lucide-react"
+import { ArticleCardActions } from "@/components/article/article-card-actions"
 import Link from "next/link"
 import Image from "next/image"
 import { prisma } from "@/lib/prisma"
@@ -207,13 +208,20 @@ export default async function HomePage() {
                               {article.excerpt && (
                                 <CardDescription>{article.excerpt}</CardDescription>
                               )}
-                              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                                <span>{article.author.name}</span>
-                                <span className="flex items-center gap-1">
-                                  <Clock className="h-3 w-3" />
-                                  {readingTime} dk
-                                </span>
-                                <span>{article._count.likes} beğeni</span>
+                              <div className="flex items-center justify-between gap-4">
+                                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                                  <span>{article.author.name}</span>
+                                  <span className="flex items-center gap-1">
+                                    <Clock className="h-3 w-3" />
+                                    {readingTime} dk
+                                  </span>
+                                </div>
+                                <ArticleCardActions
+                                  articleId={article.id}
+                                  likeCount={article._count.likes}
+                                  commentCount={article._count.comments}
+                                  viewCount={article.viewCount}
+                                />
                               </div>
                             </div>
                             {/* Thumbnail */}

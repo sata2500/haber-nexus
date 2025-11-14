@@ -121,3 +121,67 @@ export async function GET(request: NextRequest) {
     )
   }
 }
+
+/**
+ * Unlike an article
+ * DELETE /api/likes
+ */
+export async function DELETE(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      )
+    }
+
+    const { searchParams } = new URL(request.url)
+    const articleId = searchParams.get("articleId")
+
+    if (!articleId) {
+      return NextResponse.json(
+        { error: "Article ID is required" },
+        { status: 400 }
+      )
+    }
+
+    const existingLike = await prisma.like.findUnique({
+      where: {
+        userId_articleId: {
+          userId: session.user.id,
+          articleId,
+        },
+      },
+    })
+
+    if (!existingLike) {
+      return NextResponse.json(
+        { error: "Like not found" },
+        { status: 404 }
+      )
+    }
+
+    await prisma.like.delete({
+      where: {
+        id: existingLike.id,
+      },
+    })
+
+    // Update article like count
+    await prisma.article.update({
+      where: { id: articleId },
+      data: {
+        likeCount: { decrement: 1 },
+      },
+    })
+
+    return NextResponse.json({ success: true, liked: false })
+  } catch (error) {
+    console.error("Error deleting like:", error)
+    return NextResponse.json(
+      { error: "Failed to delete like" },
+      { status: 500 }
+    )
+  }
+}

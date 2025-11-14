@@ -4,7 +4,9 @@ import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
-import { Clock, Eye, Heart, Bookmark, Share2, User } from "lucide-react"
+import { Clock, Eye, User, MessageSquare } from "lucide-react"
+import { ArticleActions } from "@/components/article/article-actions"
+import { CommentSection } from "@/components/article/comment-section"
 import { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
@@ -203,8 +205,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 <span>{article.viewCount} görüntülenme</span>
               </div>
               <div className="flex items-center gap-2">
-                <Heart className="h-4 w-4" />
-                <span>{article._count.likes} beğeni</span>
+                <MessageSquare className="h-4 w-4" />
+                <span>{article._count.comments} yorum</span>
               </div>
             </div>
 
@@ -241,19 +243,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             )}
 
             {/* Social Actions */}
-            <div className="flex items-center gap-3 py-6 border-y">
-              <button className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent transition-colors">
-                <Heart className="h-5 w-5" />
-                <span>Beğen</span>
-              </button>
-              <button className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent transition-colors">
-                <Bookmark className="h-5 w-5" />
-                <span>Kaydet</span>
-              </button>
-              <button className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent transition-colors">
-                <Share2 className="h-5 w-5" />
-                <span>Paylaş</span>
-              </button>
+            <div className="py-6 border-y">
+              <ArticleActions
+                articleId={article.id}
+                articleTitle={article.title}
+                articleUrl={`/articles/${article.slug}`}
+                initialLikeCount={article._count.likes}
+              />
             </div>
 
             {/* Author Bio */}
@@ -283,6 +279,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 </CardContent>
               </Card>
             )}
+
+            {/* Comments Section */}
+            <CommentSection
+              articleId={article.id}
+              initialCommentCount={article._count.comments}
+            />
           </div>
         </article>
 

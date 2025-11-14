@@ -4,7 +4,8 @@ import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Clock, Eye } from "lucide-react"
+import { Clock } from "lucide-react"
+import { ArticleCardActions } from "@/components/article/article-card-actions"
 import { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
@@ -192,18 +193,20 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                               </CardDescription>
                             )}
                             
-                            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                              <span>{article.author.name || article.author.email}</span>
-                              <span className="flex items-center gap-1">
-                                <Clock className="h-3 w-3" />
-                                {readingTime} dk
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <Eye className="h-3 w-3" />
-                                {article.viewCount}
-                              </span>
-                              <span>{article._count.likes} beğeni</span>
-                              <span>{article._count.comments} yorum</span>
+                            <div className="flex items-center justify-between gap-4">
+                              <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                                <span>{article.author.name || article.author.email}</span>
+                                <span className="flex items-center gap-1">
+                                  <Clock className="h-3 w-3" />
+                                  {readingTime} dk
+                                </span>
+                              </div>
+                              <ArticleCardActions
+                                articleId={article.id}
+                                likeCount={article._count.likes}
+                                commentCount={article._count.comments}
+                                viewCount={article.viewCount}
+                              />
                             </div>
 
                             {article.tags.length > 0 && (
