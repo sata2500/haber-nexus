@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Clock, Eye } from "lucide-react"
 import { Metadata } from "next"
+import Link from "next/link"
 
 interface CategoryPageProps {
   params: Promise<{
@@ -105,7 +106,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <div className="max-w-4xl mx-auto">
               {/* Breadcrumb */}
               <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-                <a href="/" className="hover:text-primary">Ana Sayfa</a>
+                <Link href="/" className="hover:text-primary">Ana Sayfa</Link>
                 <span>/</span>
                 <span className="text-foreground">Kategoriler</span>
                 <span>/</span>

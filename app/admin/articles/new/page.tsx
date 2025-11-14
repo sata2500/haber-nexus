@@ -155,7 +155,7 @@ export default function NewArticlePage() {
                 required
               />
               <p className="text-xs text-muted-foreground">
-                URL'de kullanılacak benzersiz tanımlayıcı
+                URL&apos;de kullanılacak benzersiz tanımlayıcı
               </p>
             </div>
 

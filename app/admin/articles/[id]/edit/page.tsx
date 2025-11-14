@@ -254,7 +254,7 @@ export default function EditArticlePage() {
               label="Kapak Görseli"
               value={formData.coverImage}
               onChange={(value) => setFormData({ ...formData, coverImage: value })}
-              placeholder="Kapak görseli URL'si"
+              placeholder="Kapak görseli URL&apos;si"
             />
 
             <div className="space-y-2">

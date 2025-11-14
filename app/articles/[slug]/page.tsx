@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Clock, Eye, Heart, Bookmark, Share2, User } from "lucide-react"
 import { Metadata } from "next"
+import Link from "next/link"
 
 interface ArticlePageProps {
   params: Promise<{
@@ -146,11 +147,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <div className="max-w-4xl mx-auto">
             {/* Breadcrumb */}
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-              <a href="/" className="hover:text-primary">Ana Sayfa</a>
+              <Link href="/" className="hover:text-primary">Ana Sayfa</Link>
               <span>/</span>
-              <a href={`/categories/${article.category.slug}`} className="hover:text-primary">
+              <Link href={`/categories/${article.category.slug}`} className="hover:text-primary">
                 {article.category.name}
-              </a>
+              </Link>
               <span>/</span>
               <span className="text-foreground">{article.title}</span>
             </div>

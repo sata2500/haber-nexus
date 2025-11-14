@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import { User, Mail, Shield, Calendar } from "lucide-react"
+import { User, Mail, Shield } from "lucide-react"
 
 export default function ProfilePage() {
   const { data: session, status } = useSession()
@@ -40,6 +40,7 @@ export default function ProfilePage() {
     if (session?.user?.id) {
       fetchUserData()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session])
 
   const fetchUserData = async () => {
@@ -53,8 +54,8 @@ export default function ProfilePage() {
           bio: data.bio || "",
         })
       }
-    } catch (error) {
-      console.error("Error fetching user data:", error)
+    } catch (err) {
+      console.error("Error fetching user data:", err)
     }
   }
 
@@ -79,7 +80,8 @@ export default function ProfilePage() {
         const data = await response.json()
         setError(data.error || "Profil güncellenemedi")
       }
-    } catch (error) {
+    } catch (err) {
+      console.error("Error updating profile:", err)
       setError("Bir hata oluştu")
     } finally {
       setLoading(false)
@@ -127,7 +129,8 @@ export default function ProfilePage() {
         const data = await response.json()
         setError(data.error || "Şifre değiştirilemedi")
       }
-    } catch (error) {
+    } catch (err) {
+      console.error("Error updating profile:", err)
       setError("Bir hata oluştu")
     } finally {
       setLoading(false)

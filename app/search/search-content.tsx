@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useSearchParams } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -9,11 +9,36 @@ import { Button } from "@/components/ui/button"
 import { Search, FileText, FolderTree, Tag, Clock } from "lucide-react"
 import Link from "next/link"
 
+interface Article {
+  id: string
+  title: string
+  slug: string
+  excerpt?: string
+  content: string
+  category: { name: string }
+  author: { name?: string; email: string }
+}
+
+interface Category {
+  id: string
+  name: string
+  slug: string
+  description?: string
+  icon?: string
+  _count: { articles: number }
+}
+
+interface Tag {
+  id: string
+  name: string
+  useCount: number
+}
+
 interface SearchResults {
   query: string
-  articles: any[]
-  categories: any[]
-  tags: any[]
+  articles: Article[]
+  categories: Category[]
+  tags: Tag[]
   total: number
 }
 
@@ -27,13 +52,7 @@ export default function SearchContent() {
   const [loading, setLoading] = useState(false)
   const [activeTab, setActiveTab] = useState("all")
 
-  useEffect(() => {
-    if (searchQuery.length >= 2) {
-      performSearch()
-    }
-  }, [searchQuery, activeTab])
-
-  const performSearch = async () => {
+  const performSearch = useCallback(async () => {
     setLoading(true)
     try {
       const response = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}&type=${activeTab}`)
@@ -46,7 +65,13 @@ export default function SearchContent() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [searchQuery, activeTab])
+
+  useEffect(() => {
+    if (searchQuery.length >= 2) {
+      performSearch()
+    }
+  }, [searchQuery, activeTab, performSearch])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()

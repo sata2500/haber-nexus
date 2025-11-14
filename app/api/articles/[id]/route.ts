@@ -164,7 +164,7 @@ export async function PATCH(
       )
     }
 
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       title: validatedData.title,
       slug: validatedData.slug,
       excerpt: validatedData.excerpt,

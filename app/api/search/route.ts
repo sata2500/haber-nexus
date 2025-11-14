@@ -18,9 +18,9 @@ export async function GET(request: NextRequest) {
 
     const searchQuery = query.toLowerCase()
 
-    let articles: any[] = []
-    let categories: any[] = []
-    let tags: any[] = []
+    let articles: unknown[] = []
+    let categories: unknown[] = []
+    let tags: unknown[] = []
 
     // Makale araması
     if (type === "all" || type === "articles") {
