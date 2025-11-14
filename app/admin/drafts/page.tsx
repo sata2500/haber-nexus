@@ -78,11 +78,11 @@ export default function DraftsPage() {
 
   const getStatusBadge = (status: string) => {
     const colors: Record<string, string> = {
-      DRAFT: "bg-gray-100 text-gray-800",
-      RESEARCHING: "bg-blue-100 text-blue-800",
-      GENERATING: "bg-purple-100 text-purple-800",
-      REVIEW: "bg-yellow-100 text-yellow-800",
-      APPROVED: "bg-green-100 text-green-800",
+      DRAFT: "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200",
+      RESEARCHING: "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200",
+      GENERATING: "bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200",
+      REVIEW: "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200",
+      APPROVED: "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200",
       PUBLISHED: "bg-green-600 text-white"
     }
 
@@ -105,7 +105,7 @@ export default function DraftsPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">📝 İçerik Taslakları</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">📝 İçerik Taslakları</h1>
         <Link
           href="/admin/content-creator"
           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
@@ -129,7 +129,7 @@ export default function DraftsPage() {
             className={`px-4 py-2 rounded-lg ${
               filter === option.value
                 ? "bg-blue-600 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
             }`}
           >
             {option.label}
@@ -141,14 +141,14 @@ export default function DraftsPage() {
       {loading ? (
         <div className="text-center py-12">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-gray-600">Yükleniyor...</p>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Yükleniyor...</p>
         </div>
       ) : drafts.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-lg shadow">
-          <p className="text-gray-600">Henüz taslak bulunmuyor.</p>
+        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow">
+          <p className="text-gray-600 dark:text-gray-400">Henüz taslak bulunmuyor.</p>
           <Link
             href="/admin/content-creator"
-            className="inline-block mt-4 text-blue-600 hover:underline"
+            className="inline-block mt-4 text-blue-600 dark:text-blue-400 hover:underline"
           >
             İlk taslağınızı oluşturun →
           </Link>
@@ -158,20 +158,20 @@ export default function DraftsPage() {
           {drafts.map((draft) => (
             <div
               key={draft.id}
-              className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
             >
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
-                    <h3 className="text-xl font-bold">{draft.topic}</h3>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{draft.topic}</h3>
                     {getStatusBadge(draft.status)}
                     {draft.aiGenerated && (
-                      <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded text-xs font-medium">
+                      <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded text-xs font-medium">
                         🤖 AI
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
                     Yazar: {draft.author.name} | Oluşturulma: {new Date(draft.createdAt).toLocaleDateString("tr-TR")}
                   </p>
                 </div>
@@ -194,27 +194,27 @@ export default function DraftsPage() {
 
               {/* Quality Scores */}
               {(draft.qualityScore || draft.readabilityScore || draft.seoScore) && (
-                <div className="grid grid-cols-3 gap-4 pt-4 border-t">
+                <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                   {draft.qualityScore !== null && (
                     <div>
-                      <div className="text-xs text-gray-600">Kalite</div>
-                      <div className="text-lg font-bold text-blue-600">
+                      <div className="text-xs text-gray-600 dark:text-gray-400">Kalite</div>
+                      <div className="text-lg font-bold text-blue-600 dark:text-blue-400">
                         {Math.round(draft.qualityScore * 100)}%
                       </div>
                     </div>
                   )}
                   {draft.readabilityScore !== null && (
                     <div>
-                      <div className="text-xs text-gray-600">Okunabilirlik</div>
-                      <div className="text-lg font-bold text-green-600">
+                      <div className="text-xs text-gray-600 dark:text-gray-400">Okunabilirlik</div>
+                      <div className="text-lg font-bold text-green-600 dark:text-green-400">
                         {Math.round(draft.readabilityScore)}%
                       </div>
                     </div>
                   )}
                   {draft.seoScore !== null && (
                     <div>
-                      <div className="text-xs text-gray-600">SEO</div>
-                      <div className="text-lg font-bold text-purple-600">
+                      <div className="text-xs text-gray-600 dark:text-gray-400">SEO</div>
+                      <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
                         {Math.round(draft.seoScore)}%
                       </div>
                     </div>
@@ -224,10 +224,10 @@ export default function DraftsPage() {
 
               {/* Published Article Link */}
               {draft.article && (
-                <div className="mt-4 pt-4 border-t">
+                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                   <Link
                     href={`/articles/${draft.article.slug}`}
-                    className="text-blue-600 hover:underline text-sm"
+                    className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
                   >
                     📄 Yayınlanan makaleyi görüntüle →
                   </Link>

@@ -92,6 +92,30 @@ export default async function AdminDashboard() {
           </CardHeader>
           <CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <a
+              href="/admin/content-creator"
+              className="p-4 border rounded-lg hover:bg-accent transition-colors bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/20"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-2xl">🤖</span>
+                <h3 className="font-semibold">AI İçerik Oluşturucu</h3>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Yapay zeka ile özgün içerik oluştur
+              </p>
+            </a>
+            <a
+              href="/admin/drafts"
+              className="p-4 border rounded-lg hover:bg-accent transition-colors"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-2xl">📝</span>
+                <h3 className="font-semibold">İçerik Taslakları</h3>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Taslakları görüntüle ve yönet
+              </p>
+            </a>
+            <a
               href="/admin/users"
               className="p-4 border rounded-lg hover:bg-accent transition-colors"
             >
@@ -116,6 +140,15 @@ export default async function AdminDashboard() {
               <h3 className="font-semibold">Kategori Yönetimi</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 Kategorileri düzenle
+              </p>
+            </a>
+            <a
+              href="/admin/rss-feeds"
+              className="p-4 border rounded-lg hover:bg-accent transition-colors"
+            >
+              <h3 className="font-semibold">RSS Feed Yönetimi</h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                RSS kaynaklarını yönet
               </p>
             </a>
           </CardContent>

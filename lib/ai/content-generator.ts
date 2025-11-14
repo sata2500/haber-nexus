@@ -140,7 +140,7 @@ export async function generateArticle(
     sources: includeSources ? sources : undefined,
     
     aiGenerated: true,
-    aiModel: "gemini-2.0-flash-exp",
+    aiModel: "gemini-2.5-flash",
     generatedAt: new Date()
   }
 }
