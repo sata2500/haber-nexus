@@ -17,19 +17,19 @@ async function main() {
       order: 1,
     },
     {
+      slug: "dunya",
+      name: "Dünya",
+      description: "Dünya haberleri ve uluslararası gelişmeler",
+      icon: "🌍",
+      color: "#06b6d4",
+      order: 2,
+    },
+    {
       slug: "ekonomi",
       name: "Ekonomi",
       description: "Ekonomi ve finans haberleri",
       icon: "💰",
       color: "#10b981",
-      order: 2,
-    },
-    {
-      slug: "teknoloji",
-      name: "Teknoloji",
-      description: "Teknoloji ve inovasyon haberleri",
-      icon: "💻",
-      color: "#3b82f6",
       order: 3,
     },
     {
@@ -41,12 +41,20 @@ async function main() {
       order: 4,
     },
     {
+      slug: "teknoloji",
+      name: "Teknoloji",
+      description: "Teknoloji ve inovasyon haberleri",
+      icon: "💻",
+      color: "#3b82f6",
+      order: 5,
+    },
+    {
       slug: "saglik",
       name: "Sağlık",
       description: "Sağlık ve yaşam haberleri",
       icon: "🏥",
-      color: "#06b6d4",
-      order: 5,
+      color: "#ec4899",
+      order: 6,
     },
     {
       slug: "kultur-sanat",
@@ -54,7 +62,7 @@ async function main() {
       description: "Kültür, sanat ve eğlence haberleri",
       icon: "🎨",
       color: "#8b5cf6",
-      order: 6,
+      order: 7,
     },
   ]
 

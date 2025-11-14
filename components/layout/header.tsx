@@ -18,12 +18,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+/**
+ * Ana navigasyon kategorileri
+ * Her kategori veritabanındaki slug ile eşleşir
+ */
 const categories = [
-  { name: "Gündem", href: "/gundem" },
-  { name: "Dünya", href: "/dunya" },
-  { name: "Ekonomi", href: "/ekonomi" },
-  { name: "Spor", href: "/spor" },
-  { name: "Teknoloji", href: "/teknoloji" },
+  { name: "Gündem", href: "/categories/gundem" },
+  { name: "Dünya", href: "/categories/dunya" },
+  { name: "Ekonomi", href: "/categories/ekonomi" },
+  { name: "Spor", href: "/categories/spor" },
+  { name: "Teknoloji", href: "/categories/teknoloji" },
 ]
 
 export function Header() {
