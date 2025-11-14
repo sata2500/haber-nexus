@@ -7,6 +7,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Clock, Eye, User, MessageSquare } from "lucide-react"
 import { ArticleActions } from "@/components/article/article-actions"
 import { CommentSection } from "@/components/article/comment-section"
+import { ReadingTracker } from "@/components/article/reading-tracker"
+import { ReadingProgressBar } from "@/components/article/reading-progress-bar"
 import { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
@@ -142,8 +144,17 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   const readingTime = Math.ceil(article.content.split(" ").length / 200)
 
+  // Calculate estimated read time
+  const wordCount = article.content.split(/\s+/).length
+  const estimatedReadTime = Math.ceil(wordCount / 200) // 200 words per minute
+
   return (
     <div className="min-h-screen flex flex-col">
+      <ReadingProgressBar />
+      <ReadingTracker
+        articleId={article.id}
+        estimatedReadTime={estimatedReadTime}
+      />
       <Header />
       
       <main className="flex-1">

@@ -92,6 +92,14 @@ export function OverviewTab({ userId }: OverviewTabProps) {
     },
   ]
 
+  const completionRate = stats.totalReads > 0 
+    ? Math.round((stats.completedReads / stats.totalReads) * 100)
+    : 0
+
+  const avgReadingTime = stats.totalReads > 0
+    ? Math.round(stats.totalReadingTimeMinutes / stats.totalReads)
+    : 0
+
   return (
     <div className="space-y-6">
       {/* Stats Grid */}
@@ -114,6 +122,49 @@ export function OverviewTab({ userId }: OverviewTabProps) {
             </Card>
           )
         })}
+      </div>
+
+      {/* Reading Insights */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Tamamlanma Oranı</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-3xl font-bold">{completionRate}%</span>
+                <CheckCircle className="h-8 w-8 text-green-600" />
+              </div>
+              <div className="w-full bg-muted rounded-full h-2">
+                <div 
+                  className="bg-green-600 h-2 rounded-full transition-all"
+                  style={{ width: `${completionRate}%` }}
+                />
+              </div>
+              <p className="text-sm text-muted-foreground">
+                {stats.completedReads} / {stats.totalReads} makale tamamlandı
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Ortalama Okuma Süresi</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-3xl font-bold">{avgReadingTime} dk</span>
+                <Clock className="h-8 w-8 text-orange-600" />
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Makale başına ortalama okuma süresi
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Recent Activity */}
