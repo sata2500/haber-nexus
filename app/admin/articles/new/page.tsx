@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ArrowLeft } from "lucide-react"
+import { ImageInput } from "@/components/admin/image-input"
 
 interface Category {
   id: string
@@ -220,15 +221,12 @@ export default function NewArticlePage() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Kapak Görseli URL</label>
-              <Input
-                type="url"
-                value={formData.coverImage}
-                onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
-                placeholder="https://example.com/image.jpg"
-              />
-            </div>
+            <ImageInput
+              label="Kapak Görseli"
+              value={formData.coverImage}
+              onChange={(value) => setFormData({ ...formData, coverImage: value })}
+              placeholder="Kapak görseli URL'si"
+            />
 
             <div className="space-y-2">
               <label className="text-sm font-medium">Etiketler</label>
