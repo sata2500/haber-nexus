@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -14,6 +14,15 @@ export default function SignInPage() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState("")
+
+  // Check for registration success message
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get("registered") === "true") {
+      setSuccess("Kayıt başarılı! Şimdi giriş yapabilirsiniz.")
+    }
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -95,6 +104,11 @@ export default function SignInPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            {success && (
+              <div className="p-3 text-sm text-green-600 bg-green-50 dark:bg-green-900/10 rounded-md">
+                {success}
+              </div>
+            )}
             {error && (
               <div className="p-3 text-sm text-red-500 bg-red-50 dark:bg-red-900/10 rounded-md">
                 {error}
