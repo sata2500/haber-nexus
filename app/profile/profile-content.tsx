@@ -9,6 +9,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { User, Mail, Shield } from "lucide-react"
+import { DashboardCards } from "@/components/dashboard/dashboard-cards"
+import { getAccessibleDashboards, getDashboardInfo, getRoleDescription } from "@/lib/dashboard-utils"
+import { ROLE_LABELS, ROLE_COLORS } from "@/lib/permissions"
+import { UserRole } from "@prisma/client"
 
 export function ProfileContent() {
   const { data: session, status } = useSession()
@@ -148,21 +152,19 @@ export function ProfileContent() {
     return null
   }
 
-  const roleLabels: Record<string, string> = {
-    USER: "Kullanıcı",
-    AUTHOR: "Yazar",
-    EDITOR: "Editör",
-    ADMIN: "Admin",
-    SUPER_ADMIN: "Süper Admin",
-  }
+  // Dashboard bilgilerini al
+  const userRole = session.user.role as UserRole
+  const accessibleDashboards = getAccessibleDashboards(userRole)
+  const dashboardInfo = getDashboardInfo(userRole)
+  const roleDescription = getRoleDescription(userRole)
 
   return (
     <main className="flex-1 container py-12">
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-6xl mx-auto space-y-8">
         <div>
           <h1 className="text-3xl font-bold mb-2">Profil</h1>
           <p className="text-muted-foreground">
-            Hesap bilgilerinizi yönetin
+            Hesap bilgilerinizi yönetin ve dashboard'larınıza erişin
           </p>
         </div>
 
@@ -198,18 +200,31 @@ export function ProfileContent() {
                   </span>
                 </div>
                 <div className="flex items-center gap-2 mt-2">
-                  <Badge variant="default">
+                  <Badge variant={ROLE_COLORS[userRole] as any}>
                     <Shield className="h-3 w-3 mr-1" />
-                    {roleLabels[session.user.role || "USER"]}
+                    {ROLE_LABELS[userRole]}
                   </Badge>
                 </div>
+                <p className="text-sm text-muted-foreground mt-2">
+                  {roleDescription}
+                </p>
               </div>
             </div>
           </CardContent>
         </Card>
 
+        {/* Dashboard Access Cards */}
+        {accessibleDashboards.length > 0 && (
+          <DashboardCards 
+            dashboards={accessibleDashboards}
+            title="Dashboard Erişimi"
+            description="Rolünüze özel dashboard'lara hızlı erişim"
+            columns={3}
+          />
+        )}
+
         {/* Profile Update Form */}
-        <Card>
+        <Card id="settings">
           <CardHeader>
             <CardTitle>Profil Bilgileri</CardTitle>
             <CardDescription>

@@ -7,6 +7,7 @@ import { Clock, TrendingUp, Sparkles, Eye } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { prisma } from "@/lib/prisma"
+import { DashboardWelcome } from "@/components/dashboard/dashboard-welcome"
 
 /**
  * Force dynamic rendering
@@ -93,6 +94,11 @@ export default async function HomePage() {
       <Header />
       
       <main className="flex-1">
+        {/* Dashboard Welcome Card */}
+        <section className="container py-8">
+          <DashboardWelcome />
+        </section>
+
         {/* Hero Section - Featured News */}
         {featuredArticle && (
           <section className="container py-8">
