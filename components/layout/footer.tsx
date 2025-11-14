@@ -1,28 +1,41 @@
 import Link from "next/link"
 import { Separator } from "@/components/ui/separator"
+import { getFooterCategories } from "@/lib/services/category-service"
 
 /**
- * Footer bağlantıları
- * Kategoriler: Veritabanındaki kategori slug'ları ile eşleşir
- * Kurumsal: Statik sayfalar
+ * Footer Bileşeni
+ * 
+ * Server Component olarak çalışır ve kategorileri veritabanından dinamik olarak çeker.
+ * 
+ * Özellikler:
+ * - Kategoriler otomatik güncellenir (admin panelden ekleme/silme)
+ * - Kurumsal sayfalar statik olarak tanımlanır
+ * - Responsive tasarım
+ * - Logo ve açıklama
+ * - Copyright bilgisi
+ * 
+ * Kategori Yönetimi:
+ * - Admin panelden kategori eklendiğinde footer'da otomatik görünür
+ * - Kategori sıralaması order alanına göre yapılır
+ * - Sadece aktif kategoriler gösterilir
+ * - Maksimum 10 kategori gösterilir
  */
-const footerLinks = {
-  kategoriler: [
-    { name: "Gündem", href: "/categories/gundem" },
-    { name: "Dünya", href: "/categories/dunya" },
-    { name: "Ekonomi", href: "/categories/ekonomi" },
-    { name: "Spor", href: "/categories/spor" },
-    { name: "Teknoloji", href: "/categories/teknoloji" },
-  ],
-  kurumsal: [
-    { name: "Hakkımızda", href: "/about" },
-    { name: "İletişim", href: "/contact" },
-    { name: "Gizlilik Politikası", href: "/privacy" },
-    { name: "Kullanım Koşulları", href: "/terms" },
-  ],
-}
 
-export function Footer() {
+/**
+ * Kurumsal sayfalar
+ * Bu sayfalar statik olarak tanımlanır ve değişmez
+ */
+const kurumsal = [
+  { name: "Hakkımızda", href: "/about" },
+  { name: "İletişim", href: "/contact" },
+  { name: "Gizlilik Politikası", href: "/privacy" },
+  { name: "Kullanım Koşulları", href: "/terms" },
+]
+
+export async function Footer() {
+  // Veritabanından kategorileri dinamik olarak çek
+  const kategoriler = await getFooterCategories()
+
   return (
     <footer className="border-t bg-background">
       <div className="container py-12">
@@ -40,28 +53,34 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Kategoriler */}
+          {/* Kategoriler - Dinamik */}
           <div>
             <h3 className="font-semibold mb-4">Kategoriler</h3>
-            <ul className="space-y-2">
-              {footerLinks.kategoriler.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {kategoriler.length > 0 ? (
+              <ul className="space-y-2">
+                {kategoriler.map((kategori) => (
+                  <li key={kategori.id}>
+                    <Link
+                      href={`/categories/${kategori.slug}`}
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {kategori.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                Henüz kategori eklenmemiş
+              </p>
+            )}
           </div>
 
-          {/* Kurumsal */}
+          {/* Kurumsal - Statik */}
           <div>
             <h3 className="font-semibold mb-4">Kurumsal</h3>
             <ul className="space-y-2">
-              {footerLinks.kurumsal.map((link) => (
+              {kurumsal.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
