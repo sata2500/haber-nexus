@@ -54,7 +54,7 @@ export default function SignUpPage() {
 
       // Redirect to signin page
       router.push("/auth/signin?registered=true")
-    } catch (error) {
+    } catch {
       setError("Kayıt sırasında bir hata oluştu")
     } finally {
       setLoading(false)

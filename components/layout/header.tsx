@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
 import { Search, Menu, User, LogOut, Settings, LayoutDashboard } from "lucide-react"
@@ -102,11 +103,14 @@ export function Header() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">
                   {session.user.image ? (
-                    <img
-                      src={session.user.image}
-                      alt={session.user.name || ""}
-                      className="h-8 w-8 rounded-full"
-                    />
+                    <div className="relative h-8 w-8">
+                      <Image
+                        src={session.user.image}
+                        alt={session.user.name || ""}
+                        fill
+                        className="rounded-full object-cover"
+                      />
+                    </div>
                   ) : (
                     <User className="h-5 w-5" />
                   )}

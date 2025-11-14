@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Clock, Eye } from "lucide-react"
 import { Metadata } from "next"
 import Link from "next/link"
+import Image from "next/image"
 
 interface CategoryPageProps {
   params: Promise<{
@@ -216,11 +217,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                           
                           {/* Thumbnail */}
                           {article.coverImage ? (
-                            <img
-                              src={article.coverImage}
-                              alt={article.title}
-                              className="w-32 h-24 rounded-md object-cover shrink-0"
-                            />
+                            <div className="relative w-32 h-24 shrink-0">
+                              <Image
+                                src={article.coverImage}
+                                alt={article.title}
+                                fill
+                                className="rounded-md object-cover"
+                              />
+                            </div>
                           ) : (
                             <div className="w-32 h-24 rounded-md bg-muted flex items-center justify-center shrink-0">
                               <span className="text-xs text-muted-foreground">Görsel</span>

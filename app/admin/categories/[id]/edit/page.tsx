@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -39,12 +39,7 @@ export default function EditCategoryPage() {
     isActive: true,
   })
 
-  useEffect(() => {
-    fetchCategory()
-    fetchCategories()
-  }, [categoryId])
-
-  const fetchCategory = async () => {
+  const fetchCategory = useCallback(async () => {
     try {
       const response = await fetch(`/api/categories/${categoryId}`)
       if (response.ok) {
@@ -65,9 +60,9 @@ export default function EditCategoryPage() {
     } finally {
       setFetching(false)
     }
-  }
+  }, [categoryId])
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const response = await fetch("/api/categories")
       if (response.ok) {
@@ -77,7 +72,12 @@ export default function EditCategoryPage() {
     } catch (error) {
       console.error("Error fetching categories:", error)
     }
-  }
+  }, [categoryId])
+
+  useEffect(() => {
+    fetchCategory()
+    fetchCategories()
+  }, [fetchCategory, fetchCategories])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

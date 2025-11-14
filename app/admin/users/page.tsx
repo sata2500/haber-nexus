@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -46,11 +47,7 @@ export default function UsersPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [roleFilter, setRoleFilter] = useState("")
 
-  useEffect(() => {
-    fetchUsers()
-  }, [roleFilter])
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       const params = new URLSearchParams()
       if (roleFilter) params.append("role", roleFilter)
@@ -65,7 +62,11 @@ export default function UsersPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [roleFilter])
+
+  useEffect(() => {
+    fetchUsers()
+  }, [fetchUsers])
 
   const handleDelete = async (id: string) => {
     if (!confirm("Bu kullanıcıyı silmek istediğinizden emin misiniz?")) {
@@ -175,11 +176,14 @@ export default function UsersPage() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-4 flex-1">
                     {user.image ? (
-                      <img
-                        src={user.image}
-                        alt={user.name || user.email}
-                        className="w-12 h-12 rounded-full"
-                      />
+                      <div className="relative w-12 h-12 shrink-0">
+                        <Image
+                          src={user.image}
+                          alt={user.name || user.email}
+                          fill
+                          className="rounded-full object-cover"
+                        />
+                      </div>
                     ) : (
                       <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
                         <Users className="h-6 w-6 text-muted-foreground" />

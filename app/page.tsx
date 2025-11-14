@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Clock, TrendingUp, Sparkles, Eye } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { prisma } from "@/lib/prisma"
 
 async function getFeaturedArticle() {
@@ -93,11 +94,13 @@ export default async function HomePage() {
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Image */}
                 {featuredArticle.coverImage ? (
-                  <div className="aspect-video md:aspect-auto">
-                    <img
+                  <div className="aspect-video md:aspect-auto relative">
+                    <Image
                       src={featuredArticle.coverImage}
                       alt={featuredArticle.title}
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
+                      priority
                     />
                   </div>
                 ) : (
@@ -201,11 +204,14 @@ export default async function HomePage() {
                             </div>
                             {/* Thumbnail */}
                             {article.coverImage ? (
-                              <img
-                                src={article.coverImage}
-                                alt={article.title}
-                                className="w-24 h-24 rounded-md object-cover shrink-0"
-                              />
+                              <div className="relative w-24 h-24 shrink-0">
+                                <Image
+                                  src={article.coverImage}
+                                  alt={article.title}
+                                  fill
+                                  className="rounded-md object-cover"
+                                />
+                              </div>
                             ) : (
                               <div className="w-24 h-24 rounded-md bg-muted flex items-center justify-center shrink-0">
                                 <span className="text-xs text-muted-foreground">Görsel</span>

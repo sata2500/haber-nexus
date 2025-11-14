@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -68,11 +68,7 @@ export default function ArticlesPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState("")
 
-  useEffect(() => {
-    fetchArticles()
-  }, [statusFilter])
-
-  const fetchArticles = async () => {
+  const fetchArticles = useCallback(async () => {
     try {
       const params = new URLSearchParams()
       if (statusFilter) params.append("status", statusFilter)
@@ -87,7 +83,11 @@ export default function ArticlesPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [statusFilter])
+
+  useEffect(() => {
+    fetchArticles()
+  }, [fetchArticles])
 
   const handleDelete = async (id: string) => {
     if (!confirm("Bu makaleyi silmek istediğinizden emin misiniz?")) {

@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Clock, Eye, Heart, Bookmark, Share2, User } from "lucide-react"
 import { Metadata } from "next"
 import Link from "next/link"
+import Image from "next/image"
 
 interface ArticlePageProps {
   params: Promise<{
@@ -201,11 +202,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
             {/* Cover Image */}
             {article.coverImage && (
-              <div className="mb-8 rounded-lg overflow-hidden">
-                <img
+              <div className="mb-8 rounded-lg overflow-hidden relative aspect-video">
+                <Image
                   src={article.coverImage}
                   alt={article.title}
-                  className="w-full h-auto"
+                  fill
+                  className="object-cover"
+                  priority
                 />
               </div>
             )}
@@ -251,11 +254,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     {article.author.image && (
-                      <img
-                        src={article.author.image}
-                        alt={article.author.name || ""}
-                        className="w-16 h-16 rounded-full"
-                      />
+                      <div className="relative w-16 h-16 shrink-0">
+                        <Image
+                          src={article.author.image}
+                          alt={article.author.name || ""}
+                          fill
+                          className="rounded-full object-cover"
+                        />
+                      </div>
                     )}
                     <div>
                       <h3 className="font-semibold mb-1">

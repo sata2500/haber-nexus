@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -178,11 +179,14 @@ export default function ProfilePage() {
             <CardContent className="space-y-4">
               <div className="flex items-center gap-4">
                 {session.user.image ? (
-                  <img
-                    src={session.user.image}
-                    alt={session.user.name || ""}
-                    className="w-20 h-20 rounded-full"
-                  />
+                  <div className="relative w-20 h-20 shrink-0">
+                    <Image
+                      src={session.user.image}
+                      alt={session.user.name || ""}
+                      fill
+                      className="rounded-full object-cover"
+                    />
+                  </div>
                 ) : (
                   <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">
                     <User className="h-10 w-10 text-muted-foreground" />

@@ -42,7 +42,7 @@ export default function SignInPage() {
         router.push("/")
         router.refresh()
       }
-    } catch (error) {
+    } catch {
       setError("Giriş sırasında bir hata oluştu")
     } finally {
       setLoading(false)

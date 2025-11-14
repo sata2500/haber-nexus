@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -31,11 +31,7 @@ export default function EditUserPage() {
     role: "USER",
   })
 
-  useEffect(() => {
-    fetchUser()
-  }, [userId])
-
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try {
       const response = await fetch(`/api/users/${userId}`)
       if (response.ok) {
@@ -52,7 +48,11 @@ export default function EditUserPage() {
     } finally {
       setFetching(false)
     }
-  }
+  }, [userId])
+
+  useEffect(() => {
+    fetchUser()
+  }, [fetchUser])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

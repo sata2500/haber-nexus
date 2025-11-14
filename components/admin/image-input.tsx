@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Image as ImageIcon, X } from "lucide-react"
@@ -52,11 +53,12 @@ export function ImageInput({ value, onChange, label, placeholder }: ImageInputPr
         </div>
 
         {preview && (
-          <div className="relative border rounded-lg overflow-hidden bg-muted">
-            <img
+          <div className="relative border rounded-lg overflow-hidden bg-muted h-[300px]">
+            <Image
               src={preview}
               alt="Önizleme"
-              className="w-full h-auto max-h-[300px] object-contain"
+              fill
+              className="object-contain"
               onError={() => setPreview("")}
             />
           </div>
