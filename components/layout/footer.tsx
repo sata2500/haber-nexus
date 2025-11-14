@@ -1,19 +1,24 @@
 import Link from "next/link"
 import { Separator } from "@/components/ui/separator"
 
+/**
+ * Footer bağlantıları
+ * Kategoriler: Veritabanındaki kategori slug'ları ile eşleşir
+ * Kurumsal: Statik sayfalar
+ */
 const footerLinks = {
   kategoriler: [
-    { name: "Gündem", href: "/gundem" },
-    { name: "Dünya", href: "/dunya" },
-    { name: "Ekonomi", href: "/ekonomi" },
-    { name: "Spor", href: "/spor" },
-    { name: "Teknoloji", href: "/teknoloji" },
+    { name: "Gündem", href: "/categories/gundem" },
+    { name: "Dünya", href: "/categories/dunya" },
+    { name: "Ekonomi", href: "/categories/ekonomi" },
+    { name: "Spor", href: "/categories/spor" },
+    { name: "Teknoloji", href: "/categories/teknoloji" },
   ],
   kurumsal: [
-    { name: "Hakkımızda", href: "/hakkimizda" },
-    { name: "İletişim", href: "/iletisim" },
-    { name: "Gizlilik Politikası", href: "/gizlilik" },
-    { name: "Kullanım Koşulları", href: "/kosullar" },
+    { name: "Hakkımızda", href: "/about" },
+    { name: "İletişim", href: "/contact" },
+    { name: "Gizlilik Politikası", href: "/privacy" },
+    { name: "Kullanım Koşulları", href: "/terms" },
   ],
 }
 
