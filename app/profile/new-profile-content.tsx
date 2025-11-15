@@ -34,7 +34,8 @@ export function NewProfileContent() {
       fetchUserData()
       fetchStats()
     }
-  }, [session])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session?.user?.id]) // Sadece user ID değiştiğinde çalışsın
 
   const fetchUserData = async () => {
     try {

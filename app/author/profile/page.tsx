@@ -39,7 +39,7 @@ export default function AuthorProfilePage() {
     setError("")
 
     try {
-      const response = await fetch(`/api/users/${session?.user?.id}`, {
+      const response = await fetch(`/api/users/me`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
