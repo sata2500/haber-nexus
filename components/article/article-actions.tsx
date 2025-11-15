@@ -48,7 +48,6 @@ export function ArticleActions({
       />
       
       <ShareButton
-        articleId={articleId}
         title={articleTitle}
         url={articleUrl}
         showLabel={showLabels}

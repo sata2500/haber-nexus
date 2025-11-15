@@ -38,7 +38,7 @@ export function CommentItem({
   onReplyAdded,
   isReply = false,
 }: CommentItemProps) {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const [showReplyForm, setShowReplyForm] = useState(false)
 
   const handleReplyAdded = () => {

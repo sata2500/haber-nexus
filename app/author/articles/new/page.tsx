@@ -3,7 +3,6 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { useSession } from "next-auth/react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -17,7 +16,6 @@ interface Category {
 
 export default function NewArticlePage() {
   const router = useRouter()
-  const { data: session } = useSession()
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState<Category[]>([])
   const [saveType, setSaveType] = useState<"draft" | "publish">("draft")
@@ -107,7 +105,7 @@ export default function NewArticlePage() {
       })
 
       if (response.ok) {
-        const data = await response.json()
+        await response.json()
         if (type === "publish") {
           alert("Makale başarıyla yayınlandı!")
         } else {

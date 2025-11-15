@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeRaw from "rehype-raw"
@@ -71,12 +72,18 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
               {...props}
             />
           ),
-          img: ({ ...props }) => (
-            <img
-              className="rounded-lg max-w-full h-auto my-4"
-              loading="lazy"
-              {...props}
-            />
+          img: ({ src, alt, width, height, ...props }) => (
+            src && typeof src === 'string' ? (
+              <Image
+                src={src}
+                alt={alt || ""}
+                width={typeof width === 'number' ? width : 800}
+                height={typeof height === 'number' ? height : 600}
+                className="rounded-lg max-w-full h-auto my-4"
+                loading="lazy"
+                {...props}
+              />
+            ) : null
           ),
           table: ({ ...props }) => (
             <div className="overflow-x-auto my-4">

@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { User, Mail, Shield } from "lucide-react"
 import { DashboardCards } from "@/components/dashboard/dashboard-cards"
-import { getAccessibleDashboards, getDashboardInfo, getRoleDescription } from "@/lib/dashboard-utils"
+import { getAccessibleDashboards, getRoleDescription } from "@/lib/dashboard-utils"
 import { ROLE_LABELS, ROLE_COLORS } from "@/lib/permissions"
 import { UserRole } from "@prisma/client"
 
@@ -155,7 +155,6 @@ export function ProfileContent() {
   // Dashboard bilgilerini al
   const userRole = session.user.role as UserRole
   const accessibleDashboards = getAccessibleDashboards(userRole)
-  const dashboardInfo = getDashboardInfo(userRole)
   const roleDescription = getRoleDescription(userRole)
 
   return (

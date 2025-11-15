@@ -77,8 +77,6 @@ export function AnalyticsTab({ userId }: AnalyticsTabProps) {
     return <div className="text-center py-12">Analizler yüklenemedi</div>
   }
 
-  const dayNames = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"]
-
   return (
     <div className="space-y-6">
       {/* Summary Cards */}

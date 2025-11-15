@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useRouter, useParams } from "next/navigation"
+import Image from "next/image"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -288,9 +289,11 @@ export default function EditorReviewDetailPage() {
       {article.coverImage && (
         <Card>
           <CardContent className="pt-6">
-            <img
+            <Image
               src={article.coverImage}
               alt={article.title}
+              width={1200}
+              height={630}
               className="w-full h-auto rounded-lg"
             />
           </CardContent>

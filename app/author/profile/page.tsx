@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { User, Mail, Calendar, Shield, Save, CheckCircle2, AlertCircle, Sparkles, Award } from "lucide-react"
+import { Mail, Calendar, Shield, Save, CheckCircle2, AlertCircle, Sparkles, Award } from "lucide-react"
 import { InterestsSelector } from "@/components/profile/interests-selector"
 
 export default function AuthorProfilePage() {

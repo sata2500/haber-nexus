@@ -18,7 +18,7 @@ const userUpdateSchema = z.object({
  * GET /api/users/me
  * Mevcut kullanıcının bilgilerini döndürür
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions)
     

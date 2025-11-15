@@ -14,7 +14,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 interface ShareButtonProps {
-  articleId: string
   title: string
   url: string
   showLabel?: boolean
@@ -22,7 +21,6 @@ interface ShareButtonProps {
 }
 
 export function ShareButton({
-  articleId,
   title,
   url,
   showLabel = true,

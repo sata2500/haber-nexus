@@ -1,8 +1,6 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { useRouter } from "next/navigation"
-import { useSession } from "next-auth/react"
 import Link from "next/link"
 
 interface Draft {
@@ -29,8 +27,6 @@ interface Draft {
 }
 
 export default function DraftsPage() {
-  const router = useRouter()
-  const { data: session } = useSession()
   const [drafts, setDrafts] = useState<Draft[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<string>("all")

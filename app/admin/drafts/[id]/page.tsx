@@ -2,12 +2,11 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useRouter, useParams } from "next/navigation"
-import { useSession } from "next-auth/react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Save, Send, Trash2, FileText, Eye, Edit } from "lucide-react"
+import { ArrowLeft, Save, Send, Trash2, Eye, Edit } from "lucide-react"
 import Link from "next/link"
 import ReactMarkdown from "react-markdown"
 
@@ -51,7 +50,6 @@ interface Draft {
 export default function EditDraftPageImproved() {
   const router = useRouter()
   const params = useParams()
-  const { data: session } = useSession()
   const draftId = params.id as string
 
   const [draft, setDraft] = useState<Draft | null>(null)

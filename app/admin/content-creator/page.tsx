@@ -2,11 +2,9 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { useSession } from "next-auth/react"
 
 export default function ContentCreatorPage() {
   const router = useRouter()
-  const { data: session } = useSession()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   

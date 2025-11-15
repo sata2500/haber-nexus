@@ -31,7 +31,7 @@ interface CommentSectionProps {
 }
 
 export function CommentSection({ articleId }: CommentSectionProps) {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const router = useRouter()
   const [comments, setComments] = useState<Comment[]>([])
   const [loading, setLoading] = useState(true)
@@ -56,7 +56,7 @@ export function CommentSection({ articleId }: CommentSectionProps) {
     fetchComments()
   }, [fetchComments])
 
-  const handleCommentAdded = (newComment: Comment) => {
+  const handleCommentAdded = () => {
     // Refresh comments to get updated list
     fetchComments()
     setShowForm(false)
