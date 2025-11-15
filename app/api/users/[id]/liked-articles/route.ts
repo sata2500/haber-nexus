@@ -38,10 +38,10 @@ export async function GET(
     const skip = (page - 1) * limit
 
     // Sıralama seçeneği
-    let orderBy: any = { createdAt: "desc" }
-    if (sortBy === "popular") {
-      orderBy = { article: { viewCount: "desc" } }
-    }
+    const orderBy: { createdAt?: "desc" | "asc"; article?: { viewCount: "desc" | "asc" } } = 
+      sortBy === "popular" 
+        ? { article: { viewCount: "desc" } }
+        : { createdAt: "desc" }
 
     // Beğenilen makaleleri getir
     const likes = await prisma.like.findMany({

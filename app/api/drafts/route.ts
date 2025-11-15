@@ -21,7 +21,10 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit
 
     // Build where clause
-    const where: any = {}
+    const where: {
+      authorId?: string
+      status?: "DRAFT" | "RESEARCHING" | "GENERATING" | "REVIEW" | "APPROVED" | "PUBLISHED"
+    } = {}
 
     // Authors see only their drafts, admins see all
     if (!["ADMIN", "SUPER_ADMIN"].includes(session.user.role)) {
@@ -29,7 +32,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (status) {
-      where.status = status
+      where.status = status as "DRAFT" | "RESEARCHING" | "GENERATING" | "REVIEW" | "APPROVED" | "PUBLISHED"
     }
 
     // Get drafts

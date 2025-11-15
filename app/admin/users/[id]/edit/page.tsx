@@ -222,7 +222,7 @@ export default function EditUserPage() {
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <label className="text-sm font-medium">Kullanıcı Rolü</label>
-                <Badge variant={ROLE_COLORS[formData.role] as any}>
+                <Badge variant={ROLE_COLORS[formData.role] as "default" | "secondary" | "destructive" | "outline"}>
                   <Shield className="h-3 w-3 mr-1" />
                   {ROLE_LABELS[formData.role]}
                 </Badge>
@@ -274,7 +274,7 @@ export default function EditUserPage() {
                           <div className="flex items-center gap-2 mb-1">
                             <span className="font-medium">{ROLE_LABELS[role]}</span>
                             <Badge 
-                              variant={ROLE_COLORS[role] as any}
+                              variant={ROLE_COLORS[role] as "default" | "secondary" | "destructive" | "outline"}
                               className="text-xs"
                             >
                               {role}

@@ -19,8 +19,24 @@ export function NewProfileContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [activeTab, setActiveTab] = useState("overview")
-  const [userData, setUserData] = useState<any>(null)
-  const [stats, setStats] = useState<any>(null)
+  const [userData, setUserData] = useState<{
+    id: string
+    name: string
+    email: string
+    username?: string
+    bio?: string
+    image?: string
+    role: string
+    createdAt: Date
+  } | null>(null)
+  const [stats, setStats] = useState<{
+    totalLikes: number
+    totalBookmarks: number
+    totalComments: number
+    totalFollowing: number
+    totalFollowers: number
+    totalReads: number
+  } | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -79,7 +95,7 @@ export function NewProfileContent() {
     <main className="flex-1 container py-8">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Profile Header */}
-        <ProfileHeader user={userData} stats={stats} />
+        <ProfileHeader user={userData} stats={stats || undefined} />
 
         {/* Tabs Navigation */}
         <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} />

@@ -20,7 +20,19 @@ export default function ContentCreatorPage() {
   
   // Generated content
   const [draftId, setDraftId] = useState<string>("")
-  const [generatedContent, setGeneratedContent] = useState<any>(null)
+  const [generatedContent, setGeneratedContent] = useState<{
+    draftId: string
+    title: string
+    content: string
+    excerpt: string
+    category?: string
+    qualityScore?: number
+    readabilityScore?: number
+    seoScore?: number
+    wordCount?: number
+    estimatedReadTime?: number
+    tags?: string[]
+  } | null>(null)
 
   const handleGenerate = async () => {
     if (!topic.trim()) {
@@ -153,7 +165,7 @@ export default function ContentCreatorPage() {
               </label>
               <select
                 value={style}
-                onChange={(e) => setStyle(e.target.value as any)}
+                onChange={(e) => setStyle(e.target.value as "news" | "blog" | "analysis" | "interview" | "opinion")}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               >
                 <option value="news">Haber</option>
@@ -170,7 +182,7 @@ export default function ContentCreatorPage() {
               </label>
               <select
                 value={tone}
-                onChange={(e) => setTone(e.target.value as any)}
+                onChange={(e) => setTone(e.target.value as "formal" | "casual" | "professional" | "friendly")}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               >
                 <option value="formal">Resmi</option>
@@ -196,7 +208,7 @@ export default function ContentCreatorPage() {
                     type="radio"
                     value={option.value}
                     checked={length === option.value}
-                    onChange={(e) => setLength(e.target.value as any)}
+                    onChange={(e) => setLength(e.target.value as "short" | "medium" | "long")}
                     className="mr-2"
                   />
                   <span className="text-sm text-gray-900 dark:text-gray-100">{option.label}</span>
@@ -259,19 +271,19 @@ export default function ContentCreatorPage() {
               <div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">Genel Kalite</div>
                 <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                  {Math.round(generatedContent.qualityScore * 100)}%
+                  {Math.round((generatedContent.qualityScore || 0) * 100)}%
                 </div>
               </div>
               <div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">Okunabilirlik</div>
                 <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-                  {Math.round(generatedContent.readabilityScore)}%
+                  {Math.round(generatedContent.readabilityScore || 0)}%
                 </div>
               </div>
               <div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">SEO Skoru</div>
                 <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                  {Math.round(generatedContent.seoScore)}%
+                  {Math.round(generatedContent.seoScore || 0)}%
                 </div>
               </div>
             </div>
@@ -293,7 +305,7 @@ export default function ContentCreatorPage() {
               </div>
               <div className="mt-2">
                 <strong className="text-sm text-gray-600 dark:text-gray-400">Etiketler:</strong>{" "}
-                {generatedContent.tags.map((tag: string) => (
+                {generatedContent.tags?.map((tag: string) => (
                   <span key={tag} className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs px-2 py-1 rounded mr-2">
                     {tag}
                   </span>

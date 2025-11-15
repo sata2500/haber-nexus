@@ -164,7 +164,7 @@ export function ProfileContent() {
         <div>
           <h1 className="text-3xl font-bold mb-2">Profil</h1>
           <p className="text-muted-foreground">
-            Hesap bilgilerinizi yönetin ve dashboard'larınıza erişin
+            Hesap bilgilerinizi yönetin ve dashboard&apos;larınıza erişin
           </p>
         </div>
 
@@ -200,7 +200,7 @@ export function ProfileContent() {
                   </span>
                 </div>
                 <div className="flex items-center gap-2 mt-2">
-                  <Badge variant={ROLE_COLORS[userRole] as any}>
+                  <Badge variant={ROLE_COLORS[userRole] as "default" | "secondary" | "destructive" | "outline"}>
                     <Shield className="h-3 w-3 mr-1" />
                     {ROLE_LABELS[userRole]}
                   </Badge>

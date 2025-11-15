@@ -155,7 +155,7 @@ export async function GET(
       },
     })
 
-    const authorCount: Record<string, { author: any; count: number }> = {}
+    const authorCount: Record<string, { author: { id: string; name: string | null; username?: string | null; image?: string | null }; count: number }> = {}
     topAuthors.forEach((read) => {
       const authorId = read.article.author.id
       if (!authorCount[authorId]) {

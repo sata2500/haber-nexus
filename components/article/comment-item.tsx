@@ -12,13 +12,17 @@ interface Comment {
   id: string
   content: string
   createdAt: string
+  userId: string
+  articleId: string
+  parentId?: string | null
   user: {
     id: string
-    name: string | null
-    image: string | null
+    name: string
+    image?: string | null
   }
   replies?: Comment[]
   likeCount?: number
+  status?: string
 }
 
 interface CommentItemProps {

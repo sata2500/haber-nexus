@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useSession } from "next-auth/react"
 import { MessageSquare, Loader2 } from "lucide-react"
 import { CommentForm } from "./comment-form"
@@ -12,10 +12,13 @@ interface Comment {
   id: string
   content: string
   createdAt: string
+  userId: string
+  articleId: string
+  parentId?: string | null
   user: {
     id: string
-    name: string | null
-    image: string | null
+    name: string
+    image?: string | null
   }
   replies?: Comment[]
   likeCount?: number
@@ -27,18 +30,14 @@ interface CommentSectionProps {
   initialCommentCount: number
 }
 
-export function CommentSection({ articleId, initialCommentCount }: CommentSectionProps) {
+export function CommentSection({ articleId }: CommentSectionProps) {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [comments, setComments] = useState<Comment[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
 
-  useEffect(() => {
-    fetchComments()
-  }, [articleId])
-
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(`/api/comments?articleId=${articleId}`)
@@ -51,7 +50,11 @@ export function CommentSection({ articleId, initialCommentCount }: CommentSectio
     } finally {
       setLoading(false)
     }
-  }
+  }, [articleId])
+
+  useEffect(() => {
+    fetchComments()
+  }, [fetchComments])
 
   const handleCommentAdded = (newComment: Comment) => {
     // Refresh comments to get updated list

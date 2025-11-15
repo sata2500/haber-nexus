@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useSession } from "next-auth/react"
 import { Bookmark } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -24,14 +24,7 @@ export function BookmarkButton({
   const [bookmarked, setBookmarked] = useState(initialBookmarked)
   const [loading, setLoading] = useState(false)
 
-  // Fetch user's bookmark status
-  useEffect(() => {
-    if (status === "authenticated" && session?.user) {
-      fetchBookmarkStatus()
-    }
-  }, [status, session])
-
-  const fetchBookmarkStatus = async () => {
+  const fetchBookmarkStatus = useCallback(async () => {
     try {
       const response = await fetch(`/api/bookmarks?articleId=${articleId}`)
       if (response.ok) {
@@ -41,7 +34,14 @@ export function BookmarkButton({
     } catch (error) {
       console.error("Error fetching bookmark status:", error)
     }
-  }
+  }, [articleId])
+
+  // Fetch user's bookmark status
+  useEffect(() => {
+    if (status === "authenticated" && session?.user) {
+      fetchBookmarkStatus()
+    }
+  }, [status, session, fetchBookmarkStatus])
 
   const handleBookmark = async () => {
     // Check authentication

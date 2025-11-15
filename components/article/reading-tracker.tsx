@@ -15,11 +15,11 @@ export function ReadingTracker({
   estimatedReadTime,
 }: ReadingTrackerProps) {
   const { data: session, status } = useSession()
-  const [progress, setProgress] = useState(0)
-  const [readDuration, setReadDuration] = useState(0)
+  const [, setProgress] = useState(0)
+  const [, setReadDuration] = useState(0)
   
   // Refs for tracking
-  const startTimeRef = useRef<number>(Date.now())
+  const startTimeRef = useRef<number>(Date.now()) // eslint-disable-line @typescript-eslint/no-unused-vars
   const lastSaveTimeRef = useRef<number>(Date.now())
   const activeTimeRef = useRef<number>(0)
   const isActiveRef = useRef<boolean>(true)
@@ -32,7 +32,7 @@ export function ReadingTracker({
     const articleContent = document.querySelector('.article-content')
     if (!articleContent) return 0
 
-    const rect = articleContent.getBoundingClientRect()
+    // const rect = articleContent.getBoundingClientRect() // Not used currently
     const windowHeight = window.innerHeight
     const contentHeight = articleContent.scrollHeight
     const scrollTop = window.scrollY

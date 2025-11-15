@@ -1,5 +1,4 @@
 import { generateText } from "./gemini"
-import { analyzeSentiment } from "./sentiment"
 import { moderateContent, checkFactAccuracy } from "./moderation"
 import { generateTags, extractKeywords, generateSeoTitle, generateMetaDescription } from "./gemini"
 

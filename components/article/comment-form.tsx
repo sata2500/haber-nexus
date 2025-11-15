@@ -4,10 +4,24 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 
+interface Comment {
+  id: string
+  content: string
+  createdAt: string
+  userId: string
+  articleId: string
+  parentId?: string | null
+  user: {
+    id: string
+    name: string
+    image?: string | null
+  }
+}
+
 interface CommentFormProps {
   articleId: string
   parentId?: string
-  onCommentAdded: (comment: any) => void
+  onCommentAdded: (comment: Comment) => void
   onCancel?: () => void
   placeholder?: string
   submitLabel?: string
@@ -62,8 +76,8 @@ export function CommentForm({
       const newComment = await response.json()
       setContent("")
       onCommentAdded(newComment)
-    } catch (err: any) {
-      setError(err.message || "Bir hata oluştu")
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Bir hata oluştu")
     } finally {
       setLoading(false)
     }

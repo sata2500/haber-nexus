@@ -198,7 +198,7 @@ export default function UsersPage() {
                         <CardTitle className="text-lg">
                           {user.name || user.username || "İsimsiz"}
                         </CardTitle>
-                        <Badge variant={ROLE_COLORS[user.role as UserRole] as any}>
+                        <Badge variant={ROLE_COLORS[user.role as UserRole] as "default" | "secondary" | "destructive" | "outline"}>
                           <Shield className="h-3 w-3 mr-1" />
                           {ROLE_LABELS[user.role as UserRole]}
                         </Badge>

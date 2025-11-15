@@ -244,7 +244,7 @@ export default function AuthorProfilePage() {
                 İlgi Alanları
               </label>
               <p className="text-xs text-muted-foreground mb-3">
-                İlgi alanlarınız otomatik yazar ataması için kullanılır. RSS Feed'lerden gelen makaleler ilgi alanlarınıza göre size atanabilir.
+                İlgi alanlarınız otomatik yazar ataması için kullanılır. RSS Feed&apos;lerden gelen makaleler ilgi alanlarınıza göre size atanabilir.
               </p>
               {profileLoaded ? (
                 <InterestsSelector

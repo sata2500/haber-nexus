@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useSession } from "next-auth/react"
 import { Heart } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -29,14 +29,7 @@ export function LikeButton({
   const [count, setCount] = useState(initialCount)
   const [loading, setLoading] = useState(false)
 
-  // Fetch user's like status
-  useEffect(() => {
-    if (status === "authenticated" && session?.user) {
-      fetchLikeStatus()
-    }
-  }, [status, session])
-
-  const fetchLikeStatus = async () => {
+  const fetchLikeStatus = useCallback(async () => {
     try {
       const response = await fetch(`/api/likes?articleId=${articleId}`)
       if (response.ok) {
@@ -46,7 +39,14 @@ export function LikeButton({
     } catch (error) {
       console.error("Error fetching like status:", error)
     }
-  }
+  }, [articleId])
+
+  // Fetch user's like status
+  useEffect(() => {
+    if (status === "authenticated" && session?.user) {
+      fetchLikeStatus()
+    }
+  }, [status, session, fetchLikeStatus])
 
   const handleLike = async () => {
     // Check authentication

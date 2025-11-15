@@ -11,7 +11,7 @@ export function ReadingProgressBar() {
       const articleContent = document.querySelector('.article-content')
       if (!articleContent) return 0
 
-      const rect = articleContent.getBoundingClientRect()
+      // const rect = articleContent.getBoundingClientRect() // Not used
       const windowHeight = window.innerHeight
       const contentHeight = articleContent.scrollHeight
       const scrollTop = window.scrollY

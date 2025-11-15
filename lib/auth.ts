@@ -64,7 +64,7 @@ export const authOptions: NextAuthOptions = {
         try {
           const user = await prisma.user.findUnique({
             where: { id: token.sub! },
-            select: { role: true, name: true, image: true, email: true }
+            select: { role: true, name: true, image: true, email: true, username: true, bio: true }
           })
           
           if (user) {
@@ -72,6 +72,8 @@ export const authOptions: NextAuthOptions = {
             session.user.name = user.name
             session.user.image = user.image
             session.user.email = user.email
+            session.user.username = user.username
+            session.user.bio = user.bio
             
             // KRİTİK: JWT token'daki rolü de güncelle
             // Bu sayede middleware güncel rolü görebilir

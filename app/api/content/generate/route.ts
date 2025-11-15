@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
             authorId: session.user.id,
             topic: data.topic,
             outline: generated.outline,
-            research: data.includeResearch ? ({ sources: generated.sources } as any) : undefined,
+            research: data.includeResearch && generated.sources ? JSON.parse(JSON.stringify({ sources: generated.sources })) : undefined,
             draft: generated.content,
             
             aiGenerated: true,

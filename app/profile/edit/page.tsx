@@ -14,8 +14,8 @@ export default async function ProfileEditPage() {
 
   const initialData = {
     name: session.user.name || "",
-    username: (session.user as any).username || "",
-    bio: (session.user as any).bio || "",
+    username: session.user.username || "",
+    bio: session.user.bio || "",
     email: session.user.email || "",
   }
 

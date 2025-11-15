@@ -1,8 +1,8 @@
 "use client"
 
-import { Heart, Bookmark, MessageSquare, Eye } from "lucide-react"
 import { LikeButton } from "./like-button"
 import { BookmarkButton } from "./bookmark-button"
+import { Eye, MessageSquare } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface ArticleCardActionsProps {

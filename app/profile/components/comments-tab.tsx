@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Loader2, MessageSquare, ThumbsUp } from "lucide-react"
+import { Loader2, MessageSquare } from "lucide-react"
 import { formatDistanceToNow } from "@/lib/utils"
 import type { Comment } from "@/types/profile"
 
