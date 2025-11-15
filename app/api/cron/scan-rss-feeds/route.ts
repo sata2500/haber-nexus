@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { scanRssFeed } from "@/lib/rss/scanner"
 
+// Vercel Hobby plan max duration: 300 seconds (5 minutes)
+export const maxDuration = 300;
+
 /**
  * Cron job to automatically scan RSS feeds based on their scanInterval
  * GET /api/cron/scan-rss-feeds

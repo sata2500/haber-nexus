@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { publishScheduledArticles } from "@/lib/cron/publish-scheduled-articles"
 
+// Vercel Hobby plan max duration: 300 seconds (5 minutes)
+export const maxDuration = 300;
+
 /**
  * Cron job endpoint to publish scheduled articles
  * GET /api/cron/publish-scheduled

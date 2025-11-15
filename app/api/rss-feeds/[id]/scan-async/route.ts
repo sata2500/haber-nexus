@@ -3,6 +3,9 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { scanRssFeed } from "@/lib/rss/scanner"
 
+// Vercel Hobby plan max duration: 300 seconds (5 minutes)
+export const maxDuration = 300;
+
 interface RouteParams {
   params: Promise<{
     id: string
