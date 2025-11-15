@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { 
@@ -13,19 +13,31 @@ import {
   CheckCircle
 } from "lucide-react"
 
+interface UserStats {
+  totalReads: number
+  completedReads: number
+  totalLikes: number
+  totalBookmarks: number
+  totalComments: number
+  totalReadingTimeMinutes: number
+  readsLastWeek: number
+  unreadNotifications: number
+  topCategories?: Array<{
+    slug: string
+    name: string
+    count: number
+  }>
+}
+
 interface OverviewTabProps {
   userId: string
 }
 
 export function OverviewTab({ userId }: OverviewTabProps) {
-  const [stats, setStats] = useState<any>(null)
+  const [stats, setStats] = useState<UserStats | null>(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    fetchStats()
-  }, [])
-
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const response = await fetch(`/api/users/${userId}/stats`)
       if (response.ok) {
@@ -37,7 +49,11 @@ export function OverviewTab({ userId }: OverviewTabProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [userId])
+
+  useEffect(() => {
+    fetchStats()
+  }, [fetchStats])
 
   if (loading) {
     return <div className="text-center py-12">Yükleniyor...</div>
@@ -198,7 +214,7 @@ export function OverviewTab({ userId }: OverviewTabProps) {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {stats.topCategories.map((category: any, index: number) => (
+              {stats.topCategories.map((category, index) => (
                 <div key={category.slug} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span className="text-lg font-bold text-muted-foreground">

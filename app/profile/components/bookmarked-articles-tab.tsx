@@ -1,28 +1,25 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { ArticleCard } from "./article-card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Loader2, Bookmark, Search } from "lucide-react"
+import type { Bookmark as BookmarkType } from "@/types/profile"
 
 interface BookmarkedArticlesTabProps {
   userId: string
 }
 
 export function BookmarkedArticlesTab({ userId }: BookmarkedArticlesTabProps) {
-  const [bookmarks, setBookmarks] = useState<any[]>([])
+  const [bookmarks, setBookmarks] = useState<BookmarkType[]>([])
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
   const [search, setSearch] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
 
-  useEffect(() => {
-    fetchBookmarkedArticles()
-  }, [page, searchQuery])
-
-  const fetchBookmarkedArticles = async () => {
+  const fetchBookmarkedArticles = useCallback(async () => {
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -46,7 +43,11 @@ export function BookmarkedArticlesTab({ userId }: BookmarkedArticlesTabProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [userId, page, searchQuery])
+
+  useEffect(() => {
+    fetchBookmarkedArticles()
+  }, [fetchBookmarkedArticles])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()

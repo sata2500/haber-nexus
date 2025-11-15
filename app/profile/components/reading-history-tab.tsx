@@ -1,27 +1,22 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { ArticleCard } from "./article-card"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Loader2, Clock, CheckCircle } from "lucide-react"
-import { Progress } from "@/components/ui/progress"
+import { Loader2, Clock } from "lucide-react"
+import type { ReadingHistory } from "@/types/profile"
 
 interface ReadingHistoryTabProps {
   userId: string
 }
 
 export function ReadingHistoryTab({ userId }: ReadingHistoryTabProps) {
-  const [history, setHistory] = useState<any[]>([])
+  const [history, setHistory] = useState<ReadingHistory[]>([])
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
 
-  useEffect(() => {
-    fetchReadingHistory()
-  }, [page])
-
-  const fetchReadingHistory = async () => {
+  const fetchReadingHistory = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(
@@ -39,7 +34,11 @@ export function ReadingHistoryTab({ userId }: ReadingHistoryTabProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [userId, page])
+
+  useEffect(() => {
+    fetchReadingHistory()
+  }, [fetchReadingHistory])
 
   if (loading && page === 1) {
     return (
@@ -61,47 +60,34 @@ export function ReadingHistoryTab({ userId }: ReadingHistoryTabProps) {
     )
   }
 
+  const formatReadingTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60)
+    if (minutes < 1) return "1 dakikadan az"
+    if (minutes < 60) return `${minutes} dakika`
+    const hours = Math.floor(minutes / 60)
+    const remainingMinutes = minutes % 60
+    return `${hours} saat ${remainingMinutes > 0 ? `${remainingMinutes} dakika` : ""}`
+  }
+
   return (
     <div className="space-y-4">
       {history.map((item) => (
-        <Card key={item.id} className="overflow-hidden">
-          <CardContent className="p-0">
-            <div className="flex flex-col">
-              <ArticleCard
-                article={item.article}
-                metadata={{
-                  label: "Son okunma",
-                  value: new Date(item.lastReadAt),
-                }}
-              />
-              
-              {/* Reading Progress */}
-              <div className="px-4 pb-4 space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Clock className="h-4 w-4" />
-                    <span>
-                      {Math.floor(item.readDuration / 60)} dakika okuma
-                    </span>
-                  </div>
-                  {item.completed && (
-                    <div className="flex items-center gap-1 text-green-600">
-                      <CheckCircle className="h-4 w-4" />
-                      <span className="text-xs font-medium">Tamamlandı</span>
-                    </div>
-                  )}
-                </div>
-                <div className="space-y-1">
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>İlerleme</span>
-                    <span>{Math.round(item.progress)}%</span>
-                  </div>
-                  <Progress value={item.progress} className="h-2" />
-                </div>
-              </div>
+        <ArticleCard
+          key={item.id}
+          article={item.article}
+          metadata={{
+            label: "Okundu",
+            value: new Date(item.readAt),
+          }}
+          additionalInfo={
+            <div className="text-sm text-muted-foreground mt-2">
+              Okuma süresi: {formatReadingTime(item.readDuration)}
+              {item.progress < 100 && (
+                <span className="ml-2">• İlerleme: %{item.progress}</span>
+              )}
             </div>
-          </CardContent>
-        </Card>
+          }
+        />
       ))}
 
       {hasMore && (

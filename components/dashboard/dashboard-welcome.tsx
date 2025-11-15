@@ -71,7 +71,7 @@ export function DashboardWelcome() {
               onClick={() => router.push("/profile")}
               className="gap-2"
             >
-              Tüm Dashboard'lar
+              Tüm Dashboard&apos;lar
               <ArrowRight className="h-4 w-4" />
             </Button>
           )}
@@ -80,7 +80,7 @@ export function DashboardWelcome() {
         {dashboardInfo.accessible.length > 1 && (
           <div className="pt-2 border-t">
             <p className="text-xs text-muted-foreground mb-2">
-              Erişebildiğiniz diğer dashboard'lar:
+              Erişebildiğiniz diğer dashboard&apos;lar:
             </p>
             <div className="flex flex-wrap gap-2">
               {dashboardInfo.accessible

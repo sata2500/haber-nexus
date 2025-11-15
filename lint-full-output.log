@@ -1,0 +1,170 @@
+
+> haber-nexus@0.1.0 lint /home/ubuntu/haber-nexus
+> eslint
+
+
+/home/ubuntu/haber-nexus/app/admin/comments/page.tsx
+  5:29  warning  'CardDescription' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/admin/content-creator/page.tsx
+    9:17  warning  'session' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   23:60  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  156:61  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  173:60  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  199:66  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/admin/drafts/[id]/page.tsx
+  10:41  warning  'FileText' is defined but never used          @typescript-eslint/no-unused-vars
+  54:17  warning  'session' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/admin/drafts/page.tsx
+  32:9   warning  'router' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  33:17  warning  'session' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/admin/users/[id]/edit/page.tsx
+  225:63  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  277:61  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/admin/users/page.tsx
+  201:79  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/api/content/generate/route.ts
+  62:81  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/api/drafts/route.ts
+  24:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/api/users/[id]/analytics/route.ts
+  158:49  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/api/users/[id]/liked-articles/route.ts
+  41:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/api/users/me/route.ts
+  21:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/author/articles/new/page.tsx
+   20:17  warning  'session' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  110:15  warning  'data' is assigned a value but never used     @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/author/profile/page.tsx
+   11:10  warning  'User' is defined but never used                                 @typescript-eslint/no-unused-vars
+  247:82  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/ubuntu/haber-nexus/app/editor/review/[id]/page.tsx
+  291:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/ubuntu/haber-nexus/app/profile/bookmarks/bookmarks-client.tsx
+  7:10  warning  'ArrowLeft' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/profile/components/analytics-tab.tsx
+  80:9  warning  'dayNames' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/profile/components/bookmarked-articles-tab.tsx
+  14:46  error    Unexpected any. Specify a different type                                                                                    @typescript-eslint/no-explicit-any
+  23:6   warning  React Hook useEffect has a missing dependency: 'fetchBookmarkedArticles'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/home/ubuntu/haber-nexus/app/profile/components/comments-tab.tsx
+  16:44  error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+  23:6   warning  React Hook useEffect has a missing dependency: 'fetchComments'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/home/ubuntu/haber-nexus/app/profile/components/following-tab.tsx
+   16:42  error    Unexpected any. Specify a different type                                                                                 @typescript-eslint/no-explicit-any
+   23:6   warning  React Hook useEffect has a missing dependency: 'fetchFollowedAuthors'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  164:65  error    Unexpected any. Specify a different type                                                                                 @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/profile/components/liked-articles-tab.tsx
+  13:38  error    Unexpected any. Specify a different type                                                                               @typescript-eslint/no-explicit-any
+  20:6   warning  React Hook useEffect has a missing dependency: 'fetchLikedArticles'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/home/ubuntu/haber-nexus/app/profile/components/overview-tab.tsx
+   21:38  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+   26:6   warning  React Hook useEffect has a missing dependency: 'fetchStats'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  201:51  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/profile/components/profile-header.tsx
+  83:56  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/profile/components/profile-tabs.tsx
+  3:10  warning  'useState' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/profile/components/reading-history-tab.tsx
+  15:42  error    Unexpected any. Specify a different type                                                                                @typescript-eslint/no-explicit-any
+  22:6   warning  React Hook useEffect has a missing dependency: 'fetchReadingHistory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/home/ubuntu/haber-nexus/app/profile/components/settings-tab.tsx
+   13:9   error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+   36:44  error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+   40:6   warning  React Hook useEffect has a missing dependency: 'fetchSettings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+   74:14  warning  'err' is defined but never used                                                                                   @typescript-eslint/no-unused-vars
+  121:14  warning  'err' is defined but never used                                                                                   @typescript-eslint/no-unused-vars
+  128:48  error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/profile/edit/edit-client.tsx
+  24:9  warning  'router' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/profile/edit/page.tsx
+  17:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  18:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/profile/new-profile-content.tsx
+  22:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  23:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/profile/profile-content.tsx
+  158:9   warning  'dashboardInfo' is assigned a value but never used               @typescript-eslint/no-unused-vars
+  167:53  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  203:60  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/components/article/article-card-actions.tsx
+  3:10  warning  'Heart' is defined but never used     @typescript-eslint/no-unused-vars
+  3:17  warning  'Bookmark' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/components/article/bookmark-button.tsx
+  32:6  warning  React Hook useEffect has a missing dependency: 'fetchBookmarkStatus'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/home/ubuntu/haber-nexus/components/article/comment-form.tsx
+  10:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  65:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/components/article/comment-item.tsx
+  37:17  warning  'session' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/components/article/comment-section.tsx
+  30:45  warning  'initialCommentCount' is defined but never used                                                                   @typescript-eslint/no-unused-vars
+  31:17  warning  'session' is assigned a value but never used                                                                      @typescript-eslint/no-unused-vars
+  39:6   warning  React Hook useEffect has a missing dependency: 'fetchComments'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  56:31  warning  'newComment' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/components/article/like-button.tsx
+  37:6  warning  React Hook useEffect has a missing dependency: 'fetchLikeStatus'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/home/ubuntu/haber-nexus/components/article/reading-progress-bar.tsx
+  14:13  warning  'rect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/components/article/reading-tracker.tsx
+  18:10  warning  'progress' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  19:10  warning  'readDuration' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  22:9   warning  'startTimeRef' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  35:11  warning  'rect' is assigned a value but never used          @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/components/article/share-button.tsx
+  25:3  warning  'articleId' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/components/dashboard/dashboard-cards.tsx
+  80:36  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/ubuntu/haber-nexus/components/dashboard/dashboard-welcome.tsx
+  74:28  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  83:46  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/ubuntu/haber-nexus/components/editor/markdown-renderer.tsx
+  75:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  75:13  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+
+/home/ubuntu/haber-nexus/lib/ai/content-generator.ts
+  2:10  warning  'analyzeSentiment' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 78 problems (35 errors, 43 warnings)
+
+ ELIFECYCLE  Command failed with exit code 1.

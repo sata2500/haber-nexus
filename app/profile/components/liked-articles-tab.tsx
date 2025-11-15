@@ -1,25 +1,22 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { ArticleCard } from "./article-card"
 import { Button } from "@/components/ui/button"
 import { Loader2, Heart } from "lucide-react"
+import type { Like } from "@/types/profile"
 
 interface LikedArticlesTabProps {
   userId: string
 }
 
 export function LikedArticlesTab({ userId }: LikedArticlesTabProps) {
-  const [likes, setLikes] = useState<any[]>([])
+  const [likes, setLikes] = useState<Like[]>([])
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
 
-  useEffect(() => {
-    fetchLikedArticles()
-  }, [page])
-
-  const fetchLikedArticles = async () => {
+  const fetchLikedArticles = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(
@@ -35,7 +32,11 @@ export function LikedArticlesTab({ userId }: LikedArticlesTabProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [userId, page])
+
+  useEffect(() => {
+    fetchLikedArticles()
+  }, [fetchLikedArticles])
 
   const handleUnlike = async (articleId: string) => {
     try {

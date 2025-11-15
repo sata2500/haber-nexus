@@ -1,16 +1,25 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Loader2, Save } from "lucide-react"
+import type { UserSettings } from "@/types/profile"
+
+interface User {
+  id: string
+  name: string
+  username?: string
+  bio?: string
+  email: string
+}
 
 interface SettingsTabProps {
   userId: string
-  user: any
+  user: User
 }
 
 export function SettingsTab({ userId, user }: SettingsTabProps) {
@@ -33,13 +42,9 @@ export function SettingsTab({ userId, user }: SettingsTabProps) {
   })
 
   // User settings
-  const [settings, setSettings] = useState<any>(null)
+  const [settings, setSettings] = useState<UserSettings | null>(null)
 
-  useEffect(() => {
-    fetchSettings()
-  }, [])
-
-  const fetchSettings = async () => {
+  const fetchSettings = useCallback(async () => {
     try {
       const response = await fetch(`/api/users/${userId}/settings`)
       if (response.ok) {
@@ -49,7 +54,11 @@ export function SettingsTab({ userId, user }: SettingsTabProps) {
     } catch (error) {
       console.error("Error fetching settings:", error)
     }
-  }
+  }, [userId])
+
+  useEffect(() => {
+    fetchSettings()
+  }, [fetchSettings])
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -71,7 +80,8 @@ export function SettingsTab({ userId, user }: SettingsTabProps) {
         const data = await response.json()
         setError(data.error || "Profil güncellenemedi")
       }
-    } catch (err) {
+    } catch (error) {
+      console.error("Profile update error:", error)
       setError("Bir hata oluştu")
     } finally {
       setLoading(false)
@@ -118,14 +128,15 @@ export function SettingsTab({ userId, user }: SettingsTabProps) {
         const data = await response.json()
         setError(data.error || "Şifre değiştirilemedi")
       }
-    } catch (err) {
+    } catch (error) {
+      console.error("Password change error:", error)
       setError("Bir hata oluştu")
     } finally {
       setLoading(false)
     }
   }
 
-  const handleSettingsUpdate = async (updates: any) => {
+  const handleSettingsUpdate = async (updates: Partial<UserSettings>) => {
     try {
       const response = await fetch(`/api/users/${userId}/settings`, {
         method: "PATCH",
@@ -305,30 +316,6 @@ export function SettingsTab({ userId, user }: SettingsTabProps) {
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Okuma Geçmişini Göster</Label>
-              <p className="text-sm text-muted-foreground">
-                Okuma geçmişiniz profilinizde görünür olsun
-              </p>
-            </div>
-            <Switch
-              checked={settings.showReadingHistory}
-              onCheckedChange={(checked) =>
-                handleSettingsUpdate({ showReadingHistory: checked })
-              }
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Notification Settings */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Bildirim Tercihleri</CardTitle>
-          <CardDescription>Bildirim ayarlarınızı yönetin</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
               <Label>E-posta Bildirimleri</Label>
               <p className="text-sm text-muted-foreground">
                 E-posta ile bildirim alın
@@ -338,36 +325,6 @@ export function SettingsTab({ userId, user }: SettingsTabProps) {
               checked={settings.emailNotifications}
               onCheckedChange={(checked) =>
                 handleSettingsUpdate({ emailNotifications: checked })
-              }
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label>Yeni Makale Bildirimleri</Label>
-              <p className="text-sm text-muted-foreground">
-                Takip ettiğiniz yazarların yeni makaleleri
-              </p>
-            </div>
-            <Switch
-              checked={settings.followedAuthorNotif}
-              onCheckedChange={(checked) =>
-                handleSettingsUpdate({ followedAuthorNotif: checked })
-              }
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label>Yorum Yanıt Bildirimleri</Label>
-              <p className="text-sm text-muted-foreground">
-                Yorumlarınıza gelen yanıtlar
-              </p>
-            </div>
-            <Switch
-              checked={settings.commentReplyNotif}
-              onCheckedChange={(checked) =>
-                handleSettingsUpdate({ commentReplyNotif: checked })
               }
             />
           </div>

@@ -14,7 +14,7 @@ interface ArticleCardProps {
     title: string
     excerpt?: string | null
     coverImage?: string | null
-    publishedAt?: Date | null
+    publishedAt?: Date | string | null
     viewCount?: number
     likeCount?: number
     commentCount?: number
@@ -37,9 +37,10 @@ interface ArticleCardProps {
   }
   onAction?: () => void
   actionLabel?: string
+  additionalInfo?: React.ReactNode
 }
 
-export function ArticleCard({ article, metadata, onAction, actionLabel }: ArticleCardProps) {
+export function ArticleCard({ article, metadata, onAction, actionLabel, additionalInfo }: ArticleCardProps) {
   return (
     <Card className="overflow-hidden hover:shadow-md transition-shadow">
       <CardContent className="p-0">
@@ -152,6 +153,9 @@ export function ArticleCard({ article, metadata, onAction, actionLabel }: Articl
                 </div>
               )}
             </div>
+
+            {/* Additional Info */}
+            {additionalInfo && additionalInfo}
 
             {/* Action Button */}
             {onAction && actionLabel && (

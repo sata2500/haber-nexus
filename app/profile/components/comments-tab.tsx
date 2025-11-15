@@ -1,28 +1,25 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Loader2, MessageSquare, ThumbsUp } from "lucide-react"
 import { formatDistanceToNow } from "@/lib/utils"
+import type { Comment } from "@/types/profile"
 
 interface CommentsTabProps {
   userId: string
 }
 
 export function CommentsTab({ userId }: CommentsTabProps) {
-  const [comments, setComments] = useState<any[]>([])
+  const [comments, setComments] = useState<Comment[]>([])
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
 
-  useEffect(() => {
-    fetchComments()
-  }, [page])
-
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(
@@ -40,7 +37,11 @@ export function CommentsTab({ userId }: CommentsTabProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [userId, page])
+
+  useEffect(() => {
+    fetchComments()
+  }, [fetchComments])
 
   if (loading && page === 1) {
     return (
@@ -77,26 +78,10 @@ export function CommentsTab({ userId }: CommentsTabProps) {
                   {comment.article.title}
                 </h4>
               </Link>
-              <Badge variant={
-                comment.status === "APPROVED" ? "default" :
-                comment.status === "PENDING" ? "secondary" :
-                "destructive"
-              }>
-                {comment.status === "APPROVED" ? "Onaylandı" :
-                 comment.status === "PENDING" ? "Beklemede" :
-                 comment.status === "REJECTED" ? "Reddedildi" : "İşaretlendi"}
+              <Badge variant="default">
+                Yayında
               </Badge>
             </div>
-
-            {/* Parent Comment */}
-            {comment.parent && (
-              <div className="pl-4 border-l-2 border-muted text-sm text-muted-foreground">
-                <p className="font-medium">
-                  {comment.parent.user.name || comment.parent.user.username} yanıtlıyorsunuz:
-                </p>
-                <p className="line-clamp-2">{comment.parent.content}</p>
-              </div>
-            )}
 
             {/* Comment Content */}
             <p className="text-foreground">{comment.content}</p>
@@ -104,16 +89,6 @@ export function CommentsTab({ userId }: CommentsTabProps) {
             {/* Metadata */}
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
               <span>{formatDistanceToNow(new Date(comment.createdAt))}</span>
-              <div className="flex items-center gap-1">
-                <ThumbsUp className="h-3 w-3" />
-                <span>{comment.likeCount}</span>
-              </div>
-              {comment.replyCount > 0 && (
-                <div className="flex items-center gap-1">
-                  <MessageSquare className="h-3 w-3" />
-                  <span>{comment.replyCount} yanıt</span>
-                </div>
-              )}
             </div>
           </CardContent>
         </Card>

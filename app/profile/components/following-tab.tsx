@@ -1,28 +1,42 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Loader2, Users, Check, FileText, Eye, Heart } from "lucide-react"
+import type { Follow, Article } from "@/types/profile"
 
 interface FollowingTabProps {
   userId: string
 }
 
+interface FollowWithAuthorDetails extends Follow {
+  author: {
+    id: string
+    name: string
+    image?: string
+    username?: string
+    bio?: string
+    authorProfile?: {
+      totalArticles: number
+      totalViews: number
+      totalLikes: number
+      verified: boolean
+    }
+    recentArticles?: Article[]
+  }
+}
+
 export function FollowingTab({ userId }: FollowingTabProps) {
-  const [follows, setFollows] = useState<any[]>([])
+  const [follows, setFollows] = useState<FollowWithAuthorDetails[]>([])
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
 
-  useEffect(() => {
-    fetchFollowedAuthors()
-  }, [page])
-
-  const fetchFollowedAuthors = async () => {
+  const fetchFollowedAuthors = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(
@@ -40,7 +54,11 @@ export function FollowingTab({ userId }: FollowingTabProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [userId, page])
+
+  useEffect(() => {
+    fetchFollowedAuthors()
+  }, [fetchFollowedAuthors])
 
   const handleUnfollow = async (authorId: string) => {
     try {
@@ -51,7 +69,7 @@ export function FollowingTab({ userId }: FollowingTabProps) {
       })
 
       if (response.ok) {
-        setFollows((prev) => prev.filter((follow) => follow.author.id !== authorId))
+        setFollows((prev) => prev.filter((follow) => follow.following.id !== authorId))
       }
     } catch (error) {
       console.error("Error unfollowing author:", error)
@@ -81,7 +99,7 @@ export function FollowingTab({ userId }: FollowingTabProps) {
   return (
     <div className="space-y-4">
       {follows.map((follow) => (
-        <Card key={follow.followId}>
+        <Card key={follow.id}>
           <CardContent className="pt-6">
             <div className="flex flex-col md:flex-row gap-6">
               {/* Author Info */}
@@ -161,7 +179,7 @@ export function FollowingTab({ userId }: FollowingTabProps) {
                     Son Makaleler
                   </h4>
                   <div className="space-y-2">
-                    {follow.author.recentArticles.map((article: any) => (
+                    {follow.author.recentArticles.map((article) => (
                       <Link
                         key={article.id}
                         href={`/articles/${article.slug}`}

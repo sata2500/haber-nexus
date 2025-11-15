@@ -77,7 +77,7 @@ export function DashboardCards({
                     size="sm" 
                     className={`w-full justify-between ${dashboard.color}`}
                   >
-                    <span>Dashboard'a Git</span>
+                    <span>Dashboard&apos;a Git</span>
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </CardContent>

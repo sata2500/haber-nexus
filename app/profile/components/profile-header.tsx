@@ -80,7 +80,7 @@ export function ProfileHeader({ user, stats }: ProfileHeaderProps) {
             </div>
 
             <div className="flex items-center gap-2">
-              <Badge variant={ROLE_COLORS[userRole] as any}>
+              <Badge variant={ROLE_COLORS[userRole] as "default" | "secondary" | "destructive" | "outline"}>
                 <Shield className="h-3 w-3 mr-1" />
                 {ROLE_LABELS[userRole]}
               </Badge>
