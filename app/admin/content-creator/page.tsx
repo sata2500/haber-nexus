@@ -51,12 +51,21 @@ export default function ContentCreatorPage() {
       }
 
       const data = await response.json()
+      console.log("Content generation response:", data)
+      
+      if (!data.success || !data.result) {
+        throw new Error(data.error || "İçerik oluşturulamadı")
+      }
+      
       setGeneratedContent(data.result)
       setDraftId(data.result.draftId)
+      console.log("Draft ID:", data.result.draftId)
+      console.log("Content length:", data.result.content?.length || 0)
       setStep(2)
     } catch (error) {
       console.error("Generation error:", error)
-      alert("İçerik oluşturulurken bir hata oluştu")
+      const errorMessage = error instanceof Error ? error.message : "İçerik oluşturulurken bir hata oluştu"
+      alert(errorMessage)
     } finally {
       setLoading(false)
     }

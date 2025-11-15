@@ -68,20 +68,27 @@ export async function generateArticle(
     keywords = []
   } = options
 
+  console.log("[generateArticle] Starting for topic:", topic)
+  
   // Step 1: Research (if enabled)
   let researchData = ""
   let sources: ResearchSource[] = []
   
   if (includeResearch) {
+    console.log("[generateArticle] Conducting research...")
     const research = await conductResearch(topic)
     researchData = research.summary
     sources = research.sources
+    console.log("[generateArticle] Research completed. Sources:", sources.length)
   }
 
   // Step 2: Create outline
+  console.log("[generateArticle] Creating outline...")
   const outline = await createOutline(topic, style, researchData)
+  console.log("[generateArticle] Outline created with", outline.length, "items")
 
   // Step 3: Generate content
+  console.log("[generateArticle] Generating content...")
   const content = await generateContentFromOutline(
     topic,
     outline,
@@ -91,6 +98,7 @@ export async function generateArticle(
     researchData,
     targetAudience
   )
+  console.log("[generateArticle] Content generated. Length:", content.length, "characters")
 
   // Step 4: Generate title
   const title = await generateSeoTitle(content)

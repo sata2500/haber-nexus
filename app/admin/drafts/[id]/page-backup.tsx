@@ -7,9 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Save, Send, Trash2, FileText, Eye, Edit } from "lucide-react"
+import { ArrowLeft, Save, Send, Trash2, FileText } from "lucide-react"
 import Link from "next/link"
-import ReactMarkdown from "react-markdown"
 
 interface Draft {
   id: string
@@ -48,7 +47,7 @@ interface Draft {
   }>
 }
 
-export default function EditDraftPageImproved() {
+export default function EditDraftPage() {
   const router = useRouter()
   const params = useParams()
   const { data: session } = useSession()
@@ -58,7 +57,6 @@ export default function EditDraftPageImproved() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [publishing, setPublishing] = useState(false)
-  const [previewMode, setPreviewMode] = useState(false)
 
   const [formData, setFormData] = useState({
     topic: "",
@@ -213,11 +211,8 @@ export default function EditDraftPageImproved() {
     )
   }
 
-  const wordCount = formData.draft.split(/\s+/).filter(Boolean).length
-  const charCount = formData.draft.length
-
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="container mx-auto px-4 py-8 max-w-6xl">
       <Button
         variant="ghost"
         onClick={() => router.push("/admin/drafts")}
@@ -227,9 +222,9 @@ export default function EditDraftPageImproved() {
         Geri
       </Button>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content */}
-        <div className="lg:col-span-3 space-y-6">
+        <div className="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -241,15 +236,6 @@ export default function EditDraftPageImproved() {
                       🤖 AI
                     </Badge>
                   )}
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant={previewMode ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setPreviewMode(!previewMode)}
-                  >
-                    {previewMode ? <><Eye className="h-4 w-4 mr-2" /> Önizleme</> : <><Edit className="h-4 w-4 mr-2" /> Düzenle</>}
-                  </Button>
                 </div>
               </div>
               <CardDescription>
@@ -266,36 +252,22 @@ export default function EditDraftPageImproved() {
                   value={formData.topic}
                   onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
                   placeholder="Taslak konusu..."
-                  disabled={previewMode}
                 />
               </div>
 
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium">
-                    İçerik Taslağı <span className="text-destructive">*</span>
-                  </label>
-                  <div className="text-xs text-muted-foreground">
-                    {wordCount} kelime | {charCount} karakter
-                  </div>
-                </div>
-                
-                {previewMode ? (
-                  <div className="w-full min-h-[400px] px-4 py-3 border rounded-md prose dark:prose-invert max-w-none bg-gray-50 dark:bg-gray-900">
-                    {formData.draft ? (
-                      <ReactMarkdown>{formData.draft}</ReactMarkdown>
-                    ) : (
-                      <p className="text-muted-foreground italic">İçerik bulunamadı</p>
-                    )}
-                  </div>
-                ) : (
-                  <textarea
-                    className="w-full min-h-[400px] px-3 py-2 border rounded-md text-sm font-mono resize-y"
-                    value={formData.draft}
-                    onChange={(e) => setFormData({ ...formData, draft: e.target.value })}
-                    placeholder="Taslak içeriğinizi buraya yazın..."
-                  />
-                )}
+                <label className="text-sm font-medium">
+                  İçerik Taslağı <span className="text-destructive">*</span>
+                </label>
+                <textarea
+                  className="w-full min-h-[400px] px-3 py-2 border rounded-md text-sm font-mono"
+                  value={formData.draft}
+                  onChange={(e) => setFormData({ ...formData, draft: e.target.value })}
+                  placeholder="Taslak içeriğinizi buraya yazın..."
+                />
+                <p className="text-xs text-muted-foreground">
+                  {formData.draft.length} karakter
+                </p>
               </div>
 
               <div className="space-y-2">
@@ -304,7 +276,6 @@ export default function EditDraftPageImproved() {
                   className="w-full px-3 py-2 border rounded-md text-sm"
                   value={formData.status}
                   onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                  disabled={previewMode}
                 >
                   <option value="DRAFT">Taslak</option>
                   <option value="REVIEW">İnceleme</option>
@@ -312,8 +283,8 @@ export default function EditDraftPageImproved() {
                 </select>
               </div>
 
-              <div className="flex gap-3 pt-4 border-t">
-                <Button onClick={handleSave} disabled={saving || previewMode}>
+              <div className="flex gap-3 pt-4">
+                <Button onClick={handleSave} disabled={saving}>
                   <Save className="h-4 w-4 mr-2" />
                   {saving ? "Kaydediliyor..." : "Kaydet"}
                 </Button>
@@ -328,62 +299,94 @@ export default function EditDraftPageImproved() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Published Article */}
+          {draft.article && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Yayınlanan Makale</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium">{draft.article.title}</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Durum: {draft.article.status}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Link href={`/articles/${draft.article.slug}`}>
+                      <Button variant="outline" size="sm">
+                        <FileText className="h-4 w-4 mr-2" />
+                        Görüntüle
+                      </Button>
+                    </Link>
+                    <Link href={`/admin/articles/${draft.article.id}/edit`}>
+                      <Button variant="outline" size="sm">
+                        Düzenle
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {/* Sidebar */}
-        <div className="lg:col-span-1 space-y-6">
+        <div className="space-y-6">
           {/* Quality Scores */}
           {(draft.qualityScore || draft.readabilityScore || draft.seoScore) && (
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Kalite Skorları</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-4">
                 {draft.qualityScore !== null && (
                   <div>
-                    <div className="text-xs text-muted-foreground mb-1">Genel Kalite</div>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-blue-600 dark:bg-blue-500" 
-                          style={{ width: `${Math.round(draft.qualityScore * 100)}%` }}
-                        />
-                      </div>
-                      <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
+                    <div className="flex justify-between mb-1">
+                      <span className="text-sm font-medium">Kalite</span>
+                      <span className="text-sm font-bold text-blue-600">
                         {Math.round(draft.qualityScore * 100)}%
                       </span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className="bg-blue-600 h-2 rounded-full"
+                        style={{ width: `${draft.qualityScore * 100}%` }}
+                      ></div>
                     </div>
                   </div>
                 )}
                 {draft.readabilityScore !== null && (
                   <div>
-                    <div className="text-xs text-muted-foreground mb-1">Okunabilirlik</div>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-green-600 dark:bg-green-500" 
-                          style={{ width: `${Math.round(draft.readabilityScore)}%` }}
-                        />
-                      </div>
-                      <span className="text-sm font-bold text-green-600 dark:text-green-400">
+                    <div className="flex justify-between mb-1">
+                      <span className="text-sm font-medium">Okunabilirlik</span>
+                      <span className="text-sm font-bold text-green-600">
                         {Math.round(draft.readabilityScore)}%
                       </span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className="bg-green-600 h-2 rounded-full"
+                        style={{ width: `${draft.readabilityScore}%` }}
+                      ></div>
                     </div>
                   </div>
                 )}
                 {draft.seoScore !== null && (
                   <div>
-                    <div className="text-xs text-muted-foreground mb-1">SEO Skoru</div>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-purple-600 dark:bg-purple-500" 
-                          style={{ width: `${Math.round(draft.seoScore)}%` }}
-                        />
-                      </div>
-                      <span className="text-sm font-bold text-purple-600 dark:text-purple-400">
+                    <div className="flex justify-between mb-1">
+                      <span className="text-sm font-medium">SEO</span>
+                      <span className="text-sm font-bold text-purple-600">
                         {Math.round(draft.seoScore)}%
                       </span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className="bg-purple-600 h-2 rounded-full"
+                        style={{ width: `${draft.seoScore}%` }}
+                      ></div>
                     </div>
                   </div>
                 )}
@@ -397,17 +400,17 @@ export default function EditDraftPageImproved() {
               <CardHeader>
                 <CardTitle className="text-lg">AI Bilgileri</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2 text-sm">
+              <CardContent className="space-y-2">
                 {draft.aiModel && (
                   <div>
-                    <span className="text-muted-foreground">Model:</span>
-                    <span className="ml-2 font-medium">{draft.aiModel}</span>
+                    <span className="text-sm font-medium">Model:</span>
+                    <p className="text-sm text-muted-foreground">{draft.aiModel}</p>
                   </div>
                 )}
                 {draft.aiPrompt && (
                   <div>
-                    <span className="text-muted-foreground">Prompt:</span>
-                    <p className="mt-1 text-xs bg-gray-100 dark:bg-gray-800 p-2 rounded">
+                    <span className="text-sm font-medium">Prompt:</span>
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">
                       {draft.aiPrompt}
                     </p>
                   </div>
@@ -421,61 +424,77 @@ export default function EditDraftPageImproved() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Araştırma Kaynakları</CardTitle>
+                <CardDescription>
+                  {draft.sources.length} kaynak bulundu
+                </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-2">
-                {draft.sources.slice(0, 5).map((source) => (
-                  <div key={source.id} className="text-sm border-l-2 border-blue-500 pl-2">
-                    <a 
-                      href={source.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="font-medium hover:underline text-blue-600 dark:text-blue-400"
-                    >
-                      {source.title}
-                    </a>
-                    {source.excerpt && (
-                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                        {source.excerpt}
-                      </p>
-                    )}
-                  </div>
-                ))}
-                {draft.sources.length > 5 && (
-                  <p className="text-xs text-muted-foreground">
-                    +{draft.sources.length - 5} kaynak daha
-                  </p>
-                )}
+              <CardContent>
+                <div className="space-y-3">
+                  {draft.sources.map((source) => (
+                    <div key={source.id} className="border-b pb-3 last:border-0">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1">
+                          <h5 className="text-sm font-medium line-clamp-1">
+                            {source.title}
+                          </h5>
+                          <a
+                            href={source.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-blue-600 hover:underline line-clamp-1"
+                          >
+                            {source.url}
+                          </a>
+                        </div>
+                        <div className="flex gap-1">
+                          {source.isVerified && (
+                            <Badge variant="outline" className="text-xs">
+                              ✓
+                            </Badge>
+                          )}
+                          {source.isUsed && (
+                            <Badge variant="outline" className="text-xs">
+                              Kullanıldı
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                      {source.excerpt && (
+                        <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                          {source.excerpt}
+                        </p>
+                      )}
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-xs text-muted-foreground">
+                          Güvenilirlik:
+                        </span>
+                        <div className="flex-1 bg-gray-200 rounded-full h-1 max-w-[100px]">
+                          <div
+                            className="bg-blue-600 h-1 rounded-full"
+                            style={{ width: `${source.reliability * 100}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-xs font-medium">
+                          {Math.round(source.reliability * 100)}%
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
           )}
 
-          {/* Published Article */}
-          {draft.article && (
+          {/* Outline */}
+          {draft.outline && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Yayınlanan Makale</CardTitle>
+                <CardTitle className="text-lg">İçerik Taslağı</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2">
-                  <h4 className="font-medium text-sm">{draft.article.title}</h4>
-                  <p className="text-xs text-muted-foreground">
-                    Durum: {draft.article.status}
-                  </p>
-                  <div className="flex gap-2">
-                    <Link href={`/articles/${draft.article.slug}`}>
-                      <Button size="sm" variant="outline">
-                        <Eye className="h-3 w-3 mr-1" />
-                        Görüntüle
-                      </Button>
-                    </Link>
-                    <Link href={`/admin/articles/${draft.article.id}/edit`}>
-                      <Button size="sm" variant="outline">
-                        <Edit className="h-3 w-3 mr-1" />
-                        Düzenle
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
+                <pre className="text-xs whitespace-pre-wrap text-muted-foreground">
+                  {JSON.stringify(draft.outline, null, 2)}
+                </pre>
               </CardContent>
             </Card>
           )}

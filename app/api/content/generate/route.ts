@@ -35,6 +35,8 @@ export async function POST(request: NextRequest) {
           return NextResponse.json({ error: "Topic is required" }, { status: 400 })
         }
 
+        console.log("Generating article for topic:", data.topic)
+        
         // Generate article
         const generated = await generateArticle({
           topic: data.topic,
@@ -47,6 +49,10 @@ export async function POST(request: NextRequest) {
           keywords: data.keywords || []
         })
 
+        console.log("Article generated successfully")
+        console.log("Content length:", generated.content?.length || 0)
+        console.log("Quality score:", generated.qualityScore)
+        
         // Create draft
         const draft = await prisma.contentDraft.create({
           data: {
@@ -68,6 +74,8 @@ export async function POST(request: NextRequest) {
           }
         })
 
+        console.log("Draft created with ID:", draft.id)
+        
         result = {
           draftId: draft.id,
           ...generated
