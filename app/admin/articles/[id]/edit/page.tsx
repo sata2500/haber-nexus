@@ -54,7 +54,6 @@ export default function EditArticlePage() {
     metaTitle: "",
     metaDescription: "",
     keywords: "",
-    scheduledFor: "",
   })
 
   const fetchArticle = useCallback(async () => {
@@ -75,7 +74,6 @@ export default function EditArticlePage() {
           metaTitle: data.metaTitle || "",
           metaDescription: data.metaDescription || "",
           keywords: data.keywords.join(", "),
-          scheduledFor: (data as any).publishedAt ? new Date((data as any).publishedAt).toISOString().slice(0, 16) : "",
         })
       }
     } catch (error) {
@@ -118,12 +116,9 @@ export default function EditArticlePage() {
         .filter((kw) => kw.length > 0)
 
       let publishedAt = null
-      let scheduledAt = null
       
       if (formData.status === "PUBLISHED") {
         publishedAt = new Date().toISOString()
-      } else if (formData.status === "SCHEDULED" && formData.scheduledFor) {
-        scheduledAt = new Date(formData.scheduledFor).toISOString()
       }
 
       const response = await fetch(`/api/articles/${articleId}`, {
@@ -136,7 +131,6 @@ export default function EditArticlePage() {
           tags,
           keywords,
           publishedAt,
-          scheduledAt,
         }),
       })
 
@@ -350,28 +344,9 @@ export default function EditArticlePage() {
                 >
                   <option value="DRAFT">Taslak</option>
                   <option value="PUBLISHED">Yayınla</option>
-                  <option value="SCHEDULED">Zamanla</option>
                   <option value="ARCHIVED">Arşivle</option>
                 </select>
               </div>
-
-              {formData.status === "SCHEDULED" && (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">
-                    Yayın Tarihi ve Saati <span className="text-destructive">*</span>
-                  </label>
-                  <Input
-                    type="datetime-local"
-                    value={formData.scheduledFor}
-                    onChange={(e) => setFormData({ ...formData, scheduledFor: e.target.value })}
-                    min={new Date().toISOString().slice(0, 16)}
-                    required
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Makale bu tarihte otomatik olarak yayınlanacaktır
-                  </p>
-                </div>
-              )}
             </div>
 
             <div className="flex gap-3 pt-4">

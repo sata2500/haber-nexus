@@ -11,14 +11,13 @@ const articleUpdateSchema = z.object({
   content: z.string().min(1).optional(),
   coverImage: z.string().optional(),
   type: z.enum(["NEWS", "BLOG", "ANALYSIS", "INTERVIEW", "OPINION"]).optional(),
-  status: z.enum(["DRAFT", "SCHEDULED", "PUBLISHED", "ARCHIVED"]).optional(),
+  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).optional(),
   categoryId: z.string().optional(),
   tags: z.array(z.string()).optional(),
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
   keywords: z.array(z.string()).optional(),
   publishedAt: z.string().nullable().optional(),
-  scheduledAt: z.string().nullable().optional(),
 })
 
 // GET - Makale detayı
@@ -177,7 +176,6 @@ export async function PATCH(
       metaDescription: validatedData.metaDescription,
       keywords: validatedData.keywords,
       publishedAt: validatedData.publishedAt ? new Date(validatedData.publishedAt) : undefined,
-      scheduledAt: validatedData.scheduledAt ? new Date(validatedData.scheduledAt) : undefined,
     }
 
     // Undefined değerleri temizle

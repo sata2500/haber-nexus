@@ -11,14 +11,13 @@ const articleSchema = z.object({
   content: z.string().min(1, "İçerik gereklidir"),
   coverImage: z.string().optional(),
   type: z.enum(["NEWS", "BLOG", "ANALYSIS", "INTERVIEW", "OPINION"]).optional(),
-  status: z.enum(["DRAFT", "SCHEDULED", "PUBLISHED", "ARCHIVED"]).optional(),
+  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).optional(),
   categoryId: z.string().min(1, "Kategori gereklidir"),
   tags: z.array(z.string()).optional(),
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
   keywords: z.array(z.string()).optional(),
   publishedAt: z.string().optional(),
-  scheduledAt: z.string().optional(),
 })
 
 // GET - Makaleleri listele
@@ -190,7 +189,6 @@ export async function POST(request: NextRequest) {
         metaDescription: validatedData.metaDescription,
         keywords: validatedData.keywords || [],
         publishedAt: validatedData.publishedAt ? new Date(validatedData.publishedAt) : null,
-        scheduledAt: validatedData.scheduledAt ? new Date(validatedData.scheduledAt) : null,
         tags: {
           connect: tagConnections,
         },

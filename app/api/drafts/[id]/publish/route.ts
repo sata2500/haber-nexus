@@ -47,8 +47,7 @@ export async function POST(
       title,
       categoryId,
       coverImage,
-      publishNow = false,
-      scheduledAt
+      publishNow = false
     } = body
 
     // Generate SEO metadata if not provided
@@ -89,8 +88,7 @@ export async function POST(
         
         qualityScore: draft.qualityScore,
         
-        publishedAt: publishNow ? new Date() : null,
-        scheduledAt: scheduledAt ? new Date(scheduledAt) : null
+        publishedAt: publishNow ? new Date() : null
       }
     })
 

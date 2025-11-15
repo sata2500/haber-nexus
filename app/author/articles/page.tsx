@@ -27,14 +27,12 @@ interface Article {
 const STATUS_LABELS: Record<string, string> = {
   DRAFT: "Taslak",
   PUBLISHED: "Yayında",
-  SCHEDULED: "Planlanmış",
   ARCHIVED: "Arşiv"
 }
 
 const STATUS_COLORS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   DRAFT: "secondary",
   PUBLISHED: "default",
-  SCHEDULED: "outline",
   ARCHIVED: "destructive"
 }
 
@@ -146,9 +144,7 @@ export default function AuthorArticlesPage() {
               Yayında
             </Button>
             <Button
-              variant={statusFilter === "SCHEDULED" ? "default" : "outline"}
               size="sm"
-              onClick={() => setStatusFilter("SCHEDULED")}
             >
               Planlanmış
             </Button>

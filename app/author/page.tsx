@@ -92,7 +92,6 @@ export default async function AuthorDashboard() {
   const statusLabels: Record<string, string> = {
     DRAFT: "Taslak",
     PUBLISHED: "Yayında",
-    SCHEDULED: "Planlanmış",
     ARCHIVED: "Arşiv"
   }
 

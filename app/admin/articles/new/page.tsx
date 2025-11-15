@@ -305,7 +305,7 @@ export default function NewArticlePage() {
               >
                 <option value="DRAFT">Taslak</option>
                 <option value="PUBLISHED">Yayınla</option>
-                <option value="SCHEDULED">Zamanla</option>
+                
               </select>
             </div>
 

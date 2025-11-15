@@ -190,7 +190,6 @@ model Article {
   
   // Dates
   publishedAt     DateTime?
-  scheduledAt     DateTime?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   
@@ -246,7 +245,6 @@ enum ArticleType {
 
 enum ArticleStatus {
   DRAFT
-  SCHEDULED
   PUBLISHED
   ARCHIVED
 }
