@@ -11,12 +11,19 @@ import Link from "next/link"
 
 interface Draft {
   id: string
-  title: string
-  content: string
-  researchData: any
-  qualityScore: number | null
+  topic: string
+  outline?: string | null
+  draft?: string | null
+  aiGenerated: boolean
+  status: string
+  qualityScore?: number | null
   createdAt: string
   updatedAt: string
+  author?: {
+    id: string
+    name: string | null
+    email: string
+  }
 }
 
 export default function AuthorDraftsPage() {
@@ -30,10 +37,14 @@ export default function AuthorDraftsPage() {
       const response = await fetch("/api/drafts")
       if (response.ok) {
         const data = await response.json()
-        setDrafts(data)
+        // API response has { drafts: [...] } structure
+        setDrafts(Array.isArray(data) ? data : (data.drafts || []))
+      } else {
+        setDrafts([])
       }
     } catch (error) {
       console.error("Error fetching drafts:", error)
+      setDrafts([])
     } finally {
       setLoading(false)
     }
@@ -71,7 +82,7 @@ export default function AuthorDraftsPage() {
   }
 
   const filteredDrafts = drafts.filter((draft) =>
-    draft.title.toLowerCase().includes(searchQuery.toLowerCase())
+    draft.topic.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   return (
@@ -133,7 +144,7 @@ export default function AuthorDraftsPage() {
             <Card key={draft.id} className="hover:shadow-md transition-shadow">
               <CardHeader>
                 <div className="flex items-start justify-between gap-2">
-                  <CardTitle className="text-lg line-clamp-2">{draft.title}</CardTitle>
+                  <CardTitle className="text-lg line-clamp-2">{draft.topic}</CardTitle>
                   {draft.qualityScore && (
                     <Badge variant={draft.qualityScore >= 80 ? "default" : "secondary"}>
                       {draft.qualityScore}%
@@ -141,7 +152,7 @@ export default function AuthorDraftsPage() {
                   )}
                 </div>
                 <CardDescription className="line-clamp-3">
-                  {draft.content.substring(0, 150)}...
+                  {draft.draft ? draft.draft.substring(0, 150) + '...' : draft.outline ? draft.outline.substring(0, 150) + '...' : 'Taslak içeriği henüz oluşturulmadı'}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
