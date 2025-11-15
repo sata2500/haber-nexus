@@ -154,8 +154,9 @@ export async function PATCH(
 /**
  * Delete RSS feed
  * DELETE /api/rss-feeds/[id]
- * Query params:
- *   - cascade: boolean (optional) - if true, delete all associated articles
+ * 
+ * Deletes the RSS feed and its scan logs.
+ * Associated articles are NOT deleted, their sourceRssId is set to null.
  */
 export async function DELETE(
   request: NextRequest,
@@ -171,8 +172,6 @@ export async function DELETE(
     }
 
     const { id } = await params
-    const { searchParams } = new URL(request.url)
-    const cascade = searchParams.get('cascade') === 'true'
 
     // Check if feed exists
     const existing = await prisma.rssFeed.findUnique({
@@ -193,27 +192,16 @@ export async function DELETE(
       )
     }
 
-    // Check if feed has articles
-    if (existing._count.articles > 0 && !cascade) {
-      return NextResponse.json(
-        { 
-          error: "Cannot delete RSS feed with existing articles.",
-          articleCount: existing._count.articles,
-          suggestion: "Use cascade=true query parameter to delete all associated articles, or delete articles manually first."
-        },
-        { status: 409 }
-      )
-    }
-
-    // If cascade delete, remove all associated articles first
-    if (cascade && existing._count.articles > 0) {
-      // Delete all articles associated with this RSS feed
-      await prisma.article.deleteMany({
+    // Disconnect articles from this feed (set sourceRssId to null)
+    // This keeps the articles but removes the RSS feed reference
+    if (existing._count.articles > 0) {
+      await prisma.article.updateMany({
         where: { sourceRssId: id },
+        data: { sourceRssId: null },
       })
     }
 
-    // Delete scan logs first (they have foreign key constraint)
+    // Delete scan logs (they have foreign key constraint with cascade)
     await prisma.rssScanLog.deleteMany({
       where: { rssFeedId: id },
     })
@@ -225,7 +213,8 @@ export async function DELETE(
 
     return NextResponse.json({ 
       success: true,
-      deletedArticles: cascade ? existing._count.articles : 0,
+      message: "RSS feed başarıyla silindi. Makaleler korundu.",
+      preservedArticles: existing._count.articles,
     })
   } catch (error) {
     console.error("Error deleting RSS feed:", error)

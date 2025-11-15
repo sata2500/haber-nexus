@@ -162,11 +162,6 @@ export default function ArticlesPage() {
               Yayında
             </Button>
             <Button
-              size="sm"
-            >
-              Zamanlanmış
-            </Button>
-            <Button
               variant={statusFilter === "ARCHIVED" ? "default" : "outline"}
               size="sm"
               onClick={() => setStatusFilter("ARCHIVED")}

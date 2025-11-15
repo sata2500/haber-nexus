@@ -31,10 +31,26 @@ export async function POST(
 
     const { id } = await params
 
+    console.log(`[Async Scan] Starting background scan for feed: ${id}`)
+
     // Start scan in background (don't await)
-    scanRssFeed(id).catch(error => {
-      console.error("[Async Scan] Background scan failed:", error)
-    })
+    scanRssFeed(id)
+      .then(result => {
+        console.log(`[Async Scan] Scan completed for feed ${id}:`, {
+          status: result.status,
+          itemsFound: result.itemsFound,
+          itemsProcessed: result.itemsProcessed,
+          itemsPublished: result.itemsPublished,
+          duration: result.duration,
+          errors: result.errors.length > 0 ? result.errors : 'none'
+        })
+      })
+      .catch(error => {
+        console.error(`[Async Scan] Background scan failed for feed ${id}:`, {
+          error: error instanceof Error ? error.message : 'Unknown error',
+          stack: error instanceof Error ? error.stack : undefined
+        })
+      })
 
     return NextResponse.json({
       success: true,
@@ -42,7 +58,7 @@ export async function POST(
       feedId: id,
     })
   } catch (error) {
-    console.error("Error starting async scan:", error)
+    console.error("[Async Scan] Error starting async scan:", error)
     return NextResponse.json(
       { error: "Failed to start scan" },
       { status: 500 }

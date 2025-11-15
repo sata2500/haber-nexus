@@ -62,41 +62,32 @@ export default function RssFeedsPage() {
   }, [fetchFeeds])
 
   const handleDelete = async (id: string) => {
-    // First, check if feed has articles
     const feed = feeds.find(f => f.id === id)
     if (!feed) return
 
-    let cascade = false
+    // Prepare confirmation message
+    let confirmMessage = "Bu RSS feed'i silmek istediğinizden emin misiniz?\n\n"
+    
     if (feed._count.articles > 0) {
-      const confirmMessage = `Bu RSS feed'inde ${feed._count.articles} adet makale bulunuyor.\n\n` +
-        `Silme seçenekleri:\n` +
-        `- OK: RSS feed ve tüm makaleleri sil\n` +
-        `- İptal: İşlemi iptal et\n\n` +
-        `Devam etmek istiyor musunuz?`
-      
-      if (!confirm(confirmMessage)) {
-        return
-      }
-      cascade = true
-    } else {
-      if (!confirm("Bu RSS feed'i silmek istediğinizden emin misiniz?")) {
-        return
-      }
+      confirmMessage += `Not: Bu feed'den oluşturulan ${feed._count.articles} makale korunacak.\n`
+      confirmMessage += "Makaleleri silmek isterseniz makale yönetim sayfasından manuel olarak silebilirsiniz."
+    }
+    
+    if (!confirm(confirmMessage)) {
+      return
     }
 
     try {
-      const url = cascade 
-        ? `/api/rss-feeds/${id}?cascade=true`
-        : `/api/rss-feeds/${id}`
-      
-      const response = await fetch(url, {
+      const response = await fetch(`/api/rss-feeds/${id}`, {
         method: "DELETE",
       })
 
       if (response.ok) {
         const data = await response.json()
-        if (data.deletedArticles > 0) {
-          alert(`RSS feed ve ${data.deletedArticles} makale başarıyla silindi.`)
+        if (data.preservedArticles > 0) {
+          alert(`RSS feed silindi. ${data.preservedArticles} makale korundu.`)
+        } else {
+          alert("RSS feed başarıyla silindi.")
         }
         fetchFeeds()
       } else {

@@ -23,6 +23,8 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
   let itemsProcessed = 0
   let itemsPublished = 0
 
+  console.log(`[RSS Scanner] Starting scan for feed: ${feedId}`)
+
   try {
     // Get feed configuration
     const feed = await prisma.rssFeed.findUnique({
@@ -33,19 +35,26 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
     })
 
     if (!feed) {
+      console.error(`[RSS Scanner] Feed not found: ${feedId}`)
       throw new Error("RSS feed not found")
     }
 
     if (!feed.isActive) {
+      console.warn(`[RSS Scanner] Feed is not active: ${feed.name} (${feedId})`)
       throw new Error("RSS feed is not active")
     }
 
+    console.log(`[RSS Scanner] Feed found: ${feed.name}, URL: ${feed.url}`)
+
     // Parse RSS feed
+    console.log(`[RSS Scanner] Parsing RSS feed: ${feed.url}`)
     const feedData = await parseRssFeed(feed.url)
+    console.log(`[RSS Scanner] Feed parsed successfully. Total items: ${feedData.items.length}`)
     
     // Filter recent items (last 24 hours)
     const recentItems = filterRecentItems(feedData.items, 24)
     itemsFound = recentItems.length
+    console.log(`[RSS Scanner] Recent items (last 24h): ${itemsFound}`)
 
     // Get existing article slugs to avoid duplicates
     const existingArticles = await prisma.article.findMany({
@@ -110,8 +119,11 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
         const authorId = await getAuthorForRssFeed(feedId, feed.categoryId || undefined)
         
         if (!authorId) {
+          console.error(`[RSS Scanner] No suitable author found for feed: ${feed.name}`)
           throw new Error("No suitable author found for article creation")
         }
+        
+        console.log(`[RSS Scanner] Author assigned: ${authorId}`)
 
         // Determine status based on autoPublish setting
         const status = feed.autoPublish ? "PUBLISHED" : "DRAFT"
@@ -158,8 +170,12 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
         existingSlugs.add(processed.slug)
       } catch (itemError) {
         const errorMsg = itemError instanceof Error ? itemError.message : "Unknown error"
+        const errorStack = itemError instanceof Error ? itemError.stack : undefined
         errors.push(`Failed to process item "${item.title}": ${errorMsg}`)
-        console.error("Error processing RSS item:", itemError)
+        console.error(`[RSS Scanner] Error processing item "${item.title}":`, {
+          error: errorMsg,
+          stack: errorStack
+        })
       }
     }
 
@@ -191,6 +207,15 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
       },
     })
 
+    console.log(`[RSS Scanner] Scan completed for feed ${feedId}:`, {
+      status,
+      itemsFound,
+      itemsProcessed,
+      itemsPublished,
+      duration: `${duration}ms`,
+      errors: errors.length
+    })
+
     return {
       feedId,
       status,
@@ -203,19 +228,33 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
   } catch (error) {
     const duration = Date.now() - startTime
     const errorMsg = error instanceof Error ? error.message : "Unknown error"
+    const errorStack = error instanceof Error ? error.stack : undefined
+    
+    console.error(`[RSS Scanner] Fatal error during scan for feed ${feedId}:`, {
+      error: errorMsg,
+      stack: errorStack,
+      itemsFound,
+      itemsProcessed,
+      itemsPublished,
+      duration: `${duration}ms`
+    })
     
     // Create failed scan log
-    await prisma.rssScanLog.create({
-      data: {
-        rssFeedId: feedId,
-        status: "FAILED",
-        itemsFound,
-        itemsProcessed,
-        itemsPublished,
-        error: errorMsg,
-        duration,
-      },
-    })
+    try {
+      await prisma.rssScanLog.create({
+        data: {
+          rssFeedId: feedId,
+          status: "FAILED",
+          itemsFound,
+          itemsProcessed,
+          itemsPublished,
+          error: errorMsg,
+          duration,
+        },
+      })
+    } catch (logError) {
+      console.error(`[RSS Scanner] Failed to create scan log:`, logError)
+    }
 
     return {
       feedId,

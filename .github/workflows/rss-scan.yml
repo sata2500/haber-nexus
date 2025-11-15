@@ -1,0 +1,35 @@
+name: RSS Feed Scanner
+
+on:
+  schedule:
+    # Her 15 dakikada bir çalışır (0, 15, 30, 45. dakikalarda)
+    - cron: '0,15,30,45 * * * *'
+  
+  workflow_dispatch:
+    # Manuel tetikleme için
+
+jobs:
+  scan-rss-feeds:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Trigger RSS Scan
+        run: |
+          echo "Starting RSS feed scan..."
+          
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            https://habernexus.com/api/rss-feeds/scan-all \
+            -H "Content-Type: application/json")
+          
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+          
+          echo "HTTP Status: $http_code"
+          echo "Response: $body"
+          
+          if [ "$http_code" -eq 200 ]; then
+            echo "✅ RSS scan completed successfully"
+          else
+            echo "❌ RSS scan failed with status $http_code"
+            exit 1
+          fi
