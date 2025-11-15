@@ -246,6 +246,7 @@ enum ArticleType {
 enum ArticleStatus {
   DRAFT
   PUBLISHED
+  SCHEDULED
   ARCHIVED
 }
 

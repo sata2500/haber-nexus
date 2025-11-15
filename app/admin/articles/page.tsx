@@ -43,12 +43,14 @@ interface Article {
 const statusColors: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   DRAFT: "secondary",
   PUBLISHED: "default",
+  SCHEDULED: "outline",
   ARCHIVED: "destructive",
 }
 
 const statusLabels: Record<string, string> = {
   DRAFT: "Taslak",
   PUBLISHED: "Yayında",
+  SCHEDULED: "Zamanlanmış",
   ARCHIVED: "Arşivlenmiş",
 }
 
