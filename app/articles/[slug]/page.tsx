@@ -9,6 +9,7 @@ import { ArticleActions } from "@/components/article/article-actions"
 import { CommentSection } from "@/components/article/comment-section"
 import { ReadingTracker } from "@/components/article/reading-tracker"
 import { ReadingProgressBar } from "@/components/article/reading-progress-bar"
+import { MarkdownRenderer } from "@/components/editor/markdown-renderer"
 import { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
@@ -235,8 +236,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             )}
 
             {/* Content */}
-            <div className="prose prose-lg max-w-none mb-12">
-              <div className="whitespace-pre-wrap">{article.content}</div>
+            <div className="mb-12">
+              <MarkdownRenderer content={article.content} className="prose-lg" />
             </div>
 
             {/* Tags */}

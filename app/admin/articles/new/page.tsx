@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Eye, Edit3 } from "lucide-react"
 import { ImageInput } from "@/components/admin/image-input"
+import { MarkdownEditor } from "@/components/editor/markdown-editor"
+import { MarkdownRenderer } from "@/components/editor/markdown-renderer"
 
 interface Category {
   id: string
@@ -17,6 +19,7 @@ export default function NewArticlePage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState<Category[]>([])
+  const [previewMode, setPreviewMode] = useState(false)
   
   const [formData, setFormData] = useState({
     title: "",
@@ -170,18 +173,46 @@ export default function NewArticlePage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">
-                İçerik <span className="text-destructive">*</span>
-              </label>
-              <textarea
-                className="w-full min-h-[300px] px-3 py-2 border rounded-md text-sm font-mono"
-                value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                placeholder="Makale içeriği (Markdown destekli)..."
-                required
-              />
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium">
+                  İçerik <span className="text-destructive">*</span>
+                </label>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant={!previewMode ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setPreviewMode(false)}
+                  >
+                    <Edit3 className="h-4 w-4 mr-2" />
+                    Düzenle
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={previewMode ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setPreviewMode(true)}
+                  >
+                    <Eye className="h-4 w-4 mr-2" />
+                    Önizle
+                  </Button>
+                </div>
+              </div>
+              {!previewMode ? (
+                <MarkdownEditor
+                  value={formData.content}
+                  onChange={(value) => setFormData({ ...formData, content: value })}
+                  placeholder="Makale içeriğinizi markdown formatında yazın..."
+                  minHeight="400px"
+                />
+              ) : (
+                <div className="border rounded-md p-6 min-h-[400px] bg-white dark:bg-gray-900">
+                  <MarkdownRenderer content={formData.content} />
+                </div>
+              )}
               <p className="text-xs text-muted-foreground">
-                Markdown formatında yazabilirsiniz
+                Markdown formatını kullanabilirsiniz. <strong>**kalın**</strong>, <em>*italik*</em>, 
+                başlıklar için # kullanın.
               </p>
             </div>
 

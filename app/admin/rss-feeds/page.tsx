@@ -218,7 +218,7 @@ export default function RssFeedsPage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => router.push(`/admin/rss-feeds/${feed.id}/edit`)}
+                      onClick={() => router.push(`/admin/rss-feeds/${feed.id}`)}
                     >
                       <Edit className="h-4 w-4" />
                     </Button>

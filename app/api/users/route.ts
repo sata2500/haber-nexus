@@ -26,6 +26,7 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url)
     const role = searchParams.get("role")
+    const roles = searchParams.get("roles") // Multiple roles support
     const page = parseInt(searchParams.get("page") || "1")
     const limit = parseInt(searchParams.get("limit") || "20")
     const skip = (page - 1) * limit
@@ -34,6 +35,10 @@ export async function GET(request: NextRequest) {
     
     if (role) {
       where.role = role
+    } else if (roles) {
+      // Support multiple roles like "AUTHOR,ADMIN,SUPER_ADMIN"
+      const roleList = roles.split(",").map(r => r.trim())
+      where.role = { in: roleList }
     }
 
     const [users, total] = await Promise.all([
