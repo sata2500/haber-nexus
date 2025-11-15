@@ -75,14 +75,14 @@ export default async function AuthorDashboard() {
     },
     {
       title: "Toplam Görüntülenme",
-      value: totalViews._sum.viewCount || 0,
+      value: totalViews._sum?.viewCount || 0,
       description: "Tüm makaleleriniz",
       icon: Eye,
       color: "text-purple-600"
     },
     {
       title: "Toplam Beğeni",
-      value: totalLikes._sum.likeCount || 0,
+      value: totalLikes._sum?.likeCount || 0,
       description: "Okuyucu beğenileri",
       icon: Heart,
       color: "text-red-600"
