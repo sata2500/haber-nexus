@@ -209,9 +209,11 @@ export default function ArticlesPage() {
                       <Badge variant="outline">
                         {typeLabels[article.type]}
                       </Badge>
-                      <Badge variant="secondary">
-                        {article.category.name}
-                      </Badge>
+                      {article.category && (
+                        <Badge variant="secondary">
+                          {article.category.name}
+                        </Badge>
+                      )}
                     </div>
                     <CardTitle className="text-xl mb-2">{article.title}</CardTitle>
                     <CardDescription className="space-y-1">
@@ -223,11 +225,11 @@ export default function ArticlesPage() {
                         <span>{article._count.comments} yorum</span>
                         <span>{article._count.bookmarks} kayıt</span>
                       </div>
-                      {article.tags.length > 0 && (
+                      {article.tags && article.tags.length > 0 && (
                         <div className="flex gap-1 mt-2">
                           {article.tags.map((tag) => (
                             <Badge key={tag.id} variant="outline" className="text-xs">
-                              {tag.name}
+                              {tag?.name || 'Etiket'}
                             </Badge>
                           ))}
                         </div>

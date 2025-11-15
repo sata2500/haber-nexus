@@ -161,18 +161,23 @@ export default function EditRssFeedPage() {
   const handleScan = async () => {
     setScanning(true)
     try {
-      const response = await fetch(`/api/rss-feeds/${feedId}/scan`, {
+      // Use async endpoint to avoid timeout
+      const response = await fetch(`/api/rss-feeds/${feedId}/scan-async`, {
         method: "POST",
       })
 
-      if (!response.ok) throw new Error("Failed to scan")
+      if (!response.ok) throw new Error("Failed to start scan")
 
       const data = await response.json()
-      alert(data.message || "Tarama tamamlandı")
-      fetchFeed()
+      alert(data.message || "Tarama başlatıldı. Sonuçları birkaç dakika sonra kontrol edin.")
+      
+      // Refresh feed data after a short delay
+      setTimeout(() => {
+        fetchFeed()
+      }, 2000)
     } catch (error) {
       console.error("Scan error:", error)
-      alert("Tarama başarısız")
+      alert("Tarama başlatılamadı. Lütfen tekrar deneyin.")
     } finally {
       setScanning(false)
     }

@@ -10,8 +10,8 @@ interface RouteParams {
 }
 
 /**
- * Manually trigger RSS feed scan with AI processing
- * POST /api/rss-feeds/[id]/scan
+ * Async RSS feed scan - starts scan in background and returns immediately
+ * POST /api/rss-feeds/[id]/scan-async
  */
 export async function POST(
   request: NextRequest,
@@ -28,25 +28,20 @@ export async function POST(
 
     const { id } = await params
 
-    // Run scan with timeout (2 minutes max)
-    const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('Scan timeout - process taking too long')), 120000)
+    // Start scan in background (don't await)
+    scanRssFeed(id).catch(error => {
+      console.error("[Async Scan] Background scan failed:", error)
     })
-    
-    const result = await Promise.race([
-      scanRssFeed(id),
-      timeoutPromise
-    ]) as Awaited<ReturnType<typeof scanRssFeed>>
 
     return NextResponse.json({
-      success: result.status !== "FAILED",
-      result,
-      message: `Tarama tamamlandı. ${result.itemsFound} öğe bulundu, ${result.itemsProcessed} işlendi, ${result.itemsPublished} yayınlandı.`,
+      success: true,
+      message: "Tarama arka planda başlatıldı. Sonuçları tarama geçmişinden kontrol edebilirsiniz.",
+      feedId: id,
     })
   } catch (error) {
-    console.error("Error scanning RSS feed:", error)
+    console.error("Error starting async scan:", error)
     return NextResponse.json(
-      { error: "Failed to scan RSS feed" },
+      { error: "Failed to start scan" },
       { status: 500 }
     )
   }

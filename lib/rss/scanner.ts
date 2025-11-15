@@ -58,8 +58,12 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
     })
     const existingSlugs = new Set(existingArticles.map(a => a.slug))
 
+    console.log(`[RSS Scanner] Processing ${itemsFound} items from feed: ${feed.name}`)
+    
     // Process each item
-    for (const item of recentItems) {
+    for (let i = 0; i < recentItems.length; i++) {
+      const item = recentItems[i]
+      console.log(`[RSS Scanner] Processing item ${i + 1}/${recentItems.length}: ${item.title}`)
       try {
         // Process with AI
         const processed = await processRssItem(item, {
@@ -141,6 +145,8 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
         if (status === "PUBLISHED") {
           itemsPublished++
         }
+        
+        console.log(`[RSS Scanner] Progress: ${itemsProcessed}/${itemsFound} processed, ${itemsPublished} published`)
         
         existingSlugs.add(processed.slug)
       } catch (itemError) {
