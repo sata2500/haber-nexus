@@ -92,9 +92,10 @@ export default function EditUserPage() {
       if (response.ok) {
         setSuccess(true)
         
-        // Eğer rol değiştiyse kullanıcıya bildirim gönder
+        // Eğer rol değiştiyse kullanıcıya bildirim gönder ve session refresh tetikle
         if (roleChanged) {
           try {
+            // Bildirim gönder
             await fetch(`/api/users/${userId}/notify-role-change`, {
               method: "POST",
               headers: {
@@ -105,8 +106,17 @@ export default function EditUserPage() {
                 newRole: ROLE_LABELS[formData.role],
               }),
             })
+            
+            // Session refresh tetikle
+            // Bu sayede kullanıcının session'ı 5 saniye içinde güncellenecek
+            await fetch(`/api/users/${userId}/force-session-refresh`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
           } catch (notifyError) {
-            console.error("Bildirim gönderilemedi:", notifyError)
+            console.error("Bildirim/refresh gönderilemedi:", notifyError)
             // Bildirim hatası kullanıcı güncellemesini engellemez
           }
         }

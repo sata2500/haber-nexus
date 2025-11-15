@@ -72,6 +72,10 @@ export const authOptions: NextAuthOptions = {
             session.user.name = user.name
             session.user.image = user.image
             session.user.email = user.email
+            
+            // KRİTİK: JWT token'daki rolü de güncelle
+            // Bu sayede middleware güncel rolü görebilir
+            token.role = user.role as UserRole
           } else {
             // Kullanıcı silinmişse token'daki rolü kullan
             session.user.role = token.role as UserRole
