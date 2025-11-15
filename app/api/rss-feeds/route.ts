@@ -44,7 +44,11 @@ export async function GET(request: NextRequest) {
       ],
     })
 
-    return NextResponse.json(feeds)
+    return NextResponse.json(feeds, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+      },
+    })
   } catch (error) {
     console.error("Error fetching RSS feeds:", error)
     return NextResponse.json(

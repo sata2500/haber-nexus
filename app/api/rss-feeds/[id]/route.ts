@@ -54,7 +54,11 @@ export async function GET(
       )
     }
 
-    return NextResponse.json(feed)
+    return NextResponse.json(feed, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+      },
+    })
   } catch (error) {
     console.error("Error fetching RSS feed:", error)
     return NextResponse.json(
@@ -133,7 +137,11 @@ export async function PATCH(
       },
     })
 
-    return NextResponse.json(feed)
+    return NextResponse.json(feed, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+      },
+    })
   } catch (error) {
     console.error("Error updating RSS feed:", error)
     return NextResponse.json(

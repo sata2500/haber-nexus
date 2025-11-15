@@ -8,6 +8,10 @@ const userUpdateSchema = z.object({
   name: z.string().min(1, "Ad soyad gerekli").optional(),
   username: z.string().optional(),
   bio: z.string().optional(),
+  authorProfile: z.object({
+    interests: z.array(z.string()).optional(),
+    expertise: z.array(z.string()).optional(),
+  }).optional(),
 })
 
 /**
@@ -38,6 +42,13 @@ export async function GET(request: NextRequest) {
         emailVerified: true,
         createdAt: true,
         updatedAt: true,
+        authorProfile: {
+          select: {
+            interests: true,
+            expertise: true,
+            verified: true,
+          },
+        },
       },
     })
 
@@ -93,9 +104,44 @@ export async function PATCH(request: NextRequest) {
       }
     }
 
+    // Prepare update data
+    const updateData: any = {
+      name: validatedData.name,
+      username: validatedData.username,
+      bio: validatedData.bio,
+    }
+
+    // Update author profile if provided
+    if (validatedData.authorProfile) {
+      // Check if author profile exists
+      const existingProfile = await prisma.authorProfile.findUnique({
+        where: { userId: session.user.id },
+      })
+
+      if (existingProfile) {
+        // Update existing profile
+        await prisma.authorProfile.update({
+          where: { userId: session.user.id },
+          data: {
+            interests: validatedData.authorProfile.interests,
+            expertise: validatedData.authorProfile.expertise,
+          },
+        })
+      } else {
+        // Create new profile
+        await prisma.authorProfile.create({
+          data: {
+            userId: session.user.id,
+            interests: validatedData.authorProfile.interests || [],
+            expertise: validatedData.authorProfile.expertise || [],
+          },
+        })
+      }
+    }
+
     const user = await prisma.user.update({
       where: { id: session.user.id },
-      data: validatedData,
+      data: updateData,
       select: {
         id: true,
         email: true,
@@ -104,6 +150,12 @@ export async function PATCH(request: NextRequest) {
         image: true,
         bio: true,
         role: true,
+        authorProfile: {
+          select: {
+            interests: true,
+            expertise: true,
+          },
+        },
       },
     })
 

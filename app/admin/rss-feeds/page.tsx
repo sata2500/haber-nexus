@@ -40,7 +40,12 @@ export default function RssFeedsPage() {
 
   const fetchFeeds = useCallback(async () => {
     try {
-      const response = await fetch("/api/rss-feeds?includeInactive=true")
+      const response = await fetch("/api/rss-feeds?includeInactive=true", {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      })
       if (response.ok) {
         const data = await response.json()
         setFeeds(data)

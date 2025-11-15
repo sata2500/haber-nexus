@@ -748,6 +748,9 @@ model UserSettings {
   fontSize              String   @default("medium") // small, medium, large
   readingMode           String   @default("default") // default, focus
   
+  // Personalization
+  interests             String[] @default([]) // User interests for content recommendations
+  
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
   

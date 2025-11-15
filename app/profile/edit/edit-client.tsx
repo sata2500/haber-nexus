@@ -1,13 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ArrowLeft, Save, CheckCircle2, AlertCircle, User, Mail, Lock } from "lucide-react"
+import { ArrowLeft, Save, CheckCircle2, AlertCircle, User, Mail, Lock, Sparkles } from "lucide-react"
 import Link from "next/link"
+import { InterestsSelector } from "@/components/profile/interests-selector"
 
 interface EditClientProps {
   initialData: {
@@ -25,11 +26,35 @@ export function EditClient({ initialData }: EditClientProps) {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState("")
   
+  // Load user settings including interests
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const response = await fetch('/api/users/me/settings')
+        if (response.ok) {
+          const data = await response.json()
+          setFormData(prev => ({
+            ...prev,
+            interests: data.interests || []
+          }))
+        }
+      } catch (err) {
+        console.error('Error loading settings:', err)
+      } finally {
+        setSettingsLoaded(true)
+      }
+    }
+    loadSettings()
+  }, [])
+  
   const [formData, setFormData] = useState({
     name: initialData.name,
     username: initialData.username,
     bio: initialData.bio,
+    interests: [] as string[],
   })
+  
+  const [settingsLoaded, setSettingsLoaded] = useState(false)
 
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
@@ -44,25 +69,46 @@ export function EditClient({ initialData }: EditClientProps) {
     setError("")
 
     try {
-      const response = await fetch(`/api/users/me`, {
+      // Update profile
+      const profileResponse = await fetch(`/api/users/me`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          username: formData.username,
+          bio: formData.bio,
+        }),
       })
 
-      if (response.ok) {
-        setSuccess(true)
-        await update()
-        setTimeout(() => setSuccess(false), 3000)
-      } else {
-        const data = await response.json()
-        setError(data.error || "Profil güncellenemedi")
+      if (!profileResponse.ok) {
+        const data = await profileResponse.json()
+        throw new Error(data.error || "Profil güncellenemedi")
       }
+
+      // Update interests in settings
+      const settingsResponse = await fetch(`/api/users/me/settings`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          interests: formData.interests,
+        }),
+      })
+
+      if (!settingsResponse.ok) {
+        const data = await settingsResponse.json()
+        throw new Error(data.error || "Ayarlar güncellenemedi")
+      }
+
+      setSuccess(true)
+      await update()
+      setTimeout(() => setSuccess(false), 3000)
     } catch (err) {
       console.error("Error updating profile:", err)
-      setError("Bir hata oluştu")
+      setError(err instanceof Error ? err.message : "Bir hata oluştu")
     } finally {
       setLoading(false)
     }
@@ -204,6 +250,24 @@ export function EditClient({ initialData }: EditClientProps) {
                 onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                 placeholder="Kendiniz hakkında kısa bir açıklama..."
               />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-primary" />
+                İlgi Alanları
+              </label>
+              <p className="text-xs text-muted-foreground mb-3">
+                İlgi alanlarınızı seçerek size özel içerik önerileri alabilirsiniz
+              </p>
+              {settingsLoaded ? (
+                <InterestsSelector
+                  value={formData.interests}
+                  onChange={(interests) => setFormData({ ...formData, interests })}
+                />
+              ) : (
+                <div className="text-sm text-muted-foreground">Yükleniyor...</div>
+              )}
             </div>
 
             <Button

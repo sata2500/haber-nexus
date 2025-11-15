@@ -7,7 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { User, Mail, Calendar, Shield, Save, CheckCircle2, AlertCircle } from "lucide-react"
+import { User, Mail, Calendar, Shield, Save, CheckCircle2, AlertCircle, Sparkles, Award } from "lucide-react"
+import { InterestsSelector } from "@/components/profile/interests-selector"
 
 export default function AuthorProfilePage() {
   const { data: session, update } = useSession()
@@ -20,16 +21,43 @@ export default function AuthorProfilePage() {
     name: "",
     username: "",
     bio: "",
+    interests: [] as string[],
+    expertise: [] as string[],
   })
+  
+  const [profileLoaded, setProfileLoaded] = useState(false)
 
   useEffect(() => {
-    if (session?.user) {
-      setFormData({
-        name: session.user.name || "",
-        username: (session.user as any).username || "",
-        bio: (session.user as any).bio || "",
-      })
+    const loadProfile = async () => {
+      if (session?.user) {
+        setFormData(prev => ({
+          ...prev,
+          name: session.user.name || "",
+          username: (session.user as any).username || "",
+          bio: (session.user as any).bio || "",
+        }))
+        
+        // Load author profile data
+        try {
+          const response = await fetch('/api/users/me')
+          if (response.ok) {
+            const data = await response.json()
+            if (data.authorProfile) {
+              setFormData(prev => ({
+                ...prev,
+                interests: data.authorProfile.interests || [],
+                expertise: data.authorProfile.expertise || [],
+              }))
+            }
+          }
+        } catch (err) {
+          console.error('Error loading profile:', err)
+        } finally {
+          setProfileLoaded(true)
+        }
+      }
     }
+    loadProfile()
   }, [session])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -39,26 +67,35 @@ export default function AuthorProfilePage() {
     setError("")
 
     try {
-      const response = await fetch(`/api/users/me`, {
+      // Update basic profile
+      const profileResponse = await fetch(`/api/users/me`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          username: formData.username,
+          bio: formData.bio,
+          authorProfile: {
+            interests: formData.interests,
+            expertise: formData.expertise,
+          },
+        }),
       })
 
-      if (response.ok) {
-        setSuccess(true)
-        // Session'ı güncelle
-        await update()
-        setTimeout(() => setSuccess(false), 3000)
-      } else {
-        const data = await response.json()
-        setError(data.error || "Profil güncellenemedi")
+      if (!profileResponse.ok) {
+        const data = await profileResponse.json()
+        throw new Error(data.error || "Profil güncellenemedi")
       }
+
+      setSuccess(true)
+      // Session'ı güncelle
+      await update()
+      setTimeout(() => setSuccess(false), 3000)
     } catch (err) {
       console.error("Error updating profile:", err)
-      setError("Bir hata oluştu")
+      setError(err instanceof Error ? err.message : "Bir hata oluştu")
     } finally {
       setLoading(false)
     }
@@ -198,6 +235,64 @@ export default function AuthorProfilePage() {
               <p className="text-xs text-muted-foreground">
                 Yazar sayfanızda görünecek kısa biyografi
               </p>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-primary" />
+                İlgi Alanları
+              </label>
+              <p className="text-xs text-muted-foreground mb-3">
+                İlgi alanlarınız otomatik yazar ataması için kullanılır. RSS Feed'lerden gelen makaleler ilgi alanlarınıza göre size atanabilir.
+              </p>
+              {profileLoaded ? (
+                <InterestsSelector
+                  value={formData.interests}
+                  onChange={(interests) => setFormData({ ...formData, interests })}
+                />
+              ) : (
+                <div className="text-sm text-muted-foreground">Yükleniyor...</div>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium flex items-center gap-2">
+                <Award className="h-4 w-4 text-primary" />
+                Uzmanlık Alanları
+              </label>
+              <p className="text-xs text-muted-foreground mb-3">
+                Uzmanlık alanlarınızı belirtin. Bu bilgiler yazar sayfanızda görüntülenecek ve otomatik atamada kullanılacaktır.
+              </p>
+              {profileLoaded ? (
+                <InterestsSelector
+                  value={formData.expertise}
+                  onChange={(expertise) => setFormData({ ...formData, expertise })}
+                  suggestions={[
+                    "Teknoloji",
+                    "Yazılım Geliştirme",
+                    "Yapay Zeka",
+                    "Veri Bilimi",
+                    "Siber Güvenlik",
+                    "Blockchain",
+                    "Mobil Uygulama",
+                    "Web Geliştirme",
+                    "DevOps",
+                    "Cloud Computing",
+                    "Ekonomi",
+                    "Finans",
+                    "Girişimcilik",
+                    "Pazarlama",
+                    "Sağlık",
+                    "Eğitim",
+                    "Bilim",
+                    "Spor",
+                    "Sanat",
+                    "Müzik",
+                  ]}
+                />
+              ) : (
+                <div className="text-sm text-muted-foreground">Yükleniyor...</div>
+              )}
             </div>
 
             <div className="flex gap-2">
