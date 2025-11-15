@@ -154,6 +154,8 @@ export async function PATCH(
 /**
  * Delete RSS feed
  * DELETE /api/rss-feeds/[id]
+ * Query params:
+ *   - cascade: boolean (optional) - if true, delete all associated articles
  */
 export async function DELETE(
   request: NextRequest,
@@ -169,6 +171,8 @@ export async function DELETE(
     }
 
     const { id } = await params
+    const { searchParams } = new URL(request.url)
+    const cascade = searchParams.get('cascade') === 'true'
 
     // Check if feed exists
     const existing = await prisma.rssFeed.findUnique({
@@ -190,19 +194,39 @@ export async function DELETE(
     }
 
     // Check if feed has articles
-    if (existing._count.articles > 0) {
+    if (existing._count.articles > 0 && !cascade) {
       return NextResponse.json(
-        { error: "Cannot delete RSS feed with existing articles. Please delete articles first or deactivate the feed." },
+        { 
+          error: "Cannot delete RSS feed with existing articles.",
+          articleCount: existing._count.articles,
+          suggestion: "Use cascade=true query parameter to delete all associated articles, or delete articles manually first."
+        },
         { status: 409 }
       )
     }
+
+    // If cascade delete, remove all associated articles first
+    if (cascade && existing._count.articles > 0) {
+      // Delete all articles associated with this RSS feed
+      await prisma.article.deleteMany({
+        where: { sourceRssId: id },
+      })
+    }
+
+    // Delete scan logs first (they have foreign key constraint)
+    await prisma.rssScanLog.deleteMany({
+      where: { rssFeedId: id },
+    })
 
     // Delete feed
     await prisma.rssFeed.delete({
       where: { id },
     })
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ 
+      success: true,
+      deletedArticles: cascade ? existing._count.articles : 0,
+    })
   } catch (error) {
     console.error("Error deleting RSS feed:", error)
     return NextResponse.json(

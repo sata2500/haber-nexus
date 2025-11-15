@@ -60,17 +60,24 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
 
     console.log(`[RSS Scanner] Processing ${itemsFound} items from feed: ${feed.name}`)
     
-    // Process each item
+    // Process each item with timeout protection
     for (let i = 0; i < recentItems.length; i++) {
       const item = recentItems[i]
       console.log(`[RSS Scanner] Processing item ${i + 1}/${recentItems.length}: ${item.title}`)
       try {
-        // Process with AI
-        const processed = await processRssItem(item, {
-          rewriteStyle: "news",
-          minQualityScore: feed.minQualityScore,
-          generateNewContent: true,
+        // Process with AI with per-item timeout (2 minutes)
+        const timeoutPromise = new Promise<never>((_, reject) => {
+          setTimeout(() => reject(new Error('Item processing timeout')), 120000)
         })
+        
+        const processed = await Promise.race([
+          processRssItem(item, {
+            rewriteStyle: "news",
+            minQualityScore: feed.minQualityScore,
+            generateNewContent: true,
+          }),
+          timeoutPromise
+        ])
 
         // Check for duplicate slug
         if (existingSlugs.has(processed.slug)) {

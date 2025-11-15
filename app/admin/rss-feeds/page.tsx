@@ -62,16 +62,42 @@ export default function RssFeedsPage() {
   }, [fetchFeeds])
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Bu RSS feed'i silmek istediğinizden emin misiniz?")) {
-      return
+    // First, check if feed has articles
+    const feed = feeds.find(f => f.id === id)
+    if (!feed) return
+
+    let cascade = false
+    if (feed._count.articles > 0) {
+      const confirmMessage = `Bu RSS feed'inde ${feed._count.articles} adet makale bulunuyor.\n\n` +
+        `Silme seçenekleri:\n` +
+        `- OK: RSS feed ve tüm makaleleri sil\n` +
+        `- İptal: İşlemi iptal et\n\n` +
+        `Devam etmek istiyor musunuz?`
+      
+      if (!confirm(confirmMessage)) {
+        return
+      }
+      cascade = true
+    } else {
+      if (!confirm("Bu RSS feed'i silmek istediğinizden emin misiniz?")) {
+        return
+      }
     }
 
     try {
-      const response = await fetch(`/api/rss-feeds/${id}`, {
+      const url = cascade 
+        ? `/api/rss-feeds/${id}?cascade=true`
+        : `/api/rss-feeds/${id}`
+      
+      const response = await fetch(url, {
         method: "DELETE",
       })
 
       if (response.ok) {
+        const data = await response.json()
+        if (data.deletedArticles > 0) {
+          alert(`RSS feed ve ${data.deletedArticles} makale başarıyla silindi.`)
+        }
         fetchFeeds()
       } else {
         const data = await response.json()
@@ -86,25 +112,18 @@ export default function RssFeedsPage() {
   const handleScan = async (feedId: string) => {
     setScanning(feedId)
     try {
-      const response = await fetch(`/api/rss-feeds/${feedId}/scan`, {
+      const response = await fetch(`/api/rss-feeds/${feedId}/scan-async`, {
         method: "POST",
       })
 
       if (response.ok) {
         const data = await response.json()
-        // Show detailed result
-        const message = `Tarama tamamlandı!\n\n` +
-          `• Bulunan öğe: ${data.result.itemsFound}\n` +
-          `• İşlenen: ${data.result.itemsProcessed}\n` +
-          `• Yayınlanan: ${data.result.itemsPublished}\n` +
-          `• Süre: ${(data.result.duration / 1000).toFixed(1)}s`
-        
-        alert(message)
+        alert(data.message || "Tarama başlatıldı. Sonuçları tarama geçmişinden kontrol edebilirsiniz.")
         // Refresh feed list to show updated stats
         await fetchFeeds()
       } else {
         const errorData = await response.json()
-        alert(errorData.error || "Tarama başarısız")
+        alert(errorData.error || "Tarama başlatılamadı")
       }
     } catch (error) {
       console.error("Scan error:", error)
@@ -226,7 +245,7 @@ export default function RssFeedsPage() {
                       disabled={scanning === feed.id}
                     >
                       <Play className="h-4 w-4 mr-1" />
-                      {scanning === feed.id ? "Taranıyor..." : "Tara"}
+                      {scanning === feed.id ? "Başlatılıyor..." : "Tara"}
                     </Button>
                     <Button
                       variant="outline"

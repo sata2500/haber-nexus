@@ -22,25 +22,39 @@ const modelConfig = {
 export async function generateText(prompt: string, options?: {
   temperature?: number
   maxTokens?: number
+  retries?: number
 }): Promise<string> {
-  try {
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-2.5-flash",
-      generationConfig: {
-        temperature: options?.temperature ?? modelConfig.temperature,
-        topP: modelConfig.topP,
-        topK: modelConfig.topK,
-        maxOutputTokens: options?.maxTokens ?? modelConfig.maxOutputTokens,
-      },
-    })
+  const maxRetries = options?.retries ?? 2
+  let lastError: Error | null = null
 
-    const result = await model.generateContent(prompt)
-    const response = result.response
-    return response.text()
-  } catch (error) {
-    console.error("Error generating text:", error)
-    throw new Error("Failed to generate text with Gemini AI")
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const model = genAI.getGenerativeModel({ 
+        model: "gemini-2.5-flash",
+        generationConfig: {
+          temperature: options?.temperature ?? modelConfig.temperature,
+          topP: modelConfig.topP,
+          topK: modelConfig.topK,
+          maxOutputTokens: options?.maxTokens ?? modelConfig.maxOutputTokens,
+        },
+      })
+
+      const result = await model.generateContent(prompt)
+      const response = result.response
+      return response.text()
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error("Unknown error")
+      console.error(`Error generating text (attempt ${attempt + 1}/${maxRetries + 1}):`, error)
+      
+      // If not the last attempt, wait before retrying
+      if (attempt < maxRetries) {
+        const delay = Math.min(1000 * Math.pow(2, attempt), 5000) // Exponential backoff
+        await new Promise(resolve => setTimeout(resolve, delay))
+      }
+    }
   }
+
+  throw new Error(`Failed to generate text with Gemini AI after ${maxRetries + 1} attempts: ${lastError?.message}`)
 }
 
 /**
