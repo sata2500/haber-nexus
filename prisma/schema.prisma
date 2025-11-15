@@ -71,6 +71,7 @@ model AuthorProfile {
   user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   expertise       String[]
+  interests       String[]  @default([])
   socialLinks     Json?
   verified        Boolean   @default(false)
   verifiedAt      DateTime?
@@ -441,6 +442,10 @@ model RssFeed {
   // AI filtering
   minQualityScore Float        @default(0.5)
   autoPublish     Boolean      @default(false)
+  
+  // Auto Author Assignment
+  autoAssignAuthor Boolean      @default(false)
+  defaultAuthorId  String?
   
   // Relations
   articles        Article[]

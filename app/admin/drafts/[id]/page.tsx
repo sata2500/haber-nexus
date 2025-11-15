@@ -237,7 +237,7 @@ export default function EditDraftPage() {
               </div>
               <CardDescription>
                 Oluşturulma: {new Date(draft.createdAt).toLocaleDateString("tr-TR")} | 
-                Yazar: {draft.author.name}
+                Yazar: {draft.author?.name || draft.author?.email || "Bilinmiyor"}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">

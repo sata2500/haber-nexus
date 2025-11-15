@@ -69,6 +69,8 @@ export default function EditRssFeedPage() {
     priority: 1,
     minQualityScore: 0.5,
     autoPublish: false,
+    autoAssignAuthor: false,
+    defaultAuthorId: "",
   })
 
   const fetchFeed = useCallback(async () => {
@@ -88,6 +90,8 @@ export default function EditRssFeedPage() {
         priority: data.priority,
         minQualityScore: data.minQualityScore,
         autoPublish: data.autoPublish,
+        autoAssignAuthor: data.autoAssignAuthor || false,
+        defaultAuthorId: data.defaultAuthorId || "",
       })
     } catch (error) {
       console.error("Fetch error:", error)
@@ -359,7 +363,7 @@ export default function EditRssFeedPage() {
               </p>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="space-y-3">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
@@ -379,6 +383,37 @@ export default function EditRssFeedPage() {
                 />
                 <span className="text-sm font-medium">Otomatik yayınla</span>
               </label>
+
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.autoAssignAuthor}
+                  onChange={(e) => setFormData({ ...formData, autoAssignAuthor: e.target.checked })}
+                  className="rounded border-input"
+                />
+                <span className="text-sm font-medium">Otomatik yazar ata (ilgi alanlarına göre)</span>
+              </label>
+              <p className="text-xs text-muted-foreground ml-6">
+                Etkinleştirildiğinde, makaleler kategoriye göre en uygun yazara otomatik atanacaktır
+              </p>
+
+              {!formData.autoAssignAuthor && (
+                <div className="ml-6 space-y-2">
+                  <label className="text-sm font-medium">Varsayılan Yazar</label>
+                  <select
+                    className="w-full px-3 py-2 border rounded-md text-sm"
+                    value={formData.defaultAuthorId}
+                    onChange={(e) => setFormData({ ...formData, defaultAuthorId: e.target.value })}
+                  >
+                    <option value="">Varsayılan (Admin)</option>
+                    {authors.map((author) => (
+                      <option key={author.id} value={author.id}>
+                        {author.name || author.email} ({author.role})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
 
             <div className="flex gap-3 pt-4">

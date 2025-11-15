@@ -10,6 +10,7 @@ import { CommentSection } from "@/components/article/comment-section"
 import { ReadingTracker } from "@/components/article/reading-tracker"
 import { ReadingProgressBar } from "@/components/article/reading-progress-bar"
 import { MarkdownRenderer } from "@/components/editor/markdown-renderer"
+import { isPrivilegedUser } from "@/lib/auth/session-helpers"
 import { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
@@ -144,6 +145,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     : []
 
   const readingTime = Math.ceil(article.content.split(" ").length / 200)
+  const showAIBadge = await isPrivilegedUser()
 
   // Calculate estimated read time
   const wordCount = article.content.split(/\s+/).length
@@ -185,8 +187,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 </Badge>
               )}
               <Badge variant="outline">{article.type}</Badge>
-              {article.aiGenerated && (
-                <Badge variant="secondary">AI Destekli</Badge>
+              {article.aiGenerated && showAIBadge && (
+                <Badge variant="secondary">🤖 AI Destekli</Badge>
               )}
             </div>
 

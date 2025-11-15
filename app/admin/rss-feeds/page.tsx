@@ -78,24 +78,32 @@ export default function RssFeedsPage() {
     }
   }
 
-  const handleScan = async (id: string) => {
-    setScanning(id)
+  const handleScan = async (feedId: string) => {
+    setScanning(feedId)
     try {
-      const response = await fetch(`/api/rss-feeds/${id}/scan`, {
+      const response = await fetch(`/api/rss-feeds/${feedId}/scan`, {
         method: "POST",
       })
 
       if (response.ok) {
         const data = await response.json()
-        alert(data.message || "Tarama tamamlandı")
-        fetchFeeds()
+        // Show detailed result
+        const message = `Tarama tamamlandı!\n\n` +
+          `• Bulunan öğe: ${data.result.itemsFound}\n` +
+          `• İşlenen: ${data.result.itemsProcessed}\n` +
+          `• Yayınlanan: ${data.result.itemsPublished}\n` +
+          `• Süre: ${(data.result.duration / 1000).toFixed(1)}s`
+        
+        alert(message)
+        // Refresh feed list to show updated stats
+        await fetchFeeds()
       } else {
-        const data = await response.json()
-        alert(data.error || "Tarama başarısız")
+        const errorData = await response.json()
+        alert(errorData.error || "Tarama başarısız")
       }
     } catch (error) {
-      console.error("Error scanning RSS feed:", error)
-      alert("Bir hata oluştu")
+      console.error("Scan error:", error)
+      alert("Bir hata oluştu: " + (error instanceof Error ? error.message : "Bilinmeyen hata"))
     } finally {
       setScanning(null)
     }

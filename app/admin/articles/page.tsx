@@ -170,6 +170,13 @@ export default function ArticlesPage() {
             >
               Zamanlanmış
             </Button>
+            <Button
+              variant={statusFilter === "ARCHIVED" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setStatusFilter("ARCHIVED")}
+            >
+              Arşivlenmiş
+            </Button>
           </div>
         </CardContent>
       </Card>

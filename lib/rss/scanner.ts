@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { parseRssFeed, filterRecentItems } from "./parser"
 import { processRssItem, createSlug } from "../ai/processor"
+import { getAuthorForRssFeed } from "./auto-author-assignment"
 
 export interface ScanResult {
   feedId: string
@@ -94,15 +95,11 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
           tagIds.push(tag.id)
         }
 
-        // Get default author (admin user)
-        const defaultAuthor = await prisma.user.findFirst({
-          where: {
-            role: { in: ["ADMIN", "SUPER_ADMIN"] },
-          },
-        })
-
-        if (!defaultAuthor) {
-          throw new Error("No admin user found for article creation")
+        // Get author using auto-assignment or default
+        const authorId = await getAuthorForRssFeed(feedId, feed.categoryId || undefined)
+        
+        if (!authorId) {
+          throw new Error("No suitable author found for article creation")
         }
 
         // Determine status based on autoPublish setting
@@ -121,7 +118,7 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
             status,
             ...(feed.categoryId && { categoryId: feed.categoryId }),
             
-            authorId: defaultAuthor.id,
+            authorId: authorId,
             
             aiGenerated: true,
             aiSummary: processed.excerpt,

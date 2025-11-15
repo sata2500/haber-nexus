@@ -82,6 +82,29 @@ export function MarkdownEditor({
       <style jsx global>{`
         .markdown-editor-wrapper .EasyMDEContainer {
           border-radius: 0.375rem;
+          position: relative;
+          z-index: 1;
+        }
+        .markdown-editor-wrapper .CodeMirror-fullscreen {
+          z-index: 9999 !important;
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          bottom: 0 !important;
+          height: 100vh !important;
+          width: 100vw !important;
+        }
+        .markdown-editor-wrapper .editor-toolbar.fullscreen {
+          z-index: 9999 !important;
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          width: 100% !important;
+        }
+        .markdown-editor-wrapper .editor-preview-side {
+          z-index: 9998 !important;
         }
         .markdown-editor-wrapper .CodeMirror {
           border: 1px solid hsl(var(--border));
@@ -106,11 +129,8 @@ export function MarkdownEditor({
           background-color: hsl(var(--accent));
           border-color: hsl(var(--accent));
         }
-        .markdown-editor-wrapper .editor-toolbar.fullscreen {
-          background-color: hsl(var(--background));
-        }
-        .markdown-editor-wrapper .CodeMirror-fullscreen {
-          background-color: hsl(var(--background));
+        .markdown-editor-wrapper .CodeMirror-sided {
+          width: 50% !important;
         }
         .markdown-editor-wrapper .editor-preview {
           background-color: hsl(var(--background));
@@ -119,6 +139,13 @@ export function MarkdownEditor({
         .markdown-editor-wrapper .editor-preview-side {
           border-left: 1px solid hsl(var(--border));
           background-color: hsl(var(--background));
+          position: fixed !important;
+          width: 50% !important;
+          height: 100% !important;
+          top: 0 !important;
+          right: 0 !important;
+          z-index: 9 !important;
+          overflow: auto !important;
         }
         .dark .markdown-editor-wrapper .CodeMirror {
           background-color: hsl(var(--background));
