@@ -179,7 +179,7 @@ export async function GET(request: NextRequest) {
       topArticles,
       trend,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("AI analytics error:", error)
     return NextResponse.json(
       { error: "Failed to fetch AI analytics" },

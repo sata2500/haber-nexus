@@ -1,3 +1,4 @@
+ 
 "use client"
 
 import { useState, useEffect } from "react"
@@ -6,7 +7,7 @@ import { useSession } from "next-auth/react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ArrowLeft, Save, Eye, Send } from "lucide-react"
+import { ArrowLeft, Save, Send } from "lucide-react"
 import { ImageInput } from "@/components/admin/image-input"
 
 interface Category {

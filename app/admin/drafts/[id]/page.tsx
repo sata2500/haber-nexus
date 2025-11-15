@@ -14,8 +14,8 @@ import ReactMarkdown from "react-markdown"
 interface Draft {
   id: string
   topic: string
-  outline: any
-  research: any
+  outline: Record<string, unknown> | null
+  research: Record<string, unknown> | null
   draft: string | null
   status: string
   qualityScore: number | null

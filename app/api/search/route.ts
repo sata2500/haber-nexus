@@ -123,7 +123,7 @@ export async function GET(request: NextRequest) {
       tags,
       total: articles.length + categories.length + tags.length,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error searching:", error)
     return NextResponse.json(
       { error: "Arama sırasında bir hata oluştu" },

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
@@ -51,7 +51,7 @@ export async function GET() {
     })
 
     return NextResponse.json({ articles })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching pending articles:", error)
     return NextResponse.json(
       { error: "Makaleler yüklenirken bir hata oluştu" },

@@ -206,7 +206,7 @@ export async function GET(
       avgReadingTimeSeconds: Math.round(avgReadingTime._avg.readDuration || 0),
       completionRate: Math.round(completionRate),
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching user analytics:", error)
     return NextResponse.json(
       { error: "Analizler alınırken bir hata oluştu" },

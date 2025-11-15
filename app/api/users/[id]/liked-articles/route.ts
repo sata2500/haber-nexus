@@ -114,7 +114,7 @@ export async function GET(
         totalPages: Math.ceil(total / limit),
       },
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching liked articles:", error)
     return NextResponse.json(
       { error: "Beğenilen makaleler alınırken bir hata oluştu" },

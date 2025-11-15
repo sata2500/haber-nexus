@@ -1,5 +1,5 @@
 import { processRssItem, type ProcessedContent } from "./processor"
-import { analyzeImage, extractAndAnalyzeImages, selectBestCoverImage } from "./vision"
+import { extractAndAnalyzeImages, selectBestCoverImage } from "./vision"
 import { analyzeSentiment, type SentimentAnalysis } from "./sentiment"
 import { moderateContent, checkFactAccuracy, type ModerationResult } from "./moderation"
 import { translateArticle, detectLanguage, type SupportedLanguage } from "./translation"

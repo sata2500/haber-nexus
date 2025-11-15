@@ -1,67 +1,67 @@
-# Haber Nexus'a Katkıda Bulunma Rehberi
+# Contributing to HaberNexus
 
-Öncelikle, projeye katkıda bulunmayı düşündüğünüz için teşekkür ederiz! Haber Nexus, açık kaynaklı bir projedir ve topluluğun desteğiyle büyümeyi hedefler.
+First off, thank you for considering contributing to HaberNexus! It's people like you that make open source such a great community.
 
-Bu rehber, projeye nasıl katkıda bulunabileceğiniz konusunda size yol gösterecektir.
+This guide will help you get started with contributing to the project.
 
-## Davranış Kuralları
+## Code of Conduct
 
-Katılımcıların ve geliştiricilerin uyumlu ve saygılı bir ortamda çalışabilmesi için [Code of Conduct](CODE_OF_CONDUCT.md) belgesini oluşturduk. Lütfen bu belgeyi okuyun ve projenin her aşamasında bu kurallara uyun.
+To ensure a harmonious and respectful environment for all contributors and developers, we have established a [Code of Conduct](CODE_OF_CONDUCT.md). Please read this document and adhere to its rules at all stages of the project.
 
-## Nasıl Katkıda Bulunabilirim?
+## How Can I Contribute?
 
-### Hata Bildirimi (Bug Report)
+### Reporting Bugs
 
-Bir hata bulduğunuzda, lütfen GitHub Issues üzerinden yeni bir "Bug Report" oluşturun. Raporunuzda aşağıdaki bilgileri eklemeye çalışın:
+When you find a bug, please create a new "Bug Report" on GitHub Issues. Try to include the following information in your report:
 
-- **Hatanın Açıklaması**: Karşılaştığınız sorunu net bir şekilde açıklayın.
-- **Tekrarlama Adımları**: Hatayı nasıl tekrarlayabileceğimizi adım adım anlatın.
-- **Beklenen Davranış**: Normalde ne olmasını beklediğinizi belirtin.
-- **Ekran Görüntüsü**: Mümkünse, hatayı gösteren bir ekran görüntüsü ekleyin.
-- **Ortam Bilgileri**: Kullandığınız tarayıcı, işletim sistemi gibi bilgileri ekleyin.
+- **Description of the Bug**: Clearly describe the problem you encountered.
+- **Steps to Reproduce**: Explain step-by-step how we can reproduce the bug.
+- **Expected Behavior**: State what you would normally expect to happen.
+- **Screenshot**: If possible, include a screenshot showing the bug.
+- **Environment Information**: Add details about your browser, operating system, etc.
 
-### Özellik Talebi (Feature Request)
+### Feature Requests
 
-Yeni bir özellik veya iyileştirme fikriniz varsa, GitHub Issues üzerinden "Feature Request" oluşturabilirsiniz. Talebinizde şu noktalara değinin:
+If you have an idea for a new feature or improvement, you can create a "Feature Request" on GitHub Issues. In your request, please address the following points:
 
-- **Sorun ve Çözüm**: Bu özelliğin hangi sorunu çözdüğünü ve nasıl bir çözüm sunduğunu açıklayın.
-- **Alternatifler**: Düşündüğünüz alternatif çözümler var mı?
-- **Ek Bilgi**: Özelliğin nasıl çalışması gerektiğine dair detaylar veya örnekler ekleyin.
+- **Problem and Solution**: Describe the problem this feature would solve and how it provides a solution.
+- **Alternatives**: Are there any alternative solutions you have considered?
+- **Additional Information**: Add details or examples of how the feature should work.
 
-### Kod Katkısı
+### Code Contributions
 
-Kod katkısı yapmak için aşağıdaki adımları izleyebilirsiniz:
+You can follow these steps to contribute code:
 
-1.  **Projeyi Fork'layın**: Kendi GitHub hesabınıza projenin bir kopyasını oluşturun.
-2.  **Repository'yi Klonlayın**: Fork'ladığınız projeyi yerel makinenize indirin.
+1.  **Fork the Project**: Create a copy of the project in your own GitHub account.
+2.  **Clone the Repository**: Download your forked project to your local machine.
     ```bash
-    git clone https://github.com/KULLANICI_ADINIZ/haber-nexus.git
+    git clone https://github.com/YOUR_USERNAME/haber-nexus.git
     ```
-3.  **Yeni Bir Branch Oluşturun**: Yapacağınız değişikliğe uygun bir isimle yeni bir branch oluşturun.
+3.  **Create a New Branch**: Create a new branch with a suitable name for your changes.
     ```bash
-    git checkout -b feature/yeni-ozellik
-    # veya
-    git checkout -b fix/hata-duzeltmesi
+    git checkout -b feature/new-feature
+    # or
+    git checkout -b fix/bug-fix
     ```
-4.  **Değişikliklerinizi Yapın**: Kodu düzenleyin, yeni özellikler ekleyin veya hataları düzeltin.
-5.  **Commit'lerinizi Oluşturun**: Anlamlı commit mesajları ile değişikliklerinizi kaydedin. [Conventional Commits](https://www.conventionalcommits.org/) standardını takip etmeye özen gösterin.
+4.  **Make Your Changes**: Edit the code, add new features, or fix bugs.
+5.  **Create Your Commits**: Save your changes with meaningful commit messages. Try to follow the [Conventional Commits](https://www.conventionalcommits.org/) standard.
     ```bash
-    git commit -m "feat: Kullanıcı profili için avatar yükleme özelliği eklendi"
+    git commit -m "feat: Add avatar upload feature for user profiles"
     ```
-6.  **Branch'inizi Push'layın**: Değişikliklerinizi GitHub'daki fork'unuza gönderin.
+6.  **Push Your Branch**: Send your changes to your fork on GitHub.
     ```bash
-    git push origin feature/yeni-ozellik
+    git push origin feature/new-feature
     ```
-7.  **Pull Request (PR) Oluşturun**: Haber Nexus ana repository'sine bir Pull Request gönderin. PR açıklamasında yaptığınız değişiklikleri detaylı bir şekilde anlatın ve ilgili issue numarasını belirtin (e.g., `Closes #123`).
+7.  **Create a Pull Request (PR)**: Send a Pull Request to the main HaberNexus repository. In the PR description, explain your changes in detail and reference the relevant issue number (e.g., `Closes #123`).
 
-### Kod Standartları
+### Code Standards
 
-- **TypeScript**: Proje TypeScript ile yazılmıştır. Tip güvenliğine önem verin ve `any` tipini kullanmaktan kaçının.
-- **ESLint**: Kod stilini ve kalitesini korumak için ESLint kullanıyoruz. Lütfen commit'lemeden önce `pnpm lint` komutunu çalıştırarak hataları giderin.
-- **Testler**: Önemli değişiklikler için test yazmanız beklenir (henüz test altyapısı kurulmadı).
+- **TypeScript**: The project is written in TypeScript. Prioritize type safety and avoid using the `any` type.
+- **ESLint**: We use ESLint to maintain code style and quality. Please run `pnpm lint` to fix any errors before committing.
+- **Tests**: You are expected to write tests for significant changes (the test infrastructure is not yet set up).
 
-## Geliştirme Ortamı Kurulumu
+## Development Environment Setup
 
-Detaylı kurulum adımları için [README.md](README.md) dosyasındaki "Kurulum ve Çalıştırma" bölümünü takip edebilirsiniz.
+For detailed setup instructions, follow the "Installation and Setup" section in the [README.md](README.md) file.
 
-Katkılarınız için şimdiden teşekkürler!
+Thank you in advance for your contributions!

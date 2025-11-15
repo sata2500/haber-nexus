@@ -43,7 +43,7 @@ export async function POST(
     })
 
     return NextResponse.json({ comment })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error moderating comment:", error)
     return NextResponse.json(
       { error: "Yorum güncellenirken bir hata oluştu" },

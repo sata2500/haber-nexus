@@ -47,7 +47,7 @@ export async function POST(
       success: true,
       message: "Session refresh tetiklendi. Kullanıcının session'ı 5 saniye içinde güncellenecek."
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error forcing session refresh:", error)
     return NextResponse.json(
       { error: "Session refresh tetiklenirken bir hata oluştu" },

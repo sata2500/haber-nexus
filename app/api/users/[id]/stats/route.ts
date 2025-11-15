@@ -142,7 +142,7 @@ export async function GET(
       topCategories: topCategoriesArray,
       unreadNotifications,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching user stats:", error)
     return NextResponse.json(
       { error: "İstatistikler alınırken bir hata oluştu" },

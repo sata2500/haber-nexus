@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(user)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching current user:", error)
     return NextResponse.json(
       { error: "Kullanıcı yüklenirken bir hata oluştu" },
@@ -105,7 +105,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     // Prepare update data
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       name: validatedData.name,
       username: validatedData.username,
       bio: validatedData.bio,
@@ -160,7 +160,7 @@ export async function PATCH(request: NextRequest) {
     })
 
     return NextResponse.json(user)
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Geçersiz veri", details: error.issues },

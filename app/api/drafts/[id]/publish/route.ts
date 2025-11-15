@@ -110,7 +110,7 @@ export async function POST(
         status: article.status
       }
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Draft publish error:", error)
     return NextResponse.json(
       {

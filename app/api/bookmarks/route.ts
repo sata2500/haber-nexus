@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({ bookmarked: true })
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error toggling bookmark:", error)
     return NextResponse.json(
       { error: "Failed to toggle bookmark" },
@@ -131,7 +131,7 @@ export async function GET(request: NextRequest) {
     })
 
     return NextResponse.json(bookmarks.map(b => b.article))
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching bookmarks:", error)
     return NextResponse.json(
       { error: "Failed to fetch bookmarks" },
@@ -187,7 +187,7 @@ export async function DELETE(request: NextRequest) {
     })
 
     return NextResponse.json({ success: true, bookmarked: false })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error deleting bookmark:", error)
     return NextResponse.json(
       { error: "Failed to delete bookmark" },

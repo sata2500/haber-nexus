@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
     })
 
     return NextResponse.json(categories)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching categories:", error)
     return NextResponse.json(
       { error: "Kategoriler yüklenirken bir hata oluştu" },
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
     revalidatePath('/categories/[slug]', 'page')
     
     return NextResponse.json(category, { status: 201 })
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Geçersiz veri", details: error.issues },

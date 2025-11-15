@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
     })
 
     return NextResponse.json({ articles })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching author articles:", error)
     return NextResponse.json(
       { error: "Makaleler yüklenirken bir hata oluştu" },

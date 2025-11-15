@@ -57,7 +57,7 @@ export async function POST(
       message: "Tarama arka planda başlatıldı. Sonuçları tarama geçmişinden kontrol edebilirsiniz.",
       feedId: id,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("[Async Scan] Error starting async scan:", error)
     return NextResponse.json(
       { error: "Failed to start scan" },

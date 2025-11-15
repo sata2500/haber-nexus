@@ -38,7 +38,7 @@ export async function GET() {
       notifications,
       unreadCount,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching notifications:", error)
     return NextResponse.json(
       { error: "Failed to fetch notifications" },

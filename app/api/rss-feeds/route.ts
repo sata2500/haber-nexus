@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
         'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
       },
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching RSS feeds:", error)
     return NextResponse.json(
       { error: "Failed to fetch RSS feeds" },
@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
     })
 
     return NextResponse.json(feed, { status: 201 })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error creating RSS feed:", error)
     return NextResponse.json(
       { error: "Failed to create RSS feed" },

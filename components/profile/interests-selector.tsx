@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useMemo } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -46,12 +46,11 @@ export function InterestsSelector({
   suggestions = DEFAULT_SUGGESTIONS 
 }: InterestsSelectorProps) {
   const [inputValue, setInputValue] = useState("")
-  const [availableSuggestions, setAvailableSuggestions] = useState<string[]>([])
-
-  useEffect(() => {
+  
+  // Use useMemo instead of useEffect to avoid setState in effect
+  const availableSuggestions = useMemo(() => {
     // Filter out already selected interests
-    const filtered = suggestions.filter(s => !value.includes(s))
-    setAvailableSuggestions(filtered)
+    return suggestions.filter(s => !value.includes(s))
   }, [value, suggestions])
 
   const handleAdd = (interest: string) => {

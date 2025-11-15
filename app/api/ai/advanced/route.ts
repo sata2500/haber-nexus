@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
       action,
       result,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Advanced AI error:", error)
     return NextResponse.json(
       {

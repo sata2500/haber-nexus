@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({ following: true })
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error toggling follow:", error)
     return NextResponse.json(
       { error: "Failed to toggle follow" },
@@ -116,7 +116,7 @@ export async function GET(request: NextRequest) {
     })
 
     return NextResponse.json({ following: !!follow })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error checking follow:", error)
     return NextResponse.json(
       { error: "Failed to check follow" },

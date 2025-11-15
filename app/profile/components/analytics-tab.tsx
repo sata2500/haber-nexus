@@ -4,22 +4,51 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Loader2, TrendingUp, PieChart, Clock, Users } from "lucide-react"
-import Link from "next/link"
 import Image from "next/image"
 
 interface AnalyticsTabProps {
   userId: string
 }
 
+interface CategoryDistribution {
+  name: string
+  count: number
+  color?: string
+}
+
+interface WeeklyActivity {
+  day: string
+  count: number
+}
+
+interface TopAuthor {
+  id: string
+  name: string
+  username?: string
+  image?: string
+  readCount: number
+}
+
+interface ReadingTrend {
+  date: string
+  count: number
+}
+
+interface Analytics {
+  avgReadingTimeSeconds: number
+  completionRate: number
+  categoryDistribution: CategoryDistribution[]
+  weeklyActivity: WeeklyActivity[]
+  topAuthors: TopAuthor[]
+  readingTrend: ReadingTrend[]
+}
+
 export function AnalyticsTab({ userId }: AnalyticsTabProps) {
-  const [analytics, setAnalytics] = useState<any>(null)
+  const [analytics, setAnalytics] = useState<Analytics | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchAnalytics()
-  }, [])
-
-  const fetchAnalytics = async () => {
+    const fetchAnalytics = async () => {
     try {
       const response = await fetch(`/api/users/${userId}/analytics`)
       if (response.ok) {
@@ -32,6 +61,9 @@ export function AnalyticsTab({ userId }: AnalyticsTabProps) {
       setLoading(false)
     }
   }
+    
+    fetchAnalytics()
+  }, [userId])
 
   if (loading) {
     return (
@@ -92,7 +124,7 @@ export function AnalyticsTab({ userId }: AnalyticsTabProps) {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {analytics.categoryDistribution.map((category: any) => {
+              {analytics.categoryDistribution.map((category) => {
                 const maxCount = analytics.categoryDistribution[0].count
                 const percentage = (category.count / maxCount) * 100
 
@@ -127,16 +159,16 @@ export function AnalyticsTab({ userId }: AnalyticsTabProps) {
       )}
 
       {/* Weekly Activity */}
-      {analytics.weeklyActivity && (
+      {analytics.weeklyActivity && analytics.weeklyActivity.length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle>Haftalık Aktivite</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {analytics.weeklyActivity.map((day: any) => {
+              {analytics.weeklyActivity.map((day) => {
                 const maxCount = Math.max(
-                  ...analytics.weeklyActivity.map((d: any) => d.count)
+                  ...analytics.weeklyActivity.map((d) => d.count)
                 )
                 const percentage = maxCount > 0 ? (day.count / maxCount) * 100 : 0
 
@@ -174,7 +206,7 @@ export function AnalyticsTab({ userId }: AnalyticsTabProps) {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {analytics.topAuthors.map((author: any, index: number) => (
+              {analytics.topAuthors.map((author, index) => (
                 <div
                   key={author.id}
                   className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted transition-colors"
@@ -226,9 +258,9 @@ export function AnalyticsTab({ userId }: AnalyticsTabProps) {
           <CardContent>
             <div className="space-y-2">
               <div className="flex items-end gap-1 h-40">
-                {analytics.readingTrend.slice(-30).map((item: any) => {
+                {analytics.readingTrend.slice(-30).map((item) => {
                   const maxCount = Math.max(
-                    ...analytics.readingTrend.map((d: any) => d.count)
+                    ...analytics.readingTrend.map((d) => d.count)
                   )
                   const height = maxCount > 0 ? (item.count / maxCount) * 100 : 0
 

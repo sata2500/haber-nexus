@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
       action,
       result,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("AI test error:", error)
     return NextResponse.json(
       { error: "Failed to process AI request" },

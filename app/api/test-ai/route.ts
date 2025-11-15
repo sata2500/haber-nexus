@@ -12,7 +12,7 @@ export async function GET() {
       result: result,
       timestamp: new Date().toISOString()
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("AI test error:", error)
     return NextResponse.json({
       success: false,

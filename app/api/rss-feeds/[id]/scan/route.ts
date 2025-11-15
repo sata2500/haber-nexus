@@ -46,7 +46,7 @@ export async function POST(
       result,
       message: `Tarama tamamlandı. ${result.itemsFound} öğe bulundu, ${result.itemsProcessed} işlendi, ${result.itemsPublished} yayınlandı.`,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error scanning RSS feed:", error)
     return NextResponse.json(
       { error: "Failed to scan RSS feed" },

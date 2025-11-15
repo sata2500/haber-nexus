@@ -106,7 +106,7 @@ export async function GET(
         totalPages: Math.ceil(total / limit),
       },
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching user comments:", error)
     return NextResponse.json(
       { error: "Yorumlar alınırken bir hata oluştu" },

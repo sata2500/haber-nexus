@@ -39,7 +39,7 @@ export async function GET(
     const skip = (page - 1) * limit
 
     // Filtreleme koşulları
-    const where: any = { userId: id }
+    const where: Record<string, unknown> = { userId: id }
 
     // Kaydedilen makaleleri getir
     const bookmarks = await prisma.bookmark.findMany({
@@ -120,7 +120,7 @@ export async function GET(
         totalPages: Math.ceil(total / limit),
       },
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching bookmarked articles:", error)
     return NextResponse.json(
       { error: "Kaydedilen makaleler alınırken bir hata oluştu" },

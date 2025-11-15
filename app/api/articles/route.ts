@@ -97,7 +97,7 @@ export async function GET(request: NextRequest) {
         totalPages: Math.ceil(total / limit),
       },
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching articles:", error)
     return NextResponse.json(
       { error: "Makaleler yüklenirken bir hata oluştu" },
@@ -207,7 +207,7 @@ export async function POST(request: NextRequest) {
     })
 
     return NextResponse.json(article, { status: 201 })
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Geçersiz veri", details: error.issues },

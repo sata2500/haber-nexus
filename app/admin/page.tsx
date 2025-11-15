@@ -91,7 +91,7 @@ export default async function AdminDashboard() {
             <CardTitle>Hızlı Erişim</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <a
+            <Link
               href="/admin/content-creator"
               className="p-4 border rounded-lg hover:bg-accent transition-colors bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/20"
             >
@@ -102,8 +102,8 @@ export default async function AdminDashboard() {
               <p className="text-sm text-muted-foreground">
                 Yapay zeka ile özgün içerik oluştur
               </p>
-            </a>
-            <a
+            </Link>
+            <Link
               href="/admin/drafts"
               className="p-4 border rounded-lg hover:bg-accent transition-colors"
             >
@@ -114,8 +114,8 @@ export default async function AdminDashboard() {
               <p className="text-sm text-muted-foreground">
                 Taslakları görüntüle ve yönet
               </p>
-            </a>
-            <a
+            </Link>
+            <Link
               href="/admin/users"
               className="p-4 border rounded-lg hover:bg-accent transition-colors"
             >
@@ -123,8 +123,8 @@ export default async function AdminDashboard() {
               <p className="text-sm text-muted-foreground mt-1">
                 Kullanıcıları görüntüle ve yönet
               </p>
-            </a>
-            <a
+            </Link>
+            <Link
               href="/admin/articles"
               className="p-4 border rounded-lg hover:bg-accent transition-colors"
             >
@@ -132,8 +132,8 @@ export default async function AdminDashboard() {
               <p className="text-sm text-muted-foreground mt-1">
                 Makaleleri görüntüle ve düzenle
               </p>
-            </a>
-            <a
+            </Link>
+            <Link
               href="/admin/categories"
               className="p-4 border rounded-lg hover:bg-accent transition-colors"
             >
@@ -141,8 +141,8 @@ export default async function AdminDashboard() {
               <p className="text-sm text-muted-foreground mt-1">
                 Kategorileri düzenle
               </p>
-            </a>
-            <a
+            </Link>
+            <Link
               href="/admin/rss-feeds"
               className="p-4 border rounded-lg hover:bg-accent transition-colors"
             >
@@ -150,7 +150,7 @@ export default async function AdminDashboard() {
               <p className="text-sm text-muted-foreground mt-1">
                 RSS kaynaklarını yönet
               </p>
-            </a>
+            </Link>
           </CardContent>
         </Card>
       </div>

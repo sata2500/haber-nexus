@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
       action,
       result
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Content generation error:", error)
     return NextResponse.json(
       {

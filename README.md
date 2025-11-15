@@ -1,125 +1,127 @@
-# Haber Nexus - AI Destekli Haber ve Bilgi Platformu
+# HaberNexus - AI-Powered News & Information Platform
 
-![Haber Nexus](https://i.imgur.com/example.png) <!-- Gerçek bir banner resmi ile değiştirilecek -->
+<p align="center">
+  <img src="https://i.imgur.com/example.png" alt="HaberNexus Banner" width="600"/>
+</p>
 
-**Haber Nexus**, modern web teknolojileri ve yapay zeka gücüyle geliştirilen, yeni nesil bir haber ve bilgi platformudur. Amacımız, kullanıcılara sadece haber sunmak değil, aynı zamanda bilgiye erişimlerini kolaylaştırmak, etkileşimde bulunmalarını sağlamak ve topluluğun bir parçası olmalarına olanak tanımaktır.
+**HaberNexus** is a next-generation news and information platform developed with modern web technologies and the power of artificial intelligence. Our goal is not just to deliver news, but to facilitate access to information, enable user interaction, and foster a sense of community.
 
-Bu proje, **Salih TANRISEVEN** tarafından başlatılmış olup, **Manus AI** iş birliğiyle geliştirilmektedir.
-
----
-
-## ✨ Proje Vizyonu
-
-- **AI Destekli İçerik**: Google Gemini API kullanarak RSS kaynaklarından otomatik haber tarama, analiz etme ve özgün makaleler üretme.
-- **Geniş Kapsam**: Türkiye ve dünyadan güncel haberler, blog yazıları ve derinlemesine araştırma içerikleri.
-- **Gelişmiş Yönetim**: Rol tabanlı (RBAC) kullanıcı sistemi ile yazarların, editörlerin ve adminlerin platformu kolayca yönetmesi.
-- **Sosyal Etkileşim**: Yorum, beğeni, takip ve bildirim özellikleri ile kullanıcıların etkileşimde bulunabileceği bir topluluk oluşturma.
-- **Açık Kaynak Felsefesi**: Şeffaf bir geliştirme süreci ve topluluk katkılarına açık bir yapı.
+This project was initiated by **Salih TANRISEVEN** and is being developed in collaboration with **Manus AI**.
 
 ---
 
-## 🚀 Teknolojiler
+## ✨ Project Vision
 
-| Kategori | Teknoloji | Açıklama |
-| :--- | :--- | :--- |
-| **Framework** | [Next.js](https://nextjs.org/) 16 (App Router) | SSR, SSG ve ISR ile yüksek performans ve SEO. |
-| **Styling** | [Tailwind CSS](https://tailwindcss.com/) v4 | Utility-first CSS ile hızlı ve tutarlı tasarım. |
-| **UI Bileşenleri** | [Shadcn/ui](https://ui.shadcn.com/) | Erişilebilir ve özelleştirilebilir UI bileşenleri. |
-| **Veritabanı** | [PostgreSQL](https://www.postgresql.org/) (Neon) | Ölçeklenebilir ve güvenilir ilişkisel veritabanı. |
-| **ORM** | [Prisma](https://www.prisma.io/) | Tip güvenli veritabanı işlemleri ve migration yönetimi. |
-| **Kimlik Doğrulama** | [NextAuth.js](https://next-auth.js.org/) (Auth.js) | E-posta/şifre ve sosyal (Google) giriş desteği. |
-| **AI Provider** | [Google Gemini API](https://ai.google.dev/) | Metin üretimi, analiz ve web araştırması. |
-| **Form Yönetimi** | [React Hook Form](https://react-hook-form.com/) | Performanslı ve esnek form yönetimi. |
-| **Schema Doğrulama** | [Zod](https://zod.dev/) | Tip güvenli schema doğrulama. |
-| **Deployment** | [Vercel](https://vercel.com/) | Next.js için optimize edilmiş hosting ve CI/CD. |
+- **AI-Powered Content**: Automated news scanning, analysis, and original article generation from RSS feeds using the Google Gemini API.
+- **Broad Scope**: Up-to-date news from Turkey and the world, blog posts, and in-depth research content.
+- **Advanced Management**: A role-based access control (RBAC) system for authors, editors, and admins to easily manage the platform.
+- **Social Interaction**: A community where users can interact through comments, likes, follows, and notifications.
+- **Open Source Philosophy**: A transparent development process and a structure open to community contributions.
 
 ---
 
-## 📦 Kurulum ve Çalıştırma
+## 🚀 Technology Stack
 
-Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyin:
+| Category          | Technology                                      | Description                                                 |
+| :---------------- | :---------------------------------------------- | :---------------------------------------------------------- |
+| **Framework**     | [Next.js](https://nextjs.org/) 16 (App Router)  | High performance and SEO with SSR, SSG, and ISR.            |
+| **Styling**       | [Tailwind CSS](https://tailwindcss.com/) v4     | Utility-first CSS for rapid and consistent design.          |
+| **UI Components** | [Shadcn/ui](https://ui.shadcn.com/)             | Accessible and customizable UI components.                  |
+| **Database**      | [PostgreSQL](https://www.postgresql.org/) (Neon)| Scalable and reliable relational database.                  |
+| **ORM**           | [Prisma](https://www.prisma.io/)                | Type-safe database operations and migration management.     |
+| **Authentication**| [NextAuth.js](https://next-auth.js.org/) (Auth.js)| Email/password and social (Google) login support.           |
+| **AI Provider**   | [Google Gemini API](https://ai.google.dev/)     | Text generation, analysis, and web research.                |
+| **Form Management**| [React Hook Form](https://react-hook-form.com/) | Performant and flexible form management.                    |
+| **Schema Validation**| [Zod](https://zod.dev/)                        | Type-safe schema validation.                                |
+| **Deployment**    | [Vercel](https://vercel.com/)                   | Optimized hosting and CI/CD for Next.js.                    |
 
-1.  **Repository'yi Klonlayın**:
+---
+
+## 📦 Installation and Setup
+
+Follow these steps to run the project on your local machine:
+
+1.  **Clone the Repository**:
 
     ```bash
     git clone https://github.com/sata2500/haber-nexus.git
     cd haber-nexus
     ```
 
-2.  **Bağımlılıkları Yükleyin**:
+2.  **Install Dependencies**:
 
     ```bash
     pnpm install
     ```
 
-3.  **Environment Değişkenlerini Ayarlayın**:
+3.  **Set Up Environment Variables**:
 
-    `.env.example` dosyasını kopyalayarak `.env` adında yeni bir dosya oluşturun ve kendi bilgilerinizi girin.
+    Create a new file named `.env` by copying `.env.example` and enter your own information.
 
     ```bash
     cp .env.example .env
     ```
 
-    Gerekli alanlar:
-    - `DATABASE_URL`: PostgreSQL bağlantı adresiniz.
-    - `AUTH_SECRET`: `openssl rand -base64 32` komutu ile oluşturabilirsiniz.
-    - `GOOGLE_CLIENT_ID` ve `GOOGLE_CLIENT_SECRET`: Google Cloud Console'dan alabilirsiniz.
-    - `GOOGLE_API_KEY`: Google AI Studio'dan alabilirsiniz.
+    Required fields:
+    - `DATABASE_URL`: Your PostgreSQL connection string.
+    - `AUTH_SECRET`: You can generate one with `openssl rand -base64 32`.
+    - `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`: Obtain from Google Cloud Console.
+    - `GOOGLE_API_KEY`: Obtain from Google AI Studio.
 
-4.  **Veritabanı Migration'ını Çalıştırın**:
+4.  **Run Database Migration**:
 
     ```bash
     pnpm prisma migrate dev
     ```
 
-5.  **Geliştirme Sunucusunu Başlatın**:
+5.  **Start the Development Server**:
 
     ```bash
     pnpm dev
     ```
 
-    Uygulama artık [http://localhost:3000](http://localhost:3000) adresinde çalışıyor olacak.
+    The application will now be running at [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## 🛣️ Geliştirme Yol Haritası (Roadmap)
+## 🛣️ Development Roadmap
 
-- **📍 Faz 1: Temel Kurulum (Tamamlandı)**
-  - Proje iskeleti, Next.js, TypeScript, Tailwind CSS kurulumu.
-  - Prisma ve veritabanı bağlantısı.
-  - NextAuth.js ile kimlik doğrulama altyapısı.
+- **📍 Phase 1: Basic Setup (Completed)**
+  - Project skeleton, Next.js, TypeScript, Tailwind CSS setup.
+  - Prisma and database connection.
+  - NextAuth.js for authentication infrastructure.
 
-- **📍 Faz 2: İçerik Yönetim Sistemi (Tamamlandı)**
-  - Kategori ve Makale yönetimi için tam CRUD API'leri.
-  - Gelişmiş admin paneli sayfaları (Kategori, Makale, Kullanıcı yönetimi).
-  - Dinamik makale, kategori ve ana sayfalar.
+- **📍 Phase 2: Content Management System (Completed)**
+  - Full CRUD APIs for Category and Article management.
+  - Advanced admin panel pages (Category, Article, User management).
+  - Dynamic article, category, and home pages.
 
-- **⏳ Faz 3: AI Entegrasyonu ve RSS (Sıradaki)**
-  - Google Gemini API entegrasyonu.
-  - RSS feed yönetimi ve otomatik tarama.
-  - AI destekli içerik üretim (özet, tag, yeniden yazma).
-  - Arka plan görevleri için job queue sistemi (BullMQ).
+- **⏳ Phase 3: AI Integration and RSS (In Progress)**
+  - Google Gemini API integration.
+  - RSS feed management and automated scanning.
+  - AI-powered content generation (summaries, tags, rewriting).
+  - Job queue system for background tasks (BullMQ).
 
-- **⏳ Faz 4: Sosyal Etkileşim ve Topluluk**
-  - Gelişmiş yorum sistemi (cevaplama, moderasyon).
-  - Beğeni, kaydetme ve paylaşma özellikleri.
-  - Yazar takip sistemi ve profil sayfaları.
-  - Bildirim sistemi.
+- **⏳ Phase 4: Social Interaction and Community**
+  - Advanced comment system (replies, moderation).
+  - Like, save, and share features.
+  - Author follow system and profile pages.
+  - Notification system.
 
-- **⏳ Faz 5: İleri Seviye Özellikler ve Optimizasyon**
-  - Gelişmiş arama (full-text search, filtreleme).
-  - SEO ve performans optimizasyonları (Sitemap, ISR, Image Optimization).
-  - Newsletter ve e-posta bildirimleri.
-  - Çoklu dil desteği (i18n).
-
----
-
-## 🤝 Katkıda Bulunma
-
-Bu proje açık kaynaklıdır ve topluluk katkılarına açıktır. Detaylı bilgi için lütfen `CONTRIBUTING.md` dosyasını inceleyin.
+- **⏳ Phase 5: Advanced Features and Optimization**
+  - Advanced search (full-text search, filtering).
+  - SEO and performance optimizations (Sitemap, ISR, Image Optimization).
+  - Newsletter and email notifications.
+  - Multi-language support (i18n).
 
 ---
 
-## 📄 Lisans
+## 🤝 Contributing
 
-Bu proje [MIT Lisansı](LICENSE) ile lisanslanmıştır.
+This project is open source and open to community contributions. For detailed information, please review the `CONTRIBUTING.md` file.
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).

@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
     })
 
     return NextResponse.json({ readingHistory })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching reading history:", error)
     return NextResponse.json(
       { error: "Failed to fetch reading history" },
@@ -157,7 +157,7 @@ export async function POST(request: NextRequest) {
       success: true,
       readingHistory,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error saving reading history:", error)
     return NextResponse.json(
       { error: "Failed to save reading history" },

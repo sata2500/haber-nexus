@@ -43,7 +43,7 @@ export async function GET(
     }
 
     return NextResponse.json(settings)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching user settings:", error)
     return NextResponse.json(
       { error: "Ayarlar alınırken bir hata oluştu" },
@@ -152,7 +152,7 @@ export async function PATCH(
       success: true,
       settings,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error updating user settings:", error)
     return NextResponse.json(
       { error: "Ayarlar güncellenirken bir hata oluştu" },

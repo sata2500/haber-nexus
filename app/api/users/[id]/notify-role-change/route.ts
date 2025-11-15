@@ -54,7 +54,7 @@ export async function POST(
       success: true,
       message: "Bildirim gönderildi" 
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error sending role change notification:", error)
     return NextResponse.json(
       { error: "Bildirim gönderilemedi" },

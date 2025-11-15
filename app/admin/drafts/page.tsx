@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
@@ -35,11 +35,7 @@ export default function DraftsPage() {
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<string>("all")
 
-  useEffect(() => {
-    fetchDrafts()
-  }, [filter])
-
-  const fetchDrafts = async () => {
+  const fetchDrafts = useCallback(async () => {
     setLoading(true)
     try {
       const params = new URLSearchParams()
@@ -57,7 +53,11 @@ export default function DraftsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [filter])
+
+  useEffect(() => {
+    fetchDrafts()
+  }, [fetchDrafts])
 
   const handleDelete = async (id: string) => {
     if (!confirm("Bu taslağı silmek istediğinizden emin misiniz?")) return

@@ -15,7 +15,13 @@ import { useRouter } from "next/navigation"
  * 
  * @param notifications - Kullanıcının bildirimleri
  */
-export function useNotificationSessionRefresh(notifications: any[] = []) {
+interface Notification {
+  type: string
+  isRead: boolean
+  [key: string]: unknown
+}
+
+export function useNotificationSessionRefresh(notifications: Notification[] = []) {
   const { update } = useSession()
   const router = useRouter()
 

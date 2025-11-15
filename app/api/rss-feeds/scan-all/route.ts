@@ -39,7 +39,7 @@ export async function POST() {
       },
       message: `${results.length} feed tarandı. ${totalFound} öğe bulundu, ${totalProcessed} işlendi, ${totalPublished} yayınlandı.`,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error scanning all RSS feeds:", error)
     return NextResponse.json(
       { error: "Failed to scan RSS feeds" },

@@ -59,7 +59,7 @@ export async function GET(
         'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
       },
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching RSS feed:", error)
     return NextResponse.json(
       { error: "Failed to fetch RSS feed" },
@@ -142,7 +142,7 @@ export async function PATCH(
         'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
       },
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error updating RSS feed:", error)
     return NextResponse.json(
       { error: "Failed to update RSS feed" },
@@ -216,7 +216,7 @@ export async function DELETE(
       message: "RSS feed başarıyla silindi. Makaleler korundu.",
       preservedArticles: existing._count.articles,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error deleting RSS feed:", error)
     return NextResponse.json(
       { error: "Failed to delete RSS feed" },

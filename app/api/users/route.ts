@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
         totalPages: Math.ceil(total / limit),
       },
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching users:", error)
     return NextResponse.json(
       { error: "Kullanıcılar yüklenirken bir hata oluştu" },

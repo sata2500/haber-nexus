@@ -9,14 +9,15 @@ interface ReadingStatsWidgetProps {
 }
 
 export function ReadingStatsWidget({ userId }: ReadingStatsWidgetProps) {
-  const [stats, setStats] = useState<any>(null)
+  const [stats, setStats] = useState<{
+    totalReads: number
+    completedReads: number
+    totalReadingTimeMinutes: number
+  } | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchStats()
-  }, [])
-
-  const fetchStats = async () => {
+    const fetchStats = async () => {
     try {
       const response = await fetch(`/api/users/${userId}/stats`)
       if (response.ok) {
@@ -29,6 +30,9 @@ export function ReadingStatsWidget({ userId }: ReadingStatsWidgetProps) {
       setLoading(false)
     }
   }
+    
+    fetchStats()
+  }, [userId])
 
   if (loading || !stats) {
     return null

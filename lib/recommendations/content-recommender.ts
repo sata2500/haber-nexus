@@ -1,4 +1,40 @@
 import { prisma } from "@/lib/prisma"
+import { Prisma } from "@prisma/client"
+
+type ArticleWithRelations = Prisma.ArticleGetPayload<{
+  include: {
+    author: {
+      select: {
+        id: true
+        name: true
+        email: true
+        image: true
+      }
+    }
+    category: {
+      select: {
+        id: true
+        name: true
+        slug: true
+        icon: true
+      }
+    }
+    tags: {
+      select: {
+        id: true
+        name: true
+        slug: true
+      }
+    }
+    _count: {
+      select: {
+        likes: true
+        comments: true
+        bookmarks: true
+      }
+    }
+  }
+}>
 
 /**
  * Get personalized article recommendations for a user based on their interests
@@ -6,7 +42,7 @@ import { prisma } from "@/lib/prisma"
 export async function getPersonalizedRecommendations(
   userId: string,
   limit: number = 10
-): Promise<any[]> {
+): Promise<ArticleWithRelations[]> {
   try {
     // Get user settings with interests
     const settings = await prisma.userSettings.findUnique({
@@ -142,7 +178,7 @@ export async function getPersonalizedRecommendations(
 /**
  * Get popular articles as fallback
  */
-async function getPopularArticles(limit: number = 10): Promise<any[]> {
+async function getPopularArticles(limit: number = 10): Promise<ArticleWithRelations[]> {
   try {
     const articles = await prisma.article.findMany({
       where: {
@@ -199,7 +235,7 @@ async function getPopularArticles(limit: number = 10): Promise<any[]> {
 export async function getHomepageRecommendations(
   userId?: string,
   limit: number = 10
-): Promise<any[]> {
+): Promise<ArticleWithRelations[]> {
   if (userId) {
     return await getPersonalizedRecommendations(userId, limit)
   }

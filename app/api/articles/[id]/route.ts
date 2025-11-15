@@ -60,7 +60,7 @@ export async function GET(
     }
 
     return NextResponse.json(article)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching article:", error)
     return NextResponse.json(
       { error: "Makale yüklenirken bir hata oluştu" },
@@ -208,7 +208,7 @@ export async function PATCH(
     })
 
     return NextResponse.json(article)
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Geçersiz veri", details: error.issues },
@@ -270,7 +270,7 @@ export async function DELETE(
     })
 
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error deleting article:", error)
     return NextResponse.json(
       { error: "Makale silinirken bir hata oluştu" },

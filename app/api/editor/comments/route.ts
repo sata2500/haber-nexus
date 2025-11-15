@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     })
 
     return NextResponse.json({ comments })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching comments:", error)
     return NextResponse.json(
       { error: "Yorumlar yüklenirken bir hata oluştu" },

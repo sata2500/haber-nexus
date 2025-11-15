@@ -115,7 +115,7 @@ export async function GET(
         totalPages: Math.ceil(total / limit),
       },
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching followed authors:", error)
     return NextResponse.json(
       { error: "Takip edilen yazarlar alınırken bir hata oluştu" },

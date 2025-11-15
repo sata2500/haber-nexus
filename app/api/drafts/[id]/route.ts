@@ -57,7 +57,7 @@ export async function GET(
       success: true,
       draft
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Draft fetch error:", error)
     return NextResponse.json(
       { error: "Failed to fetch draft" },
@@ -127,7 +127,7 @@ export async function PATCH(
       success: true,
       draft: updated
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Draft update error:", error)
     return NextResponse.json(
       { error: "Failed to update draft" },
@@ -175,7 +175,7 @@ export async function DELETE(
       success: true,
       message: "Draft deleted successfully"
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Draft deletion error:", error)
     return NextResponse.json(
       { error: "Failed to delete draft" },

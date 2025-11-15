@@ -72,7 +72,7 @@ export async function PATCH(request: NextRequest) {
       success: true,
       message: "Şifre başarıyla değiştirildi",
     })
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Geçersiz veri", details: error.issues },

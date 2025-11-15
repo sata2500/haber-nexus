@@ -62,7 +62,7 @@ export async function GET(
     }
 
     return NextResponse.json(user)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching user:", error)
     return NextResponse.json(
       { error: "Kullanıcı yüklenirken bir hata oluştu" },
@@ -142,7 +142,7 @@ export async function PATCH(
     })
 
     return NextResponse.json(user)
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Geçersiz veri", details: error.issues },
@@ -197,7 +197,7 @@ export async function DELETE(
     })
 
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error deleting user:", error)
     return NextResponse.json(
       { error: "Kullanıcı silinirken bir hata oluştu" },

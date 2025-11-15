@@ -147,7 +147,7 @@ export function HeaderClient({ categories }: HeaderClientProps) {
                     </p>
                     {session.user.role && (
                       <Badge 
-                        variant={ROLE_COLORS[session.user.role as UserRole] as any}
+                        variant={ROLE_COLORS[session.user.role as UserRole]}
                         className="w-fit text-xs"
                       >
                         {ROLE_LABELS[session.user.role as UserRole]}

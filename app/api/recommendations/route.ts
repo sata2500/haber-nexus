@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
       recommendations,
       personalized: !!session?.user?.id,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching recommendations:", error)
     return NextResponse.json(
       { error: "Failed to fetch recommendations" },

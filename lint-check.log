@@ -1,0 +1,327 @@
+
+> haber-nexus@0.1.0 lint /home/ubuntu/haber-nexus
+> eslint
+
+
+/home/ubuntu/haber-nexus/app/admin/comments/page.tsx
+  4:29  warning  'CardDescription' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/admin/content-creator/page.tsx
+    9:17  warning  'session' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   23:60  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  156:61  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  173:60  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  199:66  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/admin/drafts/[id]/page.tsx
+  10:41  warning  'FileText' is defined but never used          @typescript-eslint/no-unused-vars
+  17:12  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  18:13  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  54:17  warning  'session' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/admin/drafts/page.tsx
+  32:9   warning  'router' is assigned a value but never used                                                                     @typescript-eslint/no-unused-vars
+  33:17  warning  'session' is assigned a value but never used                                                                    @typescript-eslint/no-unused-vars
+  40:6   warning  React Hook useEffect has a missing dependency: 'fetchDrafts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/home/ubuntu/haber-nexus/app/admin/page.tsx
+  106:13  error  Do not use an `<a>` element to navigate to `/admin/drafts/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages     @next/next/no-html-link-for-pages
+  145:13  error  Do not use an `<a>` element to navigate to `/admin/rss-feeds/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+
+/home/ubuntu/haber-nexus/app/admin/users/[id]/edit/page.tsx
+  225:63  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  277:61  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/admin/users/page.tsx
+  200:79  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/api/content/generate/route.ts
+  62:81  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/api/drafts/route.ts
+  24:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/api/editor/pending/route.ts
+  1:10  warning  'NextRequest' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/api/users/[id]/analytics/route.ts
+  158:49  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/api/users/[id]/bookmarked-articles/route.ts
+  42:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/api/users/[id]/liked-articles/route.ts
+  41:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/api/users/me/route.ts
+   21:27  warning  'request' is defined but never used       @typescript-eslint/no-unused-vars
+  108:23  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/author/articles/[id]/edit/page.tsx
+  9:33  warning  'Eye' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/author/articles/new/page.tsx
+    9:27  warning  'Eye' is defined but never used               @typescript-eslint/no-unused-vars
+   19:17  warning  'session' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  109:15  warning  'data' is assigned a value but never used     @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/author/articles/page.tsx
+  4:10  warning  'useRouter' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/author/profile/page.tsx
+   10:10  warning  'User' is defined but never used                                 @typescript-eslint/no-unused-vars
+   36:38  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+   37:33  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  178:35  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  179:47  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  246:82  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/ubuntu/haber-nexus/app/editor/review/[id]/page.tsx
+  291:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/ubuntu/haber-nexus/app/profile/bookmarks/bookmarks-client.tsx
+  7:10  warning  'ArrowLeft' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/profile/bookmarks/page.tsx
+  8:10  warning  'Card' is defined but never used         @typescript-eslint/no-unused-vars
+  8:16  warning  'CardContent' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/profile/components/analytics-tab.tsx
+    7:8   warning  'Link' is defined but never used                                                                                   @typescript-eslint/no-unused-vars
+   15:46  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+   20:6   warning  React Hook useEffect has a missing dependency: 'fetchAnalytics'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+   48:9   warning  'dayNames' is assigned a value but never used                                                                      @typescript-eslint/no-unused-vars
+   95:62  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+  137:51  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+  139:55  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+  177:50  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+  229:63  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+  231:55  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/profile/components/bookmarked-articles-tab.tsx
+  14:46  error    Unexpected any. Specify a different type                                                                                    @typescript-eslint/no-explicit-any
+  23:6   warning  React Hook useEffect has a missing dependency: 'fetchBookmarkedArticles'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/home/ubuntu/haber-nexus/app/profile/components/comments-tab.tsx
+  16:44  error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+  23:6   warning  React Hook useEffect has a missing dependency: 'fetchComments'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/home/ubuntu/haber-nexus/app/profile/components/following-tab.tsx
+   16:42  error    Unexpected any. Specify a different type                                                                                 @typescript-eslint/no-explicit-any
+   23:6   warning  React Hook useEffect has a missing dependency: 'fetchFollowedAuthors'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  164:65  error    Unexpected any. Specify a different type                                                                                 @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/profile/components/liked-articles-tab.tsx
+  13:38  error    Unexpected any. Specify a different type                                                                               @typescript-eslint/no-explicit-any
+  20:6   warning  React Hook useEffect has a missing dependency: 'fetchLikedArticles'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/home/ubuntu/haber-nexus/app/profile/components/overview-tab.tsx
+   21:38  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+   26:6   warning  React Hook useEffect has a missing dependency: 'fetchStats'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  201:51  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/profile/components/profile-header.tsx
+  83:56  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/profile/components/profile-tabs.tsx
+  3:10  warning  'useState' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/profile/components/reading-history-tab.tsx
+  15:42  error    Unexpected any. Specify a different type                                                                                @typescript-eslint/no-explicit-any
+  22:6   warning  React Hook useEffect has a missing dependency: 'fetchReadingHistory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/home/ubuntu/haber-nexus/app/profile/components/settings-tab.tsx
+   13:9   error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+   36:44  error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+   40:6   warning  React Hook useEffect has a missing dependency: 'fetchSettings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+   74:14  warning  'err' is defined but never used                                                                                   @typescript-eslint/no-unused-vars
+  121:14  warning  'err' is defined but never used                                                                                   @typescript-eslint/no-unused-vars
+  128:48  error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/profile/edit/edit-client.tsx
+  24:9  warning  'router' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/app/profile/edit/page.tsx
+  17:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  18:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/profile/new-profile-content.tsx
+  22:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  23:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/app/profile/profile-content.tsx
+  158:9   warning  'dashboardInfo' is assigned a value but never used               @typescript-eslint/no-unused-vars
+  167:53  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  203:60  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/components/article/article-card-actions.tsx
+  3:10  warning  'Heart' is defined but never used     @typescript-eslint/no-unused-vars
+  3:17  warning  'Bookmark' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/components/article/bookmark-button.tsx
+  32:6  warning  React Hook useEffect has a missing dependency: 'fetchBookmarkStatus'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/home/ubuntu/haber-nexus/components/article/comment-form.tsx
+  10:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  65:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/components/article/comment-item.tsx
+  37:17  warning  'session' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/components/article/comment-section.tsx
+  30:45  warning  'initialCommentCount' is defined but never used                                                                   @typescript-eslint/no-unused-vars
+  31:17  warning  'session' is assigned a value but never used                                                                      @typescript-eslint/no-unused-vars
+  39:6   warning  React Hook useEffect has a missing dependency: 'fetchComments'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  56:31  warning  'newComment' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/components/article/like-button.tsx
+  37:6  warning  React Hook useEffect has a missing dependency: 'fetchLikeStatus'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/home/ubuntu/haber-nexus/components/article/reading-progress-bar.tsx
+  14:13  warning  'rect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/components/article/reading-tracker.tsx
+   16:10  warning  'progress' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+   17:10  warning  'readDuration' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+   20:9   warning  'startTimeRef' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+   20:39  error    Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/home/ubuntu/haber-nexus/components/article/reading-tracker.tsx:20:39
+  18 |   
+  19 |   // Refs for tracking
+> 20 |   const startTimeRef = useRef<number>(Date.now())
+     |                                       ^^^^^^^^^^ Cannot call impure function
+  21 |   const lastSaveTimeRef = useRef<number>(Date.now())
+  22 |   const activeTimeRef = useRef<number>(0)
+  23 |   const isActiveRef = useRef<boolean>(true)                                              react-hooks/purity
+   21:42  error    Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/home/ubuntu/haber-nexus/components/article/reading-tracker.tsx:21:42
+  19 |   // Refs for tracking
+  20 |   const startTimeRef = useRef<number>(Date.now())
+> 21 |   const lastSaveTimeRef = useRef<number>(Date.now())
+     |                                          ^^^^^^^^^^ Cannot call impure function
+  22 |   const activeTimeRef = useRef<number>(0)
+  23 |   const isActiveRef = useRef<boolean>(true)
+  24 |   const lastProgressRef = useRef<number>(0)  react-hooks/purity
+   33:11  warning  'rect' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+  119:6   warning  React Hook useEffect has a missing dependency: 'saveProgress'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        react-hooks/exhaustive-deps
+  139:6   warning  React Hook useEffect has a missing dependency: 'debouncedSave'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       react-hooks/exhaustive-deps
+  159:6   warning  React Hook useEffect has a missing dependency: 'saveProgress'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        react-hooks/exhaustive-deps
+  194:6   warning  React Hook useEffect has missing dependencies: 'articleId', 'calculateTimeProgress', and 'saveProgress'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            react-hooks/exhaustive-deps
+  220:6   warning  React Hook useEffect has a missing dependency: 'articleId'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           react-hooks/exhaustive-deps
+
+/home/ubuntu/haber-nexus/components/article/share-button.tsx
+  25:3  warning  'articleId' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/components/dashboard/dashboard-cards.tsx
+  80:36  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/ubuntu/haber-nexus/components/dashboard/dashboard-welcome.tsx
+  44:58  error  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  73:28  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  82:46  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/ubuntu/haber-nexus/components/editor/markdown-editor.tsx
+  40:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  58:12  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  75:10  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/components/editor/markdown-renderer.tsx
+   21:18  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   24:18  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   27:18  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   30:18  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   33:17  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   36:18  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   39:18  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   42:18  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   45:26  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   51:20  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   51:46  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   63:19  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   66:17  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   74:19  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   75:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+   75:13  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+   81:21  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   89:21  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   92:21  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   95:18  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   96:18  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  102:18  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  105:18  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  108:22  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  111:18  warning  'node' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/components/layout/header-client.tsx
+  150:80  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/components/profile/interests-selector.tsx
+  54:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/home/ubuntu/haber-nexus/components/profile/interests-selector.tsx:54:5
+  52 |     // Filter out already selected interests
+  53 |     const filtered = suggestions.filter(s => !value.includes(s))
+> 54 |     setAvailableSuggestions(filtered)
+     |     ^^^^^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  55 |   }, [value, suggestions])
+  56 |
+  57 |   const handleAdd = (interest: string) => {  react-hooks/set-state-in-effect
+
+/home/ubuntu/haber-nexus/components/profile/reading-stats-widget.tsx
+  12:38  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+  17:6   warning  React Hook useEffect has a missing dependency: 'fetchStats'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/home/ubuntu/haber-nexus/components/ui/dialog.tsx
+  4:10  warning  'X' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/components/ui/label.tsx
+  6:18  error  An interface declaring no members is equivalent to its supertype  @typescript-eslint/no-empty-object-type
+
+/home/ubuntu/haber-nexus/hooks/use-notification-session-refresh.ts
+  18:62  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/lib/ai/advanced-processor.ts
+  2:10  warning  'analyzeImage' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubuntu/haber-nexus/lib/ai/content-generator.ts
+    2:10  warning  'analyzeSentiment' is defined but never used  @typescript-eslint/no-unused-vars
+  205:49  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/lib/ai/moderation.ts
+  156:12  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+  226:37  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/lib/ai/trends.ts
+  124:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  293:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  304:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  304:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  383:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/lib/dashboard-utils.ts
+   15:9  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  221:9  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/lib/recommendations/content-recommender.ts
+    9:12  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  145:64  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  202:12  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubuntu/haber-nexus/scripts/test-ai-features.ts
+  88:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 160 problems (76 errors, 84 warnings)
+
+ ELIFECYCLE  Command failed with exit code 1.

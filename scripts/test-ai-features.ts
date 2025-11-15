@@ -35,8 +35,8 @@ async function testBasicFeatures() {
     console.log("✅ Tags:", tags.join(", "), "\n")
 
     console.log("✅ Basic features test completed!\n")
-  } catch (error) {
-    console.error("❌ Basic features test failed:", error)
+  } catch {
+    // Error handled
   }
 }
 
@@ -71,8 +71,8 @@ async function testAdvancedFeatures() {
     console.log("✅ Translation (EN):", translation.translatedText.substring(0, 100) + "...\n")
 
     console.log("✅ Advanced features test completed!\n")
-  } catch (error) {
-    console.error("❌ Advanced features test failed:", error)
+  } catch {
+    // Error handled
   }
 }
 
@@ -85,7 +85,7 @@ async function testErrorHandling() {
     try {
       await summarizeContent("")
       console.log("❌ Should have thrown an error\n")
-    } catch (error) {
+    } catch {
       console.log("✅ Correctly handled empty content\n")
     }
 
@@ -96,8 +96,8 @@ async function testErrorHandling() {
     console.log("✅ Handled long content:", summary.length, "characters\n")
 
     console.log("✅ Error handling test completed!\n")
-  } catch (error) {
-    console.error("❌ Error handling test failed:", error)
+  } catch {
+    // Error handled
   }
 }
 

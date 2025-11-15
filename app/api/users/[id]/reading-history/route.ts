@@ -102,7 +102,7 @@ export async function GET(
         totalPages: Math.ceil(total / limit),
       },
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching reading history:", error)
     return NextResponse.json(
       { error: "Okuma geçmişi alınırken bir hata oluştu" },
@@ -186,7 +186,7 @@ export async function POST(
       success: true,
       readingHistory,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error saving reading history:", error)
     return NextResponse.json(
       { error: "Okuma kaydı eklenirken bir hata oluştu" },

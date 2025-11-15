@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({ liked: true })
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error toggling like:", error)
     return NextResponse.json(
       { error: "Failed to toggle like" },
@@ -113,7 +113,7 @@ export async function GET(request: NextRequest) {
     })
 
     return NextResponse.json({ liked: !!like })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error checking like:", error)
     return NextResponse.json(
       { error: "Failed to check like" },
@@ -177,7 +177,7 @@ export async function DELETE(request: NextRequest) {
     })
 
     return NextResponse.json({ success: true, liked: false })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error deleting like:", error)
     return NextResponse.json(
       { error: "Failed to delete like" },

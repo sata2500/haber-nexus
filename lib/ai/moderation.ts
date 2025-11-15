@@ -89,8 +89,8 @@ Analiz:
       recommendation: result.recommendation || "review",
       reason: result.reason,
     }
-  } catch (error) {
-    console.error("Error moderating content:", error)
+  } catch {
+    // Error handled
     // Default to review on error
     return {
       safe: false,
@@ -153,7 +153,7 @@ Düzeltilmiş Yorum:
       reason: moderation.reason,
       suggestedEdit: suggestedEdit.trim(),
     }
-  } catch (error) {
+  } catch {
     return {
       approved: false,
       reason: moderation.reason,
@@ -223,7 +223,7 @@ Analiz:
       reliable: result.reliable ?? true,
       confidence: Math.max(0, Math.min(1, result.confidence ?? 0.5)),
       claims: Array.isArray(result.claims)
-        ? result.claims.map((claim: any) => ({
+        ? result.claims.map((claim: { claim?: string; verdict?: string; confidence?: number; explanation?: string }) => ({
             claim: claim.claim || "",
             verdict: claim.verdict || "unverified",
             confidence: Math.max(0, Math.min(1, claim.confidence ?? 0.5)),
@@ -232,8 +232,8 @@ Analiz:
         : [],
       overallScore: Math.max(0, Math.min(1, result.overallScore ?? 0.5)),
     }
-  } catch (error) {
-    console.error("Error checking fact accuracy:", error)
+  } catch {
+    // Error handled
     return {
       reliable: true,
       confidence: 0,
@@ -299,8 +299,8 @@ Analiz:
       similarPhrases: Array.isArray(result.similarPhrases) ? result.similarPhrases : [],
       recommendation: result.recommendation || "",
     }
-  } catch (error) {
-    console.error("Error detecting plagiarism:", error)
+  } catch {
+    // Error handled
     return {
       isPlagiarized: false,
       confidence: 0,

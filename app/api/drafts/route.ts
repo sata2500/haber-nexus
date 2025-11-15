@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
         totalPages: Math.ceil(total / limit)
       }
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Drafts list error:", error)
     return NextResponse.json(
       { error: "Failed to fetch drafts" },
@@ -138,7 +138,7 @@ export async function POST(request: NextRequest) {
       success: true,
       draft: newDraft
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Draft creation error:", error)
     return NextResponse.json(
       { error: "Failed to create draft" },

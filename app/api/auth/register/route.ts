@@ -58,7 +58,7 @@ export async function POST(request: Request) {
       { status: 201 }
     )
     
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: error.issues[0].message },

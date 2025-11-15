@@ -5,14 +5,15 @@ import {
   Settings, 
   User, 
   Crown,
-  LayoutDashboard 
+  LayoutDashboard,
+  LucideIcon
 } from "lucide-react"
 
 export interface Dashboard {
   id: string
   label: string
   href: string
-  icon: any
+  icon: LucideIcon
   description: string
   color: string
   gradient: string
@@ -218,7 +219,7 @@ export function getRoleDescription(role: UserRole): string {
 export interface DashboardStats {
   label: string
   value: number | string
-  icon: any
+  icon: LucideIcon
   color: string
 }
 

@@ -83,7 +83,7 @@ export async function POST(
       updatedCount: result.count,
       message: `${result.count} makale için yazar ataması yapıldı`,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error assigning author:", error)
     return NextResponse.json(
       { error: "Failed to assign author" },

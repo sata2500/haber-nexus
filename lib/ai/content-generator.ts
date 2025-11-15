@@ -202,7 +202,7 @@ Sadece JSON yanıtı ver, başka açıklama ekleme.
     
     return {
       summary: research.summary || "",
-      sources: (research.sources || []).map((s: any) => ({
+      sources: (research.sources || []).map((s: { title?: string; url?: string; excerpt?: string; reliability?: number }) => ({
         title: s.title || "",
         url: s.url || "",
         excerpt: s.excerpt || "",

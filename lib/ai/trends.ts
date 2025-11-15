@@ -121,7 +121,7 @@ Analiz:
 
     return {
       topics: Array.isArray(result.topics)
-        ? result.topics.map((topic: any) => ({
+        ? result.topics.map((topic: { name?: string; count?: number; trend?: string; score?: number; relatedTags?: string[] }) => ({
             name: topic.name || "",
             count: topic.count || 0,
             trend: topic.trend || "stable",
@@ -289,8 +289,11 @@ Sadece JSON yanıtı ver, başka açıklama ekleme.
       throw new Error("Invalid recommendations format")
     }
 
-    const recommendations = result.recommendations
-      .map((rec: any) => {
+    type Recommendation = { articleId: string; score: number; reason: string }
+    
+    const recommendations: Recommendation[] = result.recommendations
+      .map((rec: { index?: number; score?: number; reason?: string }): Recommendation | null => {
+        if (!rec.index) return null
         const article = candidates[rec.index - 1]
         if (!article) return null
 
@@ -300,8 +303,8 @@ Sadece JSON yanıtı ver, başka açıklama ekleme.
           reason: rec.reason || "Önerildi",
         }
       })
-      .filter(Boolean)
-      .sort((a: any, b: any) => b.score - a.score)
+      .filter((item: Recommendation | null): item is Recommendation => item !== null)
+      .sort((a: Recommendation, b: Recommendation) => b.score - a.score)
       .slice(0, limit)
 
     return recommendations
@@ -380,7 +383,7 @@ Sadece JSON yanıtı ver, başka açıklama ekleme.
       throw new Error("Invalid ideas format")
     }
 
-    return result.ideas.map((idea: any) => ({
+    return result.ideas.map((idea: { title?: string; description?: string; keywords?: string[]; estimatedInterest?: number }) => ({
       title: idea.title || "",
       description: idea.description || "",
       keywords: Array.isArray(idea.keywords) ? idea.keywords : [],
