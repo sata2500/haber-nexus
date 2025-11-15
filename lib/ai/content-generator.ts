@@ -365,8 +365,11 @@ ${content.substring(0, 1000)}...
  */
 async function calculateQualityScore(content: string): Promise<number> {
   try {
+    console.log("[Quality] Calculating quality score...")
     const moderation = await moderateContent(content)
+    console.log("[Quality] Moderation:", moderation.safe ? "safe" : "unsafe")
     const factCheck = await checkFactAccuracy(content)
+    console.log("[Quality] Fact check score:", factCheck.overallScore)
     
     let score = 0.5
     
@@ -397,9 +400,11 @@ async function calculateQualityScore(content: string): Promise<number> {
       score += 0.1
     }
     
-    return Math.max(0, Math.min(1, score))
+    const finalScore = Math.max(0, Math.min(1, score))
+    console.log("[Quality] Final quality score:", finalScore)
+    return finalScore
   } catch (error) {
-    console.error("Quality score calculation error:", error)
+    console.error("[Quality] Quality score calculation error:", error)
     return 0.5
   }
 }

@@ -118,10 +118,12 @@ export default function EditArticlePage() {
         .filter((kw) => kw.length > 0)
 
       let publishedAt = null
+      let scheduledAt = null
+      
       if (formData.status === "PUBLISHED") {
         publishedAt = new Date().toISOString()
       } else if (formData.status === "SCHEDULED" && formData.scheduledFor) {
-        publishedAt = new Date(formData.scheduledFor).toISOString()
+        scheduledAt = new Date(formData.scheduledFor).toISOString()
       }
 
       const response = await fetch(`/api/articles/${articleId}`, {
@@ -134,6 +136,7 @@ export default function EditArticlePage() {
           tags,
           keywords,
           publishedAt,
+          scheduledAt,
         }),
       })
 

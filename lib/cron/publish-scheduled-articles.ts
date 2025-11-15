@@ -12,7 +12,8 @@ export async function publishScheduledArticles() {
     const dueArticles = await prisma.article.findMany({
       where: {
         status: "SCHEDULED",
-        publishedAt: {
+        scheduledAt: {
+          not: null,
           lte: now
         }
       },
@@ -43,7 +44,8 @@ export async function publishScheduledArticles() {
         status: "SCHEDULED"
       },
       data: {
-        status: "PUBLISHED"
+        status: "PUBLISHED",
+        publishedAt: now
       }
     })
 
