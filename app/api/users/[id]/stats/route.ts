@@ -7,27 +7,18 @@ import { prisma } from "@/lib/prisma"
  * GET /api/users/[id]/stats
  * Kullanıcının genel istatistiklerini getirir
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
     const { id } = await params
 
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Oturum açmanız gerekiyor" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Oturum açmanız gerekiyor" }, { status: 401 })
     }
 
     // Kullanıcı sadece kendi istatistiklerini görebilir
     if (session.user.id !== id) {
-      return NextResponse.json(
-        { error: "Bu istatistikleri görme yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu istatistikleri görme yetkiniz yok" }, { status: 403 })
     }
 
     // Toplam beğeni sayısı
@@ -62,7 +53,7 @@ export async function GET(
 
     // Tamamlanan okuma sayısı
     const completedReads = await prisma.readingHistory.count({
-      where: { 
+      where: {
         userId: id,
         completed: true,
       },
@@ -144,9 +135,6 @@ export async function GET(
     })
   } catch (error: unknown) {
     console.error("Error fetching user stats:", error)
-    return NextResponse.json(
-      { error: "İstatistikler alınırken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "İstatistikler alınırken bir hata oluştu" }, { status: 500 })
   }
 }

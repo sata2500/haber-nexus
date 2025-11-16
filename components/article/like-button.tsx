@@ -77,7 +77,7 @@ export function LikeButton({
 
       const data = await response.json()
       setLiked(data.liked)
-      
+
       // Refresh to get accurate count from server
       setTimeout(() => {
         router.refresh()
@@ -110,27 +110,15 @@ export function LikeButton({
       disabled={loading}
       className={cn(
         "flex items-center gap-2 rounded-md transition-all",
-        "hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed",
-        liked
-          ? "text-red-600 dark:text-red-500"
-          : "text-muted-foreground hover:text-red-600",
+        "hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50",
+        liked ? "text-red-600 dark:text-red-500" : "text-muted-foreground hover:text-red-600",
         sizeClasses[size]
       )}
       aria-label={liked ? "Beğeniyi kaldır" : "Beğen"}
     >
-      <Heart
-        className={cn(
-          iconSizes[size],
-          "transition-all",
-          liked && "fill-current"
-        )}
-      />
+      <Heart className={cn(iconSizes[size], "transition-all", liked && "fill-current")} />
       {showLabel && <span className="font-medium">Beğen</span>}
-      {showCount && (
-        <span className={cn("font-semibold", liked && "text-red-600")}>
-          {count}
-        </span>
-      )}
+      {showCount && <span className={cn("font-semibold", liked && "text-red-600")}>{count}</span>}
     </button>
   )
 }

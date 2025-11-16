@@ -20,20 +20,14 @@ export async function POST(request: NextRequest) {
     // Check authentication
     const session = await getServerSession(authOptions)
     if (!session || !["ADMIN", "SUPER_ADMIN"].includes(session.user.role)) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const body = await request.json()
     const { action, content } = body
 
     if (!action || !content) {
-      return NextResponse.json(
-        { error: "Action and content are required" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Action and content are required" }, { status: 400 })
     }
 
     let result
@@ -68,10 +62,7 @@ export async function POST(request: NextRequest) {
         break
 
       default:
-        return NextResponse.json(
-          { error: "Invalid action" },
-          { status: 400 }
-        )
+        return NextResponse.json({ error: "Invalid action" }, { status: 400 })
     }
 
     return NextResponse.json({
@@ -81,9 +72,6 @@ export async function POST(request: NextRequest) {
     })
   } catch (error: unknown) {
     console.error("AI test error:", error)
-    return NextResponse.json(
-      { error: "Failed to process AI request" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to process AI request" }, { status: 500 })
   }
 }

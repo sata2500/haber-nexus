@@ -26,9 +26,9 @@ export function generateContentHash(content: string): string {
   const normalized = content
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s]/g, "")  // Remove punctuation
-    .replace(/\s+/g, " ")     // Normalize whitespace
-  
+    .replace(/[^\w\s]/g, "") // Remove punctuation
+    .replace(/\s+/g, " ") // Normalize whitespace
+
   // Generate SHA-256 hash
   return crypto.createHash("sha256").update(normalized, "utf8").digest("hex")
 }
@@ -43,7 +43,7 @@ export function generateTitleHash(title: string): string {
     .trim()
     .replace(/[^\w\s]/g, "")
     .replace(/\s+/g, " ")
-  
+
   return crypto.createHash("sha256").update(normalized, "utf8").digest("hex")
 }
 
@@ -59,7 +59,7 @@ export function calculateSimilarity(str1: string, str2: string): number {
       .split(/\s+/)
       .filter((w) => w.length > 2)
   )
-  
+
   const words2 = new Set(
     str2
       .toLowerCase()
@@ -126,7 +126,7 @@ export async function checkDuplicateByTitle(
 
     for (const article of recentArticles) {
       const similarity = calculateSimilarity(title, article.title)
-      
+
       // If similarity > 80%, consider it a duplicate
       if (similarity > 0.8) {
         return {
@@ -290,7 +290,9 @@ export async function checkDuplicate(
 /**
  * Add hash fields to article before saving
  */
-export function addHashFields<T extends { title: string; content: string }>(article: T): T & {
+export function addHashFields<T extends { title: string; content: string }>(
+  article: T
+): T & {
   titleHash: string
   contentHash: string
 } {

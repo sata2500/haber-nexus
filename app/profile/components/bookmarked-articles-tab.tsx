@@ -28,14 +28,10 @@ export function BookmarkedArticlesTab({ userId }: BookmarkedArticlesTabProps) {
         ...(searchQuery && { search: searchQuery }),
       })
 
-      const response = await fetch(
-        `/api/users/${userId}/bookmarked-articles?${params}`
-      )
+      const response = await fetch(`/api/users/${userId}/bookmarked-articles?${params}`)
       if (response.ok) {
         const data = await response.json()
-        setBookmarks((prev) =>
-          page === 1 ? data.bookmarks : [...prev, ...data.bookmarks]
-        )
+        setBookmarks((prev) => (page === 1 ? data.bookmarks : [...prev, ...data.bookmarks]))
         setHasMore(data.pagination.page < data.pagination.totalPages)
       }
     } catch (error) {
@@ -64,9 +60,7 @@ export function BookmarkedArticlesTab({ userId }: BookmarkedArticlesTabProps) {
       })
 
       if (response.ok) {
-        setBookmarks((prev) =>
-          prev.filter((bookmark) => bookmark.article.id !== articleId)
-        )
+        setBookmarks((prev) => prev.filter((bookmark) => bookmark.article.id !== articleId))
       }
     } catch (error) {
       console.error("Error unbookmarking article:", error)
@@ -76,7 +70,7 @@ export function BookmarkedArticlesTab({ userId }: BookmarkedArticlesTabProps) {
   if (loading && page === 1) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="text-primary h-8 w-8 animate-spin" />
       </div>
     )
   }
@@ -86,7 +80,7 @@ export function BookmarkedArticlesTab({ userId }: BookmarkedArticlesTabProps) {
       {/* Search */}
       <form onSubmit={handleSearch} className="flex gap-2">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             type="text"
             placeholder="Kayıtlı makalelerde ara..."
@@ -99,12 +93,10 @@ export function BookmarkedArticlesTab({ userId }: BookmarkedArticlesTabProps) {
       </form>
 
       {bookmarks.length === 0 ? (
-        <div className="text-center py-12">
-          <Bookmark className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-          <h3 className="text-lg font-semibold mb-2">
-            {searchQuery
-              ? "Arama sonucu bulunamadı"
-              : "Henüz kayıtlı makale yok"}
+        <div className="py-12 text-center">
+          <Bookmark className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
+          <h3 className="mb-2 text-lg font-semibold">
+            {searchQuery ? "Arama sonucu bulunamadı" : "Henüz kayıtlı makale yok"}
           </h3>
           <p className="text-muted-foreground">
             {searchQuery
@@ -129,11 +121,7 @@ export function BookmarkedArticlesTab({ userId }: BookmarkedArticlesTabProps) {
 
           {hasMore && (
             <div className="flex justify-center pt-4">
-              <Button
-                onClick={() => setPage((p) => p + 1)}
-                disabled={loading}
-                variant="outline"
-              >
+              <Button onClick={() => setPage((p) => p + 1)} disabled={loading} variant="outline">
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

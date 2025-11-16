@@ -4,7 +4,7 @@ import { NewProfileContent } from "./new-profile-content"
 
 /**
  * Profesyonel Profil Sayfası (Server Component)
- * 
+ *
  * Okuyucu rolündeki kullanıcılar için:
  * - Beğenilen içerikler
  * - Kaydedilen içerikler
@@ -17,7 +17,7 @@ import { NewProfileContent } from "./new-profile-content"
 
 export default async function ProfilePage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Header />
       <NewProfileContent />
       <Footer />

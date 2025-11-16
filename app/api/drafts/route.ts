@@ -32,7 +32,13 @@ export async function GET(request: NextRequest) {
     }
 
     if (status) {
-      where.status = status as "DRAFT" | "RESEARCHING" | "GENERATING" | "REVIEW" | "APPROVED" | "PUBLISHED"
+      where.status = status as
+        | "DRAFT"
+        | "RESEARCHING"
+        | "GENERATING"
+        | "REVIEW"
+        | "APPROVED"
+        | "PUBLISHED"
     }
 
     // Get drafts
@@ -45,16 +51,16 @@ export async function GET(request: NextRequest) {
               id: true,
               name: true,
               email: true,
-              image: true
-            }
+              image: true,
+            },
           },
           article: {
             select: {
               id: true,
               title: true,
               slug: true,
-              status: true
-            }
+              status: true,
+            },
           },
           sources: {
             select: {
@@ -62,17 +68,17 @@ export async function GET(request: NextRequest) {
               title: true,
               url: true,
               reliability: true,
-              isUsed: true
-            }
-          }
+              isUsed: true,
+            },
+          },
         },
         orderBy: {
-          updatedAt: "desc"
+          updatedAt: "desc",
         },
         skip,
-        take: limit
+        take: limit,
       }),
-      prisma.contentDraft.count({ where })
+      prisma.contentDraft.count({ where }),
     ])
 
     return NextResponse.json({
@@ -82,15 +88,12 @@ export async function GET(request: NextRequest) {
         page,
         limit,
         total,
-        totalPages: Math.ceil(total / limit)
-      }
+        totalPages: Math.ceil(total / limit),
+      },
     })
   } catch (error: unknown) {
     console.error("Drafts list error:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch drafts" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to fetch drafts" }, { status: 500 })
   }
 }
 
@@ -123,7 +126,7 @@ export async function POST(request: NextRequest) {
         outline: outline || undefined,
         draft: draft || undefined,
         aiGenerated: aiGenerated || false,
-        status: "DRAFT"
+        status: "DRAFT",
       },
       include: {
         author: {
@@ -131,21 +134,18 @@ export async function POST(request: NextRequest) {
             id: true,
             name: true,
             email: true,
-            image: true
-          }
-        }
-      }
+            image: true,
+          },
+        },
+      },
     })
 
     return NextResponse.json({
       success: true,
-      draft: newDraft
+      draft: newDraft,
     })
   } catch (error: unknown) {
     console.error("Draft creation error:", error)
-    return NextResponse.json(
-      { error: "Failed to create draft" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to create draft" }, { status: 500 })
   }
 }

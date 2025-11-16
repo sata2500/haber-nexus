@@ -5,7 +5,16 @@ import { useSession } from "next-auth/react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ArrowLeft, Save, CheckCircle2, AlertCircle, User, Mail, Lock, Sparkles } from "lucide-react"
+import {
+  ArrowLeft,
+  Save,
+  CheckCircle2,
+  AlertCircle,
+  User,
+  Mail,
+  Lock,
+  Sparkles,
+} from "lucide-react"
 import Link from "next/link"
 import { InterestsSelector } from "@/components/profile/interests-selector"
 
@@ -23,35 +32,35 @@ export function EditClient({ initialData }: EditClientProps) {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState("")
-  
+
   // Load user settings including interests
   useEffect(() => {
     const loadSettings = async () => {
       try {
-        const response = await fetch('/api/users/me/settings')
+        const response = await fetch("/api/users/me/settings")
         if (response.ok) {
           const data = await response.json()
-          setFormData(prev => ({
+          setFormData((prev) => ({
             ...prev,
-            interests: data.interests || []
+            interests: data.interests || [],
           }))
         }
       } catch (err) {
-        console.error('Error loading settings:', err)
+        console.error("Error loading settings:", err)
       } finally {
         setSettingsLoaded(true)
       }
     }
     loadSettings()
   }, [])
-  
+
   const [formData, setFormData] = useState({
     name: initialData.name,
     username: initialData.username,
     bio: initialData.bio,
     interests: [] as string[],
   })
-  
+
   const [settingsLoaded, setSettingsLoaded] = useState(false)
 
   const [passwordData, setPasswordData] = useState({
@@ -114,7 +123,7 @@ export function EditClient({ initialData }: EditClientProps) {
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       setError("Yeni şifreler eşleşmiyor")
       return
@@ -162,7 +171,7 @@ export function EditClient({ initialData }: EditClientProps) {
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <div className="mx-auto max-w-3xl space-y-6">
       <div className="flex items-center gap-4">
         <Link href="/profile">
           <Button variant="ghost" size="sm">
@@ -172,9 +181,7 @@ export function EditClient({ initialData }: EditClientProps) {
         </Link>
         <div>
           <h1 className="text-3xl font-bold">Profil Düzenle</h1>
-          <p className="text-muted-foreground mt-1">
-            Hesap bilgilerinizi güncelleyin
-          </p>
+          <p className="text-muted-foreground mt-1">Hesap bilgilerinizi güncelleyin</p>
         </div>
       </div>
 
@@ -206,9 +213,7 @@ export function EditClient({ initialData }: EditClientProps) {
             <User className="h-5 w-5" />
             Profil Bilgileri
           </CardTitle>
-          <CardDescription>
-            Genel profil bilgilerinizi düzenleyin
-          </CardDescription>
+          <CardDescription>Genel profil bilgilerinizi düzenleyin</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -225,25 +230,19 @@ export function EditClient({ initialData }: EditClientProps) {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">
-                Kullanıcı Adı
-              </label>
+              <label className="text-sm font-medium">Kullanıcı Adı</label>
               <Input
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 placeholder="kullaniciadi"
               />
-              <p className="text-xs text-muted-foreground">
-                Benzersiz kullanıcı adınız
-              </p>
+              <p className="text-muted-foreground text-xs">Benzersiz kullanıcı adınız</p>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">
-                Biyografi
-              </label>
+              <label className="text-sm font-medium">Biyografi</label>
               <textarea
-                className="w-full min-h-[100px] px-3 py-2 border rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring"
+                className="focus:ring-ring min-h-[100px] w-full resize-none rounded-md border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
                 value={formData.bio}
                 onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                 placeholder="Kendiniz hakkında kısa bir açıklama..."
@@ -251,11 +250,11 @@ export function EditClient({ initialData }: EditClientProps) {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-primary" />
+              <label className="flex items-center gap-2 text-sm font-medium">
+                <Sparkles className="text-primary h-4 w-4" />
                 İlgi Alanları
               </label>
-              <p className="text-xs text-muted-foreground mb-3">
+              <p className="text-muted-foreground mb-3 text-xs">
                 İlgi alanlarınızı seçerek size özel içerik önerileri alabilirsiniz
               </p>
               {settingsLoaded ? (
@@ -264,15 +263,11 @@ export function EditClient({ initialData }: EditClientProps) {
                   onChange={(interests) => setFormData({ ...formData, interests })}
                 />
               ) : (
-                <div className="text-sm text-muted-foreground">Yükleniyor...</div>
+                <div className="text-muted-foreground text-sm">Yükleniyor...</div>
               )}
             </div>
 
-            <Button
-              type="submit"
-              disabled={loading || !formData.name}
-              className="gap-2"
-            >
+            <Button type="submit" disabled={loading || !formData.name} className="gap-2">
               <Save className="h-4 w-4" />
               {loading ? "Kaydediliyor..." : "Değişiklikleri Kaydet"}
             </Button>
@@ -286,14 +281,12 @@ export function EditClient({ initialData }: EditClientProps) {
             <Mail className="h-5 w-5" />
             Email Adresi
           </CardTitle>
-          <CardDescription>
-            Mevcut email adresiniz
-          </CardDescription>
+          <CardDescription>Mevcut email adresiniz</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="p-3 bg-muted rounded-lg">
+          <div className="bg-muted rounded-lg p-3">
             <p className="text-sm font-medium">{initialData.email}</p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-muted-foreground mt-1 text-xs">
               Email değiştirme özelliği yakında eklenecek
             </p>
           </div>
@@ -306,9 +299,7 @@ export function EditClient({ initialData }: EditClientProps) {
             <Lock className="h-5 w-5" />
             Şifre Değiştir
           </CardTitle>
-          <CardDescription>
-            Hesap güvenliğiniz için şifrenizi güncelleyin
-          </CardDescription>
+          <CardDescription>Hesap güvenliğiniz için şifrenizi güncelleyin</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handlePasswordChange} className="space-y-4">
@@ -319,7 +310,9 @@ export function EditClient({ initialData }: EditClientProps) {
               <Input
                 type="password"
                 value={passwordData.currentPassword}
-                onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                onChange={(e) =>
+                  setPasswordData({ ...passwordData, currentPassword: e.target.value })
+                }
                 placeholder="Mevcut şifreniz"
                 required
               />
@@ -345,7 +338,9 @@ export function EditClient({ initialData }: EditClientProps) {
               <Input
                 type="password"
                 value={passwordData.confirmPassword}
-                onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                onChange={(e) =>
+                  setPasswordData({ ...passwordData, confirmPassword: e.target.value })
+                }
                 placeholder="Yeni şifrenizi tekrar girin"
                 required
               />
@@ -353,7 +348,12 @@ export function EditClient({ initialData }: EditClientProps) {
 
             <Button
               type="submit"
-              disabled={loading || !passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword}
+              disabled={
+                loading ||
+                !passwordData.currentPassword ||
+                !passwordData.newPassword ||
+                !passwordData.confirmPassword
+              }
               variant="outline"
             >
               {loading ? "Değiştiriliyor..." : "Şifreyi Değiştir"}

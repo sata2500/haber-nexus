@@ -12,10 +12,7 @@ export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session || !["ADMIN", "EDITOR", "SUPER_ADMIN"].includes(session.user.role)) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const { searchParams } = new URL(request.url)
@@ -38,23 +35,17 @@ export async function GET(request: NextRequest) {
           },
         },
       },
-      orderBy: [
-        { priority: "desc" },
-        { name: "asc" },
-      ],
+      orderBy: [{ priority: "desc" }, { name: "asc" }],
     })
 
     return NextResponse.json(feeds, {
       headers: {
-        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
       },
     })
   } catch (error: unknown) {
     console.error("Error fetching RSS feeds:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch RSS feeds" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to fetch RSS feeds" }, { status: 500 })
   }
 }
 
@@ -66,10 +57,7 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session || !["ADMIN", "SUPER_ADMIN"].includes(session.user.role)) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const body = await request.json()
@@ -86,19 +74,13 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!name || !url) {
-      return NextResponse.json(
-        { error: "Name and URL are required" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Name and URL are required" }, { status: 400 })
     }
 
     // Validate RSS feed URL
     const validation = await validateRssFeed(url)
     if (!validation.valid) {
-      return NextResponse.json(
-        { error: `Invalid RSS feed: ${validation.error}` },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: `Invalid RSS feed: ${validation.error}` }, { status: 400 })
     }
 
     // Check if URL already exists
@@ -107,10 +89,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (existing) {
-      return NextResponse.json(
-        { error: "RSS feed with this URL already exists" },
-        { status: 409 }
-      )
+      return NextResponse.json({ error: "RSS feed with this URL already exists" }, { status: 409 })
     }
 
     // Create RSS feed
@@ -139,9 +118,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(feed, { status: 201 })
   } catch (error: unknown) {
     console.error("Error creating RSS feed:", error)
-    return NextResponse.json(
-      { error: "Failed to create RSS feed" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to create RSS feed" }, { status: 500 })
   }
 }

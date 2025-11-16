@@ -140,7 +140,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     notFound()
   }
 
-  const relatedArticles = article.categoryId 
+  const relatedArticles = article.categoryId
     ? await getRelatedArticles(article.categoryId, article.id)
     : []
 
@@ -152,25 +152,27 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const estimatedReadTime = Math.ceil(wordCount / 200) // 200 words per minute
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <ReadingProgressBar />
-      <ReadingTracker
-        articleId={article.id}
-        estimatedReadTime={estimatedReadTime}
-      />
+      <ReadingTracker articleId={article.id} estimatedReadTime={estimatedReadTime} />
       <Header />
-      
+
       <main className="flex-1">
         {/* Article Header */}
         <article className="container py-8">
-          <div className="max-w-4xl mx-auto">
+          <div className="mx-auto max-w-4xl">
             {/* Breadcrumb */}
-            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-              <Link href="/" className="hover:text-primary">Ana Sayfa</Link>
+            <div className="text-muted-foreground mb-6 flex items-center gap-2 text-sm">
+              <Link href="/" className="hover:text-primary">
+                Ana Sayfa
+              </Link>
               {article.category && (
                 <>
                   <span>/</span>
-                  <Link href={`/categories/${article.category.slug}`} className="hover:text-primary">
+                  <Link
+                    href={`/categories/${article.category.slug}`}
+                    className="hover:text-primary"
+                  >
                     {article.category.name}
                   </Link>
                 </>
@@ -180,7 +182,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </div>
 
             {/* Category & Type */}
-            <div className="flex items-center gap-2 mb-4">
+            <div className="mb-4 flex items-center gap-2">
               {article.category && (
                 <Badge variant="default">
                   {article.category.icon} {article.category.name}
@@ -193,19 +195,15 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </div>
 
             {/* Title */}
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-              {article.title}
-            </h1>
+            <h1 className="mb-4 text-4xl leading-tight font-bold md:text-5xl">{article.title}</h1>
 
             {/* Excerpt */}
             {article.excerpt && (
-              <p className="text-xl text-muted-foreground mb-6">
-                {article.excerpt}
-              </p>
+              <p className="text-muted-foreground mb-6 text-xl">{article.excerpt}</p>
             )}
 
             {/* Meta Info */}
-            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-8 pb-8 border-b">
+            <div className="text-muted-foreground mb-8 flex flex-wrap items-center gap-4 border-b pb-8 text-sm">
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4" />
                 <span>{article.author.name || article.author.email}</span>
@@ -226,7 +224,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
             {/* Cover Image */}
             {article.coverImage && (
-              <div className="mb-8 rounded-lg overflow-hidden relative aspect-video">
+              <div className="relative mb-8 aspect-video overflow-hidden rounded-lg">
                 <Image
                   src={article.coverImage}
                   alt={article.title}
@@ -245,7 +243,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             {/* Tags */}
             {article.tags.length > 0 && (
               <div className="mb-8">
-                <h3 className="text-sm font-medium mb-3">Etiketler:</h3>
+                <h3 className="mb-3 text-sm font-medium">Etiketler:</h3>
                 <div className="flex flex-wrap gap-2">
                   {article.tags.map((tag) => (
                     <Badge key={tag.id} variant="secondary">
@@ -257,7 +255,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             )}
 
             {/* Social Actions */}
-            <div className="py-6 border-y">
+            <div className="border-y py-6">
               <ArticleActions
                 articleId={article.id}
                 articleTitle={article.title}
@@ -272,7 +270,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     {article.author.image && (
-                      <div className="relative w-16 h-16 shrink-0">
+                      <div className="relative h-16 w-16 shrink-0">
                         <Image
                           src={article.author.image}
                           alt={article.author.name || ""}
@@ -282,12 +280,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                       </div>
                     )}
                     <div>
-                      <h3 className="font-semibold mb-1">
-                        {article.author.name}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {article.author.bio}
-                      </p>
+                      <h3 className="mb-1 font-semibold">{article.author.name}</h3>
+                      <p className="text-muted-foreground text-sm">{article.author.bio}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -295,10 +289,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             )}
 
             {/* Comments Section */}
-            <CommentSection
-              articleId={article.id}
-              initialCommentCount={article._count.comments}
-            />
+            <CommentSection articleId={article.id} initialCommentCount={article._count.comments} />
           </div>
         </article>
 
@@ -306,18 +297,18 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         {relatedArticles.length > 0 && (
           <section className="bg-muted/50 py-12">
             <div className="container">
-              <div className="max-w-4xl mx-auto">
-                <h2 className="text-2xl font-bold mb-6">İlgili Haberler</h2>
-                <div className="grid md:grid-cols-3 gap-6">
+              <div className="mx-auto max-w-4xl">
+                <h2 className="mb-6 text-2xl font-bold">İlgili Haberler</h2>
+                <div className="grid gap-6 md:grid-cols-3">
                   {relatedArticles.map((related) => (
-                    <Card key={related.id} className="hover:shadow-md transition-shadow">
+                    <Card key={related.id} className="transition-shadow hover:shadow-md">
                       <CardContent className="pt-6">
                         {related.category && (
                           <Badge variant="secondary" className="mb-2">
                             {related.category.name}
                           </Badge>
                         )}
-                        <h3 className="font-semibold mb-2 line-clamp-2">
+                        <h3 className="mb-2 line-clamp-2 font-semibold">
                           <a
                             href={`/articles/${related.slug}`}
                             className="hover:text-primary transition-colors"
@@ -326,7 +317,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                           </a>
                         </h3>
                         {related.excerpt && (
-                          <p className="text-sm text-muted-foreground line-clamp-2">
+                          <p className="text-muted-foreground line-clamp-2 text-sm">
                             {related.excerpt}
                           </p>
                         )}

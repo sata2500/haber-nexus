@@ -65,7 +65,9 @@ class ApiKeyCache {
   constructor() {
     this.keys = loadApiKeysFromEnv()
     if (this.keys.length === 0) {
-      throw new Error("No Google API keys configured. Please set GOOGLE_API_KEY or GOOGLE_API_KEY_1, GOOGLE_API_KEY_2, etc.")
+      throw new Error(
+        "No Google API keys configured. Please set GOOGLE_API_KEY or GOOGLE_API_KEY_1, GOOGLE_API_KEY_2, etc."
+      )
     }
     console.error(`[API Key Manager] Loaded ${this.keys.length} API key(s)`)
   }
@@ -102,9 +104,7 @@ class ApiKeyCache {
     this.resetDailyUsageIfNeeded()
 
     // Find first available key (under daily limit)
-    const availableKeys = this.keys.filter(
-      (k) => k.isActive && k.usageCount < k.dailyLimit
-    )
+    const availableKeys = this.keys.filter((k) => k.isActive && k.usageCount < k.dailyLimit)
 
     if (availableKeys.length === 0) {
       console.error(

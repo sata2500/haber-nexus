@@ -1,4 +1,3 @@
- 
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
@@ -117,10 +116,11 @@ export default function AdminCommentsPage() {
       if (filter === "pending") return !comment.approved
       return true
     })
-    .filter((comment) =>
-      comment.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      comment.user.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      comment.article.title.toLowerCase().includes(searchQuery.toLowerCase())
+    .filter(
+      (comment) =>
+        comment.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        comment.user.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        comment.article.title.toLowerCase().includes(searchQuery.toLowerCase())
     )
 
   return (
@@ -140,7 +140,7 @@ export default function AdminCommentsPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
             <Input
               placeholder="Yorum içeriği, kullanıcı veya makale ile ara..."
               value={searchQuery}
@@ -148,7 +148,7 @@ export default function AdminCommentsPage() {
               className="pl-10"
             />
           </div>
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex flex-wrap gap-2">
             <Button
               variant={filter === "all" ? "default" : "outline"}
               size="sm"
@@ -175,13 +175,13 @@ export default function AdminCommentsPage() {
       </Card>
 
       {loading ? (
-        <div className="text-center py-12">
+        <div className="py-12 text-center">
           <p className="text-muted-foreground">Yükleniyor...</p>
         </div>
       ) : filteredComments.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <MessageSquare className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+            <MessageSquare className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
             <p className="text-muted-foreground">
               {searchQuery ? "Arama kriterlerine uygun yorum bulunamadı" : "Henüz yorum yok"}
             </p>
@@ -194,13 +194,13 @@ export default function AdminCommentsPage() {
               <CardHeader>
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="mb-2 flex items-center gap-2">
                       <Badge variant={comment.approved ? "default" : "secondary"}>
                         {comment.approved ? "Onaylı" : "Onay Bekliyor"}
                       </Badge>
                     </div>
-                    <p className="text-sm mb-3">{comment.content}</p>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
+                    <p className="mb-3 text-sm">{comment.content}</p>
+                    <div className="text-muted-foreground flex flex-wrap items-center gap-4 text-sm">
                       <span className="flex items-center gap-1">
                         <User className="h-3 w-3" />
                         {comment.user.name || comment.user.email}
@@ -219,28 +219,16 @@ export default function AdminCommentsPage() {
                   </div>
                   <div className="flex gap-2">
                     {!comment.approved && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleApprove(comment.id)}
-                      >
+                      <Button variant="outline" size="sm" onClick={() => handleApprove(comment.id)}>
                         <CheckCircle className="h-4 w-4" />
                       </Button>
                     )}
                     {comment.approved && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleReject(comment.id)}
-                      >
+                      <Button variant="outline" size="sm" onClick={() => handleReject(comment.id)}>
                         <XCircle className="h-4 w-4" />
                       </Button>
                     )}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDelete(comment.id)}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => handleDelete(comment.id)}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -255,7 +243,7 @@ export default function AdminCommentsPage() {
         <CardHeader>
           <CardTitle className="text-base">Yorum Moderasyonu</CardTitle>
         </CardHeader>
-        <CardContent className="text-sm text-muted-foreground space-y-2">
+        <CardContent className="text-muted-foreground space-y-2 text-sm">
           <p>
             <strong>Onaylama:</strong> Yorumu onayladığınızda makale sayfasında görünür hale gelir.
           </p>

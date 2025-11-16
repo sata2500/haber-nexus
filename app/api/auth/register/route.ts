@@ -12,27 +12,24 @@ const registerSchema = z.object({
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    
+
     // Validate input
     const validatedData = registerSchema.parse(body)
-    
+
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: {
-        email: validatedData.email
-      }
+        email: validatedData.email,
+      },
     })
-    
+
     if (existingUser) {
-      return NextResponse.json(
-        { error: "Bu email adresi zaten kullanılıyor" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Bu email adresi zaten kullanılıyor" }, { status: 400 })
     }
-    
+
     // Hash password
     const hashedPassword = await bcrypt.hash(validatedData.password, 10)
-    
+
     // Create user
     const user = await prisma.user.create({
       data: {
@@ -47,29 +44,22 @@ export async function POST(request: Request) {
         email: true,
         role: true,
         createdAt: true,
-      }
+      },
     })
-    
+
     return NextResponse.json(
-      { 
+      {
         message: "Kayıt başarılı! Şimdi giriş yapabilirsiniz.",
-        user 
+        user,
       },
       { status: 201 }
     )
-    
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: error.issues[0].message },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: error.issues[0].message }, { status: 400 })
     }
-    
+
     console.error("Registration error:", error)
-    return NextResponse.json(
-      { error: "Kayıt sırasında bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Kayıt sırasında bir hata oluştu" }, { status: 500 })
   }
 }

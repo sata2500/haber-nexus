@@ -30,18 +30,18 @@ export function DashboardWelcome() {
   }
 
   return (
-    <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
+    <Card className="border-primary/20 from-primary/5 to-primary/10 border-2 bg-gradient-to-br">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className={`p-3 rounded-lg bg-background border-2 ${dashboardInfo.primary.color}`}>
+            <div className={`bg-background rounded-lg border-2 p-3 ${dashboardInfo.primary.color}`}>
               <Icon className="h-6 w-6" />
             </div>
             <div>
               <CardTitle className="text-xl">
                 Hoş Geldiniz, {session.user.name || "Kullanıcı"}!
               </CardTitle>
-              <div className="flex items-center gap-2 mt-1">
+              <div className="mt-1 flex items-center gap-2">
                 <Badge variant={ROLE_COLORS[userRole] as any} className="text-xs">
                   {ROLE_LABELS[userRole]}
                 </Badge>
@@ -51,26 +51,17 @@ export function DashboardWelcome() {
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        <CardDescription className="text-base">
-          {roleDescription}
-        </CardDescription>
-        
-        <div className="flex flex-col sm:flex-row gap-3">
-          <Button 
-            onClick={() => router.push(dashboardInfo.primary.href)}
-            className="gap-2"
-          >
+        <CardDescription className="text-base">{roleDescription}</CardDescription>
+
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Button onClick={() => router.push(dashboardInfo.primary.href)} className="gap-2">
             <Icon className="h-4 w-4" />
             {dashboardInfo.primary.label}
             <ArrowRight className="h-4 w-4" />
           </Button>
-          
+
           {dashboardInfo.accessible.length > 1 && (
-            <Button 
-              variant="outline"
-              onClick={() => router.push("/profile")}
-              className="gap-2"
-            >
+            <Button variant="outline" onClick={() => router.push("/profile")} className="gap-2">
               Tüm Dashboard&apos;lar
               <ArrowRight className="h-4 w-4" />
             </Button>
@@ -78,13 +69,13 @@ export function DashboardWelcome() {
         </div>
 
         {dashboardInfo.accessible.length > 1 && (
-          <div className="pt-2 border-t">
-            <p className="text-xs text-muted-foreground mb-2">
+          <div className="border-t pt-2">
+            <p className="text-muted-foreground mb-2 text-xs">
               Erişebildiğiniz diğer dashboard&apos;lar:
             </p>
             <div className="flex flex-wrap gap-2">
               {dashboardInfo.accessible
-                .filter(d => d.href !== dashboardInfo.primary.href)
+                .filter((d) => d.href !== dashboardInfo.primary.href)
                 .map((dashboard) => {
                   const DashIcon = dashboard.icon
                   return (

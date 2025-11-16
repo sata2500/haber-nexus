@@ -8,20 +8,20 @@ Açık ve samimi bir ortam sağlamak amacıyla, katkıda bulunanlar ve sürdüre
 
 Olumlu bir ortam yaratmaya katkıda bulunan davranışlara örnekler:
 
-*   Hoşgörülü ve kapsayıcı bir dil kullanmak
-*   Farklı bakış açılarına ve deneyimlere saygılı olmak
-*   Yapıcı eleştirileri nazikçe kabul etmek
-*   Topluluk için en iyi olana odaklanmak
-*   Diğer topluluk üyelerine empati göstermek
+- Hoşgörülü ve kapsayıcı bir dil kullanmak
+- Farklı bakış açılarına ve deneyimlere saygılı olmak
+- Yapıcı eleştirileri nazikçe kabul etmek
+- Topluluk için en iyi olana odaklanmak
+- Diğer topluluk üyelerine empati göstermek
 
 Kabul edilemez davranışlara örnekler:
 
-*   Cinsiyetçi, ırkçı veya dışlayıcı dil veya görsellerin kullanılması
-*   İstenmeyen cinsel ilgi veya yaklaşımlar
-*   Trollemek, hakaret edici/aşağılayıcı yorumlar ve kişisel veya politik saldırılar
-*   Her türlü taciz
-*   Başkalarının özel bilgilerini, örneğin fiziksel veya elektronik adreslerini, açık izinleri olmadan yayınlamak
-*   Profesyonel bir ortamda makul olarak uygunsuz kabul edilebilecek diğer davranışlar
+- Cinsiyetçi, ırkçı veya dışlayıcı dil veya görsellerin kullanılması
+- İstenmeyen cinsel ilgi veya yaklaşımlar
+- Trollemek, hakaret edici/aşağılayıcı yorumlar ve kişisel veya politik saldırılar
+- Her türlü taciz
+- Başkalarının özel bilgilerini, örneğin fiziksel veya elektronik adreslerini, açık izinleri olmadan yayınlamak
+- Profesyonel bir ortamda makul olarak uygunsuz kabul edilebilecek diğer davranışlar
 
 ## Sorumluluklarımız
 

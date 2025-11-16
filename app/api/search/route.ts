@@ -125,9 +125,6 @@ export async function GET(request: NextRequest) {
     })
   } catch (error: unknown) {
     console.error("Error searching:", error)
-    return NextResponse.json(
-      { error: "Arama sırasında bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Arama sırasında bir hata oluştu" }, { status: 500 })
   }
 }

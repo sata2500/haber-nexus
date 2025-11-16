@@ -11,20 +11,14 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const body = await request.json()
     const { articleId } = body
 
     if (!articleId) {
-      return NextResponse.json(
-        { error: "Article ID is required" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Article ID is required" }, { status: 400 })
     }
 
     // Check if already bookmarked
@@ -59,10 +53,7 @@ export async function POST(request: NextRequest) {
     }
   } catch (error: unknown) {
     console.error("Error toggling bookmark:", error)
-    return NextResponse.json(
-      { error: "Failed to toggle bookmark" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to toggle bookmark" }, { status: 500 })
   }
 }
 
@@ -130,13 +121,10 @@ export async function GET(request: NextRequest) {
       },
     })
 
-    return NextResponse.json(bookmarks.map(b => b.article))
+    return NextResponse.json(bookmarks.map((b) => b.article))
   } catch (error: unknown) {
     console.error("Error fetching bookmarks:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch bookmarks" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to fetch bookmarks" }, { status: 500 })
   }
 }
 
@@ -148,20 +136,14 @@ export async function DELETE(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const { searchParams } = new URL(request.url)
     const articleId = searchParams.get("articleId")
 
     if (!articleId) {
-      return NextResponse.json(
-        { error: "Article ID is required" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Article ID is required" }, { status: 400 })
     }
 
     const existingBookmark = await prisma.bookmark.findUnique({
@@ -174,10 +156,7 @@ export async function DELETE(request: NextRequest) {
     })
 
     if (!existingBookmark) {
-      return NextResponse.json(
-        { error: "Bookmark not found" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "Bookmark not found" }, { status: 404 })
     }
 
     await prisma.bookmark.delete({
@@ -189,9 +168,6 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ success: true, bookmarked: false })
   } catch (error: unknown) {
     console.error("Error deleting bookmark:", error)
-    return NextResponse.json(
-      { error: "Failed to delete bookmark" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to delete bookmark" }, { status: 500 })
   }
 }

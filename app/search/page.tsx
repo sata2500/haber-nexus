@@ -5,15 +5,17 @@ import SearchContent from "./search-content"
 
 export default function SearchPage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Header />
-      
-      <main className="flex-1 container py-12">
-        <Suspense fallback={
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">Yükleniyor...</p>
-          </div>
-        }>
+
+      <main className="container flex-1 py-12">
+        <Suspense
+          fallback={
+            <div className="py-12 text-center">
+              <p className="text-muted-foreground">Yükleniyor...</p>
+            </div>
+          }
+        >
           <SearchContent />
         </Suspense>
       </main>

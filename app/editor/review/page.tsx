@@ -1,4 +1,3 @@
- 
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
@@ -48,10 +47,11 @@ export default function EditorReviewPage() {
     fetchArticles()
   }, [fetchArticles])
 
-  const filteredArticles = articles.filter((article) =>
-    article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    article.author.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    article.author.email.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredArticles = articles.filter(
+    (article) =>
+      article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.author.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.author.email.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   const getQualityBadge = (score: number | null) => {
@@ -78,7 +78,7 @@ export default function EditorReviewPage() {
         </CardHeader>
         <CardContent>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
             <Input
               placeholder="Makale başlığı veya yazar adı ile ara..."
               value={searchQuery}
@@ -90,15 +90,17 @@ export default function EditorReviewPage() {
       </Card>
 
       {loading ? (
-        <div className="text-center py-12">
+        <div className="py-12 text-center">
           <p className="text-muted-foreground">Yükleniyor...</p>
         </div>
       ) : filteredArticles.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <FileCheck className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+            <FileCheck className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
             <p className="text-muted-foreground">
-              {searchQuery ? "Arama kriterlerine uygun makale bulunamadı" : "Onay bekleyen makale yok"}
+              {searchQuery
+                ? "Arama kriterlerine uygun makale bulunamadı"
+                : "Onay bekleyen makale yok"}
             </p>
           </CardContent>
         </Card>
@@ -109,7 +111,7 @@ export default function EditorReviewPage() {
               <CardHeader>
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2 flex-wrap">
+                    <div className="mb-2 flex flex-wrap items-center gap-2">
                       <CardTitle className="text-lg">{article.title}</CardTitle>
                       {article.aiGenerated && (
                         <Badge variant="outline" className="text-xs">
@@ -119,17 +121,17 @@ export default function EditorReviewPage() {
                       {getQualityBadge(article.qualityScore)}
                     </div>
                     {article.excerpt && (
-                      <CardDescription className="line-clamp-2 mb-3">
+                      <CardDescription className="mb-3 line-clamp-2">
                         {article.excerpt}
                       </CardDescription>
                     )}
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
+                    <div className="text-muted-foreground flex flex-wrap items-center gap-4 text-sm">
                       <span className="flex items-center gap-1">
                         <User className="h-3 w-3" />
                         {article.author.name || article.author.email}
                       </span>
                       {article.category && (
-                        <span className="px-2 py-0.5 bg-secondary rounded text-xs">
+                        <span className="bg-secondary rounded px-2 py-0.5 text-xs">
                           {article.category.name}
                         </span>
                       )}

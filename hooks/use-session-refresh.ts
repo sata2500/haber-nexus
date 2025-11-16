@@ -5,10 +5,10 @@ import { useEffect, useRef } from "react"
 
 /**
  * Session Yenileme Hook'u
- * 
+ *
  * Bu hook, kullanıcının session'ını belirli aralıklarla otomatik olarak yeniler.
  * Rol değişiklikleri gibi veritabanı güncellemelerinin session'a yansıması için kullanılır.
- * 
+ *
  * @param intervalMs - Yenileme aralığı (milisaniye, varsayılan: 60000 = 1 dakika)
  */
 export function useSessionRefresh(intervalMs: number = 60000) {
@@ -39,7 +39,7 @@ export function useSessionRefresh(intervalMs: number = 60000) {
 
 /**
  * Manuel Session Yenileme Hook'u
- * 
+ *
  * Bu hook, session'ı manuel olarak yenilemek için bir fonksiyon döndürür.
  * Örneğin, kullanıcı profilini güncelledikten sonra kullanılabilir.
  */

@@ -94,21 +94,11 @@ async function testApiKeyManager() {
 
   // Summary
   console.log("\n📊 Summary:")
-  console.log(
-    `- Total API Keys Configured: ${initialStats.totalKeys}`
-  )
-  console.log(
-    `- Daily Limit per Key: 100 images`
-  )
-  console.log(
-    `- Total Daily Capacity: ${initialStats.totalLimit} images`
-  )
-  console.log(
-    `- Strategy: Round-robin rotation across all keys`
-  )
-  console.log(
-    `- Cost: $0 (Free Tier)`
-  )
+  console.log(`- Total API Keys Configured: ${initialStats.totalKeys}`)
+  console.log(`- Daily Limit per Key: 100 images`)
+  console.log(`- Total Daily Capacity: ${initialStats.totalLimit} images`)
+  console.log(`- Strategy: Round-robin rotation across all keys`)
+  console.log(`- Cost: $0 (Free Tier)`)
 }
 
 testApiKeyManager()

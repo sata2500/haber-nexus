@@ -47,7 +47,7 @@ export async function getPersonalizedRecommendations(
     // Get user settings with interests
     const settings = await prisma.userSettings.findUnique({
       where: { userId },
-      select: { interests: true }
+      select: { interests: true },
     })
 
     // If no interests, return popular articles
@@ -55,7 +55,7 @@ export async function getPersonalizedRecommendations(
       return await getPopularArticles(limit)
     }
 
-    const userInterests = settings.interests.map(i => i.toLowerCase())
+    const userInterests = settings.interests.map((i) => i.toLowerCase())
 
     // Get articles matching user interests
     const articles = await prisma.article.findMany({
@@ -67,9 +67,9 @@ export async function getPersonalizedRecommendations(
             category: {
               name: {
                 in: settings.interests,
-                mode: "insensitive"
-              }
-            }
+                mode: "insensitive",
+              },
+            },
           },
           // Match tags
           {
@@ -77,12 +77,12 @@ export async function getPersonalizedRecommendations(
               some: {
                 name: {
                   in: settings.interests,
-                  mode: "insensitive"
-                }
-              }
-            }
+                  mode: "insensitive",
+                },
+              },
+            },
           },
-        ]
+        ],
       },
       include: {
         author: {
@@ -91,7 +91,7 @@ export async function getPersonalizedRecommendations(
             name: true,
             email: true,
             image: true,
-          }
+          },
         },
         category: {
           select: {
@@ -99,50 +99,49 @@ export async function getPersonalizedRecommendations(
             name: true,
             slug: true,
             icon: true,
-          }
+          },
         },
         tags: {
           select: {
             id: true,
             name: true,
             slug: true,
-          }
+          },
         },
         _count: {
           select: {
             likes: true,
             comments: true,
             bookmarks: true,
-          }
-        }
+          },
+        },
       },
-      orderBy: [
-        { publishedAt: "desc" },
-        { createdAt: "desc" },
-      ],
+      orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
       take: limit * 2, // Get more for scoring
     })
 
     // Score articles based on interest match
-    const scoredArticles = articles.map(article => {
+    const scoredArticles = articles.map((article) => {
       let score = 0
-      
+
       // Category match
       if (article.category) {
         const categoryName = article.category.name.toLowerCase()
-        if (userInterests.some(interest => 
-          categoryName.includes(interest) || interest.includes(categoryName)
-        )) {
+        if (
+          userInterests.some(
+            (interest) => categoryName.includes(interest) || interest.includes(categoryName)
+          )
+        ) {
           score += 10
         }
       }
 
       // Tag matches
-      article.tags.forEach(tag => {
+      article.tags.forEach((tag) => {
         const tagName = tag.name.toLowerCase()
-        if (userInterests.some(interest => 
-          tagName.includes(interest) || interest.includes(tagName)
-        )) {
+        if (
+          userInterests.some((interest) => tagName.includes(interest) || interest.includes(tagName))
+        ) {
           score += 5
         }
       })
@@ -153,20 +152,20 @@ export async function getPersonalizedRecommendations(
       score += article._count.bookmarks * 0.7
 
       // Recency bonus (newer articles get higher score)
-      const daysOld = article.publishedAt 
+      const daysOld = article.publishedAt
         ? (Date.now() - new Date(article.publishedAt).getTime()) / (1000 * 60 * 60 * 24)
         : 999
       score += Math.max(0, 10 - daysOld)
 
       return {
         ...article,
-        _recommendationScore: score
+        _recommendationScore: score,
       }
     })
 
     // Sort by score and return top N
     scoredArticles.sort((a, b) => b._recommendationScore - a._recommendationScore)
-    
+
     return scoredArticles.slice(0, limit)
   } catch (error) {
     console.error("Error getting personalized recommendations:", error)
@@ -191,7 +190,7 @@ async function getPopularArticles(limit: number = 10): Promise<ArticleWithRelati
             name: true,
             email: true,
             image: true,
-          }
+          },
         },
         category: {
           select: {
@@ -199,26 +198,24 @@ async function getPopularArticles(limit: number = 10): Promise<ArticleWithRelati
             name: true,
             slug: true,
             icon: true,
-          }
+          },
         },
         tags: {
           select: {
             id: true,
             name: true,
             slug: true,
-          }
+          },
         },
         _count: {
           select: {
             likes: true,
             comments: true,
             bookmarks: true,
-          }
-        }
+          },
+        },
       },
-      orderBy: [
-        { publishedAt: "desc" },
-      ],
+      orderBy: [{ publishedAt: "desc" }],
       take: limit,
     })
 
@@ -239,6 +236,6 @@ export async function getHomepageRecommendations(
   if (userId) {
     return await getPersonalizedRecommendations(userId, limit)
   }
-  
+
   return await getPopularArticles(limit)
 }

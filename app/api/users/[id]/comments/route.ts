@@ -7,27 +7,18 @@ import { prisma } from "@/lib/prisma"
  * GET /api/users/[id]/comments
  * Kullanıcının yaptığı yorumları getirir
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
     const { id } = await params
 
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Oturum açmanız gerekiyor" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Oturum açmanız gerekiyor" }, { status: 401 })
     }
 
     // Kullanıcı sadece kendi yorumlarını görebilir
     if (session.user.id !== id) {
-      return NextResponse.json(
-        { error: "Bu yorumları görme yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu yorumları görme yetkiniz yok" }, { status: 403 })
     }
 
     const { searchParams } = new URL(request.url)
@@ -78,9 +69,7 @@ export async function GET(
     })
 
     // Sadece yayınlanmış makalelerdeki yorumları filtrele
-    const filteredComments = comments.filter(
-      (comment) => comment.article.status === "PUBLISHED"
-    )
+    const filteredComments = comments.filter((comment) => comment.article.status === "PUBLISHED")
 
     return NextResponse.json({
       comments: filteredComments.map((comment) => ({
@@ -108,9 +97,6 @@ export async function GET(
     })
   } catch (error: unknown) {
     console.error("Error fetching user comments:", error)
-    return NextResponse.json(
-      { error: "Yorumlar alınırken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Yorumlar alınırken bir hata oluştu" }, { status: 500 })
   }
 }

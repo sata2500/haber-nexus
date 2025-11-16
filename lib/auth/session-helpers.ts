@@ -6,11 +6,11 @@ import { authOptions } from "@/lib/auth"
  */
 export async function isPrivilegedUser(): Promise<boolean> {
   const session = await getServerSession(authOptions)
-  
+
   if (!session || !session.user) {
     return false
   }
-  
+
   const privilegedRoles = ["AUTHOR", "EDITOR", "ADMIN", "SUPER_ADMIN"]
   return privilegedRoles.includes(session.user.role)
 }

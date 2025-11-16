@@ -223,12 +223,19 @@ Analiz:
       reliable: result.reliable ?? true,
       confidence: Math.max(0, Math.min(1, result.confidence ?? 0.5)),
       claims: Array.isArray(result.claims)
-        ? result.claims.map((claim: { claim?: string; verdict?: string; confidence?: number; explanation?: string }) => ({
-            claim: claim.claim || "",
-            verdict: claim.verdict || "unverified",
-            confidence: Math.max(0, Math.min(1, claim.confidence ?? 0.5)),
-            explanation: claim.explanation || "",
-          }))
+        ? result.claims.map(
+            (claim: {
+              claim?: string
+              verdict?: string
+              confidence?: number
+              explanation?: string
+            }) => ({
+              claim: claim.claim || "",
+              verdict: claim.verdict || "unverified",
+              confidence: Math.max(0, Math.min(1, claim.confidence ?? 0.5)),
+              explanation: claim.explanation || "",
+            })
+          )
         : [],
       overallScore: Math.max(0, Math.min(1, result.overallScore ?? 0.5)),
     }

@@ -1,11 +1,7 @@
 /**
  * Generate a detailed image generation prompt for article cover
  */
-export function generateImagePrompt(
-  title: string,
-  excerpt: string,
-  keywords: string[]
-): string {
+export function generateImagePrompt(title: string, excerpt: string, keywords: string[]): string {
   // Extract main subject from title and excerpt
   const mainSubject = title.split(":")[0].trim()
 

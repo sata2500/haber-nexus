@@ -34,11 +34,14 @@ export interface AdvancedProcessedContent extends ProcessedContent {
 
   // Translation
   detectedLanguage?: SupportedLanguage
-  translations?: Record<SupportedLanguage, {
-    title: string
-    excerpt: string
-    content: string
-  }>
+  translations?: Record<
+    SupportedLanguage,
+    {
+      title: string
+      excerpt: string
+      content: string
+    }
+  >
 }
 
 /**
@@ -189,11 +192,14 @@ export async function advancedProcessRssItem(
 
   // Translation
   if (options?.translateTo && options.translateTo.length > 0) {
-    advancedContent.translations = {} as Record<SupportedLanguage, {
-      title: string
-      excerpt: string
-      content: string
-    }>
+    advancedContent.translations = {} as Record<
+      SupportedLanguage,
+      {
+        title: string
+        excerpt: string
+        content: string
+      }
+    >
 
     for (const targetLang of options.translateTo) {
       try {
@@ -267,9 +273,7 @@ export async function batchAdvancedProcessRssItems(
 /**
  * Generate comprehensive article report
  */
-export async function generateArticleReport(
-  content: AdvancedProcessedContent
-): Promise<{
+export async function generateArticleReport(content: AdvancedProcessedContent): Promise<{
   summary: string
   strengths: string[]
   weaknesses: string[]

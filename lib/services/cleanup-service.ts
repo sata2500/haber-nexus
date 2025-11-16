@@ -406,10 +406,10 @@ export async function runAllCleanupTasks(): Promise<CleanupResult[]> {
   const results: CleanupResult[] = []
 
   // Run cleanup tasks sequentially to avoid database overload
-  results.push(await cleanupRssScanLogs(30))  // RSS scan logs: 30 days
-  results.push(await cleanupRssItems(30))     // RSS items cache: 30 days (increased from 7)
+  results.push(await cleanupRssScanLogs(30)) // RSS scan logs: 30 days
+  results.push(await cleanupRssItems(30)) // RSS items cache: 30 days (increased from 7)
   results.push(await cleanupDraftArticles(180)) // Draft articles: 180 days (increased from 90)
-  results.push(await cleanupOrphanedData())   // Orphaned data: 1 day
+  results.push(await cleanupOrphanedData()) // Orphaned data: 1 day
 
   const totalDeleted = results.reduce((sum, r) => sum + r.itemsDeleted, 0)
   const totalDuration = results.reduce((sum, r) => sum + r.duration, 0)

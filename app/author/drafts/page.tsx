@@ -38,7 +38,7 @@ export default function AuthorDraftsPage() {
       if (response.ok) {
         const data = await response.json()
         // API response has { drafts: [...] } structure
-        setDrafts(Array.isArray(data) ? data : (data.drafts || []))
+        setDrafts(Array.isArray(data) ? data : data.drafts || [])
       } else {
         setDrafts([])
       }
@@ -90,9 +90,7 @@ export default function AuthorDraftsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">AI Taslaklar</h1>
-          <p className="text-muted-foreground mt-2">
-            AI destekli taslak oluşturun ve yönetin
-          </p>
+          <p className="text-muted-foreground mt-2">AI destekli taslak oluşturun ve yönetin</p>
         </div>
         <Link href="/admin/content-creator">
           <Button className="gap-2">
@@ -108,7 +106,7 @@ export default function AuthorDraftsPage() {
         </CardHeader>
         <CardContent>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
             <Input
               placeholder="Taslak başlığı ile ara..."
               value={searchQuery}
@@ -120,19 +118,21 @@ export default function AuthorDraftsPage() {
       </Card>
 
       {loading ? (
-        <div className="text-center py-12">
+        <div className="py-12 text-center">
           <p className="text-muted-foreground">Yükleniyor...</p>
         </div>
       ) : filteredDrafts.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+            <FileText className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
             <p className="text-muted-foreground mb-4">
-              {searchQuery ? "Arama kriterlerine uygun taslak bulunamadı" : "Henüz taslak oluşturmadınız"}
+              {searchQuery
+                ? "Arama kriterlerine uygun taslak bulunamadı"
+                : "Henüz taslak oluşturmadınız"}
             </p>
             <Link href="/admin/content-creator">
               <Button>
-                <FilePlus className="h-4 w-4 mr-2" />
+                <FilePlus className="mr-2 h-4 w-4" />
                 AI ile Taslak Oluştur
               </Button>
             </Link>
@@ -141,10 +141,10 @@ export default function AuthorDraftsPage() {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredDrafts.map((draft) => (
-            <Card key={draft.id} className="hover:shadow-md transition-shadow">
+            <Card key={draft.id} className="transition-shadow hover:shadow-md">
               <CardHeader>
                 <div className="flex items-start justify-between gap-2">
-                  <CardTitle className="text-lg line-clamp-2">{draft.topic}</CardTitle>
+                  <CardTitle className="line-clamp-2 text-lg">{draft.topic}</CardTitle>
                   {draft.qualityScore && (
                     <Badge variant={draft.qualityScore >= 80 ? "default" : "secondary"}>
                       {draft.qualityScore}%
@@ -152,11 +152,15 @@ export default function AuthorDraftsPage() {
                   )}
                 </div>
                 <CardDescription className="line-clamp-3">
-                  {draft.draft ? draft.draft.substring(0, 150) + '...' : draft.outline ? draft.outline.substring(0, 150) + '...' : 'Taslak içeriği henüz oluşturulmadı'}
+                  {draft.draft
+                    ? draft.draft.substring(0, 150) + "..."
+                    : draft.outline
+                      ? draft.outline.substring(0, 150) + "..."
+                      : "Taslak içeriği henüz oluşturulmadı"}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <div className="text-muted-foreground flex items-center gap-2 text-xs">
                   <Calendar className="h-3 w-3" />
                   {new Date(draft.createdAt).toLocaleDateString("tr-TR")}
                 </div>
@@ -167,14 +171,10 @@ export default function AuthorDraftsPage() {
                     className="flex-1"
                     onClick={() => handlePublish(draft)}
                   >
-                    <Edit className="h-3 w-3 mr-1" />
+                    <Edit className="mr-1 h-3 w-3" />
                     Makaleye Dönüştür
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleDelete(draft.id)}
-                  >
+                  <Button variant="outline" size="sm" onClick={() => handleDelete(draft.id)}>
                     <Trash2 className="h-3 w-3" />
                   </Button>
                 </div>
@@ -188,17 +188,18 @@ export default function AuthorDraftsPage() {
         <CardHeader>
           <CardTitle className="text-base">AI Taslak Sistemi Hakkında</CardTitle>
         </CardHeader>
-        <CardContent className="text-sm text-muted-foreground space-y-2">
+        <CardContent className="text-muted-foreground space-y-2 text-sm">
           <p>
-            <strong>AI Taslak Sistemi</strong>, Google Gemini AI kullanarak otomatik içerik taslakları oluşturur.
+            <strong>AI Taslak Sistemi</strong>, Google Gemini AI kullanarak otomatik içerik
+            taslakları oluşturur.
           </p>
           <p>
-            Taslaklar, araştırma verilerini, kalite skorlarını ve önerilen içeriği içerir. 
+            Taslaklar, araştırma verilerini, kalite skorlarını ve önerilen içeriği içerir.
             Taslakları düzenleyerek tam makaleye dönüştürebilirsiniz.
           </p>
           <p>
-            Yeni taslak oluşturmak için <strong>&quot;Yeni Taslak Oluştur&quot;</strong> butonuna tıklayın 
-            ve AI İçerik Oluşturucu sayfasına yönlendirileceksiniz.
+            Yeni taslak oluşturmak için <strong>&quot;Yeni Taslak Oluştur&quot;</strong> butonuna
+            tıklayın ve AI İçerik Oluşturucu sayfasına yönlendirileceksiniz.
           </p>
         </CardContent>
       </Card>

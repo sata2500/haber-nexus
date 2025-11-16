@@ -1,4 +1,3 @@
- 
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
@@ -28,13 +27,13 @@ interface Article {
 const STATUS_LABELS: Record<string, string> = {
   DRAFT: "Taslak",
   PUBLISHED: "Yayında",
-  ARCHIVED: "Arşiv"
+  ARCHIVED: "Arşiv",
 }
 
 const STATUS_COLORS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   DRAFT: "secondary",
   PUBLISHED: "default",
-  ARCHIVED: "destructive"
+  ARCHIVED: "destructive",
 }
 
 export default function AuthorArticlesPage() {
@@ -48,7 +47,7 @@ export default function AuthorArticlesPage() {
     try {
       const params = new URLSearchParams()
       if (statusFilter) params.append("status", statusFilter)
-      
+
       const response = await fetch(`/api/author/articles?${params.toString()}`)
       if (response.ok) {
         const data = await response.json()
@@ -96,9 +95,7 @@ export default function AuthorArticlesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Makalelerim</h1>
-          <p className="text-muted-foreground mt-2">
-            Tüm makalelerinizi görüntüleyin ve yönetin
-          </p>
+          <p className="text-muted-foreground mt-2">Tüm makalelerinizi görüntüleyin ve yönetin</p>
         </div>
         <Link href="/author/articles/new">
           <Button className="gap-2">
@@ -114,7 +111,7 @@ export default function AuthorArticlesPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
             <Input
               placeholder="Makale başlığı ile ara..."
               value={searchQuery}
@@ -122,7 +119,7 @@ export default function AuthorArticlesPage() {
               className="pl-10"
             />
           </div>
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex flex-wrap gap-2">
             <Button
               variant={statusFilter === "" ? "default" : "outline"}
               size="sm"
@@ -144,11 +141,7 @@ export default function AuthorArticlesPage() {
             >
               Yayında
             </Button>
-            <Button
-              size="sm"
-            >
-              Planlanmış
-            </Button>
+            <Button size="sm">Planlanmış</Button>
             <Button
               variant={statusFilter === "ARCHIVED" ? "default" : "outline"}
               size="sm"
@@ -161,19 +154,21 @@ export default function AuthorArticlesPage() {
       </Card>
 
       {loading ? (
-        <div className="text-center py-12">
+        <div className="py-12 text-center">
           <p className="text-muted-foreground">Yükleniyor...</p>
         </div>
       ) : filteredArticles.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <FilePlus className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+            <FilePlus className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
             <p className="text-muted-foreground mb-4">
-              {searchQuery ? "Arama kriterlerine uygun makale bulunamadı" : "Henüz makale oluşturmadınız"}
+              {searchQuery
+                ? "Arama kriterlerine uygun makale bulunamadı"
+                : "Henüz makale oluşturmadınız"}
             </p>
             <Link href="/author/articles/new">
               <Button>
-                <FilePlus className="h-4 w-4 mr-2" />
+                <FilePlus className="mr-2 h-4 w-4" />
                 Yeni Makale Oluştur
               </Button>
             </Link>
@@ -186,20 +181,18 @@ export default function AuthorArticlesPage() {
               <CardHeader>
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="mb-2 flex items-center gap-2">
                       <CardTitle className="text-lg">{article.title}</CardTitle>
                       <Badge variant={STATUS_COLORS[article.status]}>
                         {STATUS_LABELS[article.status]}
                       </Badge>
                     </div>
                     {article.excerpt && (
-                      <CardDescription className="line-clamp-2">
-                        {article.excerpt}
-                      </CardDescription>
+                      <CardDescription className="line-clamp-2">{article.excerpt}</CardDescription>
                     )}
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground mt-3">
+                    <div className="text-muted-foreground mt-3 flex items-center gap-4 text-sm">
                       {article.category && (
-                        <span className="px-2 py-0.5 bg-secondary rounded text-xs">
+                        <span className="bg-secondary rounded px-2 py-0.5 text-xs">
                           {article.category.name}
                         </span>
                       )}
@@ -228,11 +221,7 @@ export default function AuthorArticlesPage() {
                         <Edit className="h-4 w-4" />
                       </Button>
                     </Link>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDelete(article.id)}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => handleDelete(article.id)}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>

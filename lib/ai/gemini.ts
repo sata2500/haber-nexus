@@ -19,18 +19,21 @@ const modelConfig = {
 /**
  * Generate text using Gemini AI
  */
-export async function generateText(prompt: string, options?: {
-  temperature?: number
-  maxTokens?: number
-  retries?: number
-}): Promise<string> {
+export async function generateText(
+  prompt: string,
+  options?: {
+    temperature?: number
+    maxTokens?: number
+    retries?: number
+  }
+): Promise<string> {
   const maxRetries = options?.retries ?? 2
   let lastError: Error | null = null
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
-      const model = genAI.getGenerativeModel({ 
-        model: "gemini-2.5-pro",  // Using Gemini 2.5 Pro (Free Tier)
+      const model = genAI.getGenerativeModel({
+        model: "gemini-2.5-pro", // Using Gemini 2.5 Pro (Free Tier)
         generationConfig: {
           temperature: options?.temperature ?? modelConfig.temperature,
           topP: modelConfig.topP,
@@ -45,25 +48,30 @@ export async function generateText(prompt: string, options?: {
     } catch (error) {
       lastError = error instanceof Error ? error : new Error("Unknown error")
       console.error(`Error generating text (attempt ${attempt + 1}/${maxRetries + 1}):`, error)
-      
+
       // If not the last attempt, wait before retrying
       if (attempt < maxRetries) {
         const delay = Math.min(1000 * Math.pow(2, attempt), 5000) // Exponential backoff
-        await new Promise(resolve => setTimeout(resolve, delay))
+        await new Promise((resolve) => setTimeout(resolve, delay))
       }
     }
   }
 
-  throw new Error(`Failed to generate text with Gemini AI after ${maxRetries + 1} attempts: ${lastError?.message}`)
+  throw new Error(
+    `Failed to generate text with Gemini AI after ${maxRetries + 1} attempts: ${lastError?.message}`
+  )
 }
 
 /**
  * Summarize content using Gemini AI
  */
-export async function summarizeContent(content: string, options?: {
-  maxLength?: number
-  style?: "brief" | "detailed"
-}): Promise<string> {
+export async function summarizeContent(
+  content: string,
+  options?: {
+    maxLength?: number
+    style?: "brief" | "detailed"
+  }
+): Promise<string> {
   const style = options?.style ?? "brief"
   const maxLength = options?.maxLength ?? 200
 
@@ -83,10 +91,13 @@ ${content}
 /**
  * Generate tags for content using Gemini AI
  */
-export async function generateTags(content: string, options?: {
-  maxTags?: number
-  existingTags?: string[]
-}): Promise<string[]> {
+export async function generateTags(
+  content: string,
+  options?: {
+    maxTags?: number
+    existingTags?: string[]
+  }
+): Promise<string[]> {
   const maxTags = options?.maxTags ?? 5
   const existingTags = options?.existingTags ?? []
 
@@ -104,12 +115,12 @@ Etiketler:
 `.trim()
 
   const response = await generateText(prompt, { temperature: 0.6 })
-  
+
   // Parse comma-separated tags
   const tags = response
     .split(",")
-    .map(tag => tag.trim())
-    .filter(tag => tag.length > 0)
+    .map((tag) => tag.trim())
+    .filter((tag) => tag.length > 0)
     .slice(0, maxTags)
 
   return tags
@@ -196,16 +207,16 @@ Analiz:
 `.trim()
 
   const response = await generateText(prompt, { temperature: 0.3 })
-  
+
   try {
     // Extract JSON from response (handle markdown code blocks)
     const jsonMatch = response.match(/\{[\s\S]*\}/)
     if (!jsonMatch) {
       throw new Error("No JSON found in response")
     }
-    
+
     const analysis = JSON.parse(jsonMatch[0])
-    
+
     return {
       score: Math.max(0, Math.min(1, analysis.score ?? 0.5)),
       reasons: Array.isArray(analysis.reasons) ? analysis.reasons : [],
@@ -253,7 +264,10 @@ Yeniden Yazılmış İçerik:
 /**
  * Extract keywords from content
  */
-export async function extractKeywords(content: string, maxKeywords: number = 10): Promise<string[]> {
+export async function extractKeywords(
+  content: string,
+  maxKeywords: number = 10
+): Promise<string[]> {
   const prompt = `
 Aşağıdaki haber içeriğinden en önemli ${maxKeywords} anahtar kelimeyi çıkar.
 
@@ -271,11 +285,11 @@ Anahtar Kelimeler:
 `.trim()
 
   const response = await generateText(prompt, { temperature: 0.4 })
-  
+
   const keywords = response
     .split(",")
-    .map(keyword => keyword.trim())
-    .filter(keyword => keyword.length > 0)
+    .map((keyword) => keyword.trim())
+    .filter((keyword) => keyword.length > 0)
     .slice(0, maxKeywords)
 
   return keywords

@@ -12,24 +12,28 @@
 Sistemde 4 farklı cleanup fonksiyonu var:
 
 #### a) `cleanupRssScanLogs()` - RSS Tarama Logları
+
 - **Retention**: 30 gün
 - **Silinecekler**: 30 günden eski RSS tarama logları
 - **Etkilenen Tablo**: `RssScanLog`
 - **✅ Durum**: Bu DOĞRU - loglar silinmeli
 
 #### b) `cleanupRssItems()` - RSS Öğeleri
+
 - **Retention**: 7 gün
 - **Silinecekler**: 7 günden eski, işlenmiş RSS öğeleri
 - **Etkilenen Tablo**: `RssItem`
 - **✅ Durum**: Bu DOĞRU - RSS cache silinmeli
 
 #### c) `cleanupDraftArticles()` - Taslak Makaleler
+
 - **Retention**: 90 gün
 - **Silinecekler**: 90 günden eski, AI tarafından oluşturulmuş TASLAK makaleler
 - **Etkilenen Tablo**: `Article` (status = "DRAFT", aiGenerated = true)
 - **⚠️ SORUN**: Bu YANLIŞ - yayınlanmış makaleler silinmemeli
 
 **Kod**:
+
 ```typescript
 const result = await prisma.article.deleteMany({
   where: {
@@ -45,6 +49,7 @@ const result = await prisma.article.deleteMany({
 **Analiz**: Bu fonksiyon sadece TASLAK makaleleri siliyor, yayınlanmış makaleleri silmiyor. ✅ DOĞRU
 
 #### d) `cleanupOrphanedData()` - Yetim Veriler
+
 - **Retention**: 1 gün
 - **Silinecekler**: İşlenmiş ama makale oluşturulmamış RSS öğeleri
 - **Etkilenen Tablo**: `RssItem` (processed = true, articleId = null)
@@ -66,6 +71,7 @@ const result = await prisma.article.deleteMany({
 ### Olası Senaryo 1: Yayınlanmış Makaleler Silinmiyor ✅
 
 Kod incelemesine göre, **yayınlanmış makaleler silinmiyor**. `cleanupDraftArticles()` fonksiyonu sadece:
+
 - `status = "DRAFT"` olan
 - `aiGenerated = true` olan
 - 90 günden eski makaleleri siliyor
@@ -75,6 +81,7 @@ Kod incelemesine göre, **yayınlanmış makaleler silinmiyor**. `cleanupDraftAr
 ### Olası Senaryo 2: RSS Öğeleri Siliniyor (Doğru Davranış) ✅
 
 `cleanupRssItems()` fonksiyonu 7 günden eski RSS öğelerini siliyor. Bu DOĞRU bir davranış çünkü:
+
 - RSS öğeleri sadece bir cache
 - Makale zaten oluşturulmuş (`articleId` bağlantısı var)
 - Eski RSS öğelerini tutmanın bir anlamı yok
@@ -82,6 +89,7 @@ Kod incelemesine göre, **yayınlanmış makaleler silinmiyor**. `cleanupDraftAr
 ### Olası Senaryo 3: Kullanıcı Yanlış Anlama
 
 Kullanıcı muhtemelen şunlardan birini gözlemlemiş olabilir:
+
 1. **RSS öğelerinin silinmesi** → Bu normal, makaleler silinmiyor
 2. **Taslak makalelerin silinmesi** → Bu normal, sadece taslaklar siliniyor
 3. **Veritabanı bağlantı sorunu** → Makaleler görünmüyor ama silinmemiş
@@ -149,6 +157,7 @@ Cleanup sisteminin nasıl çalıştığını ve hangi ayarların değiştirilebi
 **Mevcut Durum**: Yayınlanmış makaleler zaten korunuyor. Sadece taslak makaleler ve RSS cache'i siliniyor.
 
 **Önerilen Değişiklikler**:
+
 1. RSS öğeleri retention: 7 → 30 gün
 2. Taslak makaleler retention: 90 → 180 gün (veya devre dışı)
 3. Cleanup ayarlarını konfigüre edilebilir yap

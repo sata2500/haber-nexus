@@ -47,7 +47,7 @@ export function BookmarksClient({ initialBookmarks }: BookmarksClientProps) {
       })
 
       if (response.ok) {
-        setBookmarks(bookmarks.filter(b => b.article.id !== articleId))
+        setBookmarks(bookmarks.filter((b) => b.article.id !== articleId))
       } else {
         alert("İşlem başarısız")
       }
@@ -61,10 +61,8 @@ export function BookmarksClient({ initialBookmarks }: BookmarksClientProps) {
     return (
       <Card>
         <CardContent className="py-12 text-center">
-          <Bookmark className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-          <p className="text-muted-foreground mb-4">
-            Henüz kaydettiğiniz makale yok
-          </p>
+          <Bookmark className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
+          <p className="text-muted-foreground mb-4">Henüz kaydettiğiniz makale yok</p>
           <Link href="/">
             <Button>Makaleleri Keşfet</Button>
           </Link>
@@ -77,15 +75,13 @@ export function BookmarksClient({ initialBookmarks }: BookmarksClientProps) {
     <div className="space-y-4">
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">
-            {bookmarks.length} Kayıtlı Makale
-          </CardTitle>
+          <CardTitle className="text-lg">{bookmarks.length} Kayıtlı Makale</CardTitle>
         </CardHeader>
       </Card>
 
       <div className="grid gap-6 md:grid-cols-2">
         {bookmarks.map((bookmark) => (
-          <Card key={bookmark.id} className="overflow-hidden hover:shadow-md transition-shadow">
+          <Card key={bookmark.id} className="overflow-hidden transition-shadow hover:shadow-md">
             {bookmark.article.coverImage && (
               <div className="relative h-48 w-full">
                 <Image
@@ -97,7 +93,7 @@ export function BookmarksClient({ initialBookmarks }: BookmarksClientProps) {
               </div>
             )}
             <CardHeader>
-              <div className="flex items-start gap-2 mb-2">
+              <div className="mb-2 flex items-start gap-2">
                 {bookmark.article.category && (
                   <Badge variant="secondary" className="text-xs">
                     {bookmark.article.category.name}
@@ -105,7 +101,7 @@ export function BookmarksClient({ initialBookmarks }: BookmarksClientProps) {
                 )}
               </div>
               <Link href={`/articles/${bookmark.article.slug}`}>
-                <CardTitle className="text-lg hover:text-primary transition-colors line-clamp-2">
+                <CardTitle className="hover:text-primary line-clamp-2 text-lg transition-colors">
                   {bookmark.article.title}
                 </CardTitle>
               </Link>
@@ -116,7 +112,7 @@ export function BookmarksClient({ initialBookmarks }: BookmarksClientProps) {
               )}
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex items-center gap-4 text-xs text-muted-foreground">
+              <div className="text-muted-foreground flex items-center gap-4 text-xs">
                 <span className="flex items-center gap-1">
                   <Eye className="h-3 w-3" />
                   {bookmark.article.viewCount}

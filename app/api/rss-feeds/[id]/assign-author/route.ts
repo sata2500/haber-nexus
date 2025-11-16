@@ -13,17 +13,11 @@ interface RouteParams {
  * Assign author to all articles from this RSS feed
  * POST /api/rss-feeds/[id]/assign-author
  */
-export async function POST(
-  request: NextRequest,
-  { params }: RouteParams
-) {
+export async function POST(request: NextRequest, { params }: RouteParams) {
   try {
     const session = await getServerSession(authOptions)
     if (!session || !["ADMIN", "SUPER_ADMIN"].includes(session.user.role)) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const { id } = await params
@@ -31,10 +25,7 @@ export async function POST(
     const { authorId } = body
 
     if (!authorId) {
-      return NextResponse.json(
-        { error: "Author ID is required" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Author ID is required" }, { status: 400 })
     }
 
     // Check if RSS feed exists
@@ -43,10 +34,7 @@ export async function POST(
     })
 
     if (!feed) {
-      return NextResponse.json(
-        { error: "RSS feed not found" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "RSS feed not found" }, { status: 404 })
     }
 
     // Check if author exists and has appropriate role
@@ -55,17 +43,11 @@ export async function POST(
     })
 
     if (!author) {
-      return NextResponse.json(
-        { error: "Author not found" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "Author not found" }, { status: 404 })
     }
 
     if (!["AUTHOR", "ADMIN", "SUPER_ADMIN"].includes(author.role)) {
-      return NextResponse.json(
-        { error: "User does not have author privileges" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "User does not have author privileges" }, { status: 400 })
     }
 
     // Update all articles from this RSS feed
@@ -85,9 +67,6 @@ export async function POST(
     })
   } catch (error: unknown) {
     console.error("Error assigning author:", error)
-    return NextResponse.json(
-      { error: "Failed to assign author" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to assign author" }, { status: 500 })
   }
 }

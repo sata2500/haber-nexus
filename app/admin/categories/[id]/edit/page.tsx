@@ -1,4 +1,3 @@
- 
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
@@ -24,11 +23,11 @@ export default function EditCategoryPage() {
   const router = useRouter()
   const params = useParams()
   const categoryId = params.id as string
-  
+
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(true)
   const [categories, setCategories] = useState<Category[]>([])
-  
+
   const [formData, setFormData] = useState({
     name: "",
     slug: "",
@@ -113,18 +112,14 @@ export default function EditCategoryPage() {
   if (fetching) {
     return (
       <div className="container mx-auto py-10">
-        <p className="text-center text-muted-foreground">Yükleniyor...</p>
+        <p className="text-muted-foreground text-center">Yükleniyor...</p>
       </div>
     )
   }
 
   return (
-    <div className="container mx-auto py-10 max-w-2xl">
-      <Button
-        variant="ghost"
-        className="mb-6"
-        onClick={() => router.back()}
-      >
+    <div className="container mx-auto max-w-2xl py-10">
+      <Button variant="ghost" className="mb-6" onClick={() => router.back()}>
         <ArrowLeft className="mr-2 h-4 w-4" />
         Geri
       </Button>
@@ -132,9 +127,7 @@ export default function EditCategoryPage() {
       <Card>
         <CardHeader>
           <CardTitle>Kategori Düzenle</CardTitle>
-          <CardDescription>
-            Kategori bilgilerini güncelleyin
-          </CardDescription>
+          <CardDescription>Kategori bilgilerini güncelleyin</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -160,7 +153,7 @@ export default function EditCategoryPage() {
                 placeholder="teknoloji"
                 required
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 URL&apos;de kullanılacak benzersiz tanımlayıcı
               </p>
             </div>
@@ -168,7 +161,7 @@ export default function EditCategoryPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Açıklama</label>
               <textarea
-                className="w-full min-h-[100px] px-3 py-2 border rounded-md text-sm"
+                className="min-h-[100px] w-full rounded-md border px-3 py-2 text-sm"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 placeholder="Kategori açıklaması..."
@@ -199,7 +192,7 @@ export default function EditCategoryPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Üst Kategori</label>
               <select
-                className="w-full px-3 py-2 border rounded-md text-sm"
+                className="w-full rounded-md border px-3 py-2 text-sm"
                 value={formData.parentId}
                 onChange={(e) => setFormData({ ...formData, parentId: e.target.value })}
               >
@@ -228,9 +221,9 @@ export default function EditCategoryPage() {
                 id="isActive"
                 checked={formData.isActive}
                 onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                className="w-4 h-4"
+                className="h-4 w-4"
               />
-              <label htmlFor="isActive" className="text-sm font-medium cursor-pointer">
+              <label htmlFor="isActive" className="cursor-pointer text-sm font-medium">
                 Aktif
               </label>
             </div>
@@ -239,11 +232,7 @@ export default function EditCategoryPage() {
               <Button type="submit" disabled={loading}>
                 {loading ? "Güncelleniyor..." : "Güncelle"}
               </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.back()}
-              >
+              <Button type="button" variant="outline" onClick={() => router.back()}>
                 İptal
               </Button>
             </div>

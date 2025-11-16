@@ -49,12 +49,12 @@ async function testImagen() {
       // Get image data from imageBytes
       if (generatedImage.image && generatedImage.image.imageBytes) {
         console.log(`   Image MIME type: ${generatedImage.image.mimeType}`)
-        
+
         // imageBytes is a base64 string
         const imageBuffer = Buffer.from(generatedImage.image.imageBytes, "base64")
         const filename = "test-imagen-output.png"
         writeFileSync(filename, imageBuffer)
-        
+
         console.log(`\n💾 Image saved to: ${filename}`)
         console.log(`   Size: ${imageBuffer.length} bytes`)
       }

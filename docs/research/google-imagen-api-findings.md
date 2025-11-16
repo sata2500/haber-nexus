@@ -48,6 +48,7 @@ for generated_image in response.generated_images:
 ### 5. Prompt Yazma Rehberi
 
 Imagen için etkili prompt'lar:
+
 - **Konu (Subject)**: Ana nesne, kişi, hayvan veya sahne
 - **Bağlam (Context)**: Arka plan ve ortam
 - **Stil (Style)**: Genel veya spesifik stil (fotoğraf, çizim, 3D vb.)
@@ -57,11 +58,13 @@ Imagen için etkili prompt'lar:
 ### 6. Fiyatlandırma
 
 #### Free Tier
+
 - **Ücretsiz**: Sınırlı sayıda görsel üretimi
 - Google AI Studio erişimi
 - İçerik, Google'ın ürünlerini geliştirmek için kullanılabilir
 
 #### Paid Tier
+
 - **Fiyat**: Henüz sayfada açık fiyat bulunamadı, ancak genel bilgi:
   - Görsel çıktısı: **$30 per 1,000,000 tokens**
   - 1024x1024px'e kadar görseller: **1290 token** (yaklaşık **$0.039 per image**)
@@ -75,12 +78,14 @@ Mevcut projede zaten `google.genai` paketi kullanılıyor (Gemini için). Aynı 
 ✅ **Google Imagen API kullanılabilir ve projeye entegre edilebilir.**
 
 **Avantajlar**:
+
 1. Mevcut `GOOGLE_API_KEY` ile çalışır
 2. Zaten kullanılan `google.genai` paketi ile entegrasyon kolay
 3. Yüksek kalite görseller (Imagen 4)
 4. Türkçe prompt'lar destekleniyor (İngilizce'ye çevrilmesi önerilir)
 
 **Dikkat Edilmesi Gerekenler**:
+
 - Free tier sınırlı kullanım sunar, üretim için Paid tier gerekebilir
 - Her görsel yaklaşık $0.039 maliyetli (Paid tier)
 - Prompt maksimum 480 token

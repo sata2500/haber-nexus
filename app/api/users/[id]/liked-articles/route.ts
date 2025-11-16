@@ -7,27 +7,18 @@ import { prisma } from "@/lib/prisma"
  * GET /api/users/[id]/liked-articles
  * Kullanıcının beğendiği makaleleri getirir
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
     const { id } = await params
 
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Oturum açmanız gerekiyor" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Oturum açmanız gerekiyor" }, { status: 401 })
     }
 
     // Kullanıcı sadece kendi beğenilerini görebilir
     if (session.user.id !== id) {
-      return NextResponse.json(
-        { error: "Bu beğenileri görme yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu beğenileri görme yetkiniz yok" }, { status: 403 })
     }
 
     const { searchParams } = new URL(request.url)
@@ -38,10 +29,8 @@ export async function GET(
     const skip = (page - 1) * limit
 
     // Sıralama seçeneği
-    const orderBy: { createdAt?: "desc" | "asc"; article?: { viewCount: "desc" | "asc" } } = 
-      sortBy === "popular" 
-        ? { article: { viewCount: "desc" } }
-        : { createdAt: "desc" }
+    const orderBy: { createdAt?: "desc" | "asc"; article?: { viewCount: "desc" | "asc" } } =
+      sortBy === "popular" ? { article: { viewCount: "desc" } } : { createdAt: "desc" }
 
     // Beğenilen makaleleri getir
     const likes = await prisma.like.findMany({
@@ -85,9 +74,7 @@ export async function GET(
     })
 
     // Sadece yayınlanmış makaleleri filtrele
-    const filteredLikes = likes.filter(
-      (like) => like.article.status === "PUBLISHED"
-    )
+    const filteredLikes = likes.filter((like) => like.article.status === "PUBLISHED")
 
     return NextResponse.json({
       likes: filteredLikes.map((like) => ({

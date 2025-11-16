@@ -11,16 +11,17 @@
 
 **Gemini 2.5 Pro** için ücretsiz kullanım:
 
-| Özellik | Free Tier | Paid Tier |
-|---------|-----------|-----------|
-| **Input price** | **Free of charge** | $1.25 (prompts ≤ 200k tokens)<br>$2.50 (prompts > 200k tokens) |
-| **Output price** | **Free of charge** | $10.00 (prompts ≤ 200k tokens)<br>$15.00 (prompts > 200k tokens) |
-| **Context caching** | Not available | $0.125 (≤ 200k tokens)<br>$0.25 (> 200k tokens)<br>$4.50 / 1M tokens per hour (storage) |
-| **Grounding with Google Search** | Not available | 1,500 RPD (free), then $35 / 1,000 grounded prompts |
-| **Grounding with Google Maps** | Not available | 10,000 RPD (free), then $25 / 1,000 grounded prompts |
-| **Used to improve products** | Yes | No |
+| Özellik                          | Free Tier          | Paid Tier                                                                               |
+| -------------------------------- | ------------------ | --------------------------------------------------------------------------------------- |
+| **Input price**                  | **Free of charge** | $1.25 (prompts ≤ 200k tokens)<br>$2.50 (prompts > 200k tokens)                          |
+| **Output price**                 | **Free of charge** | $10.00 (prompts ≤ 200k tokens)<br>$15.00 (prompts > 200k tokens)                        |
+| **Context caching**              | Not available      | $0.125 (≤ 200k tokens)<br>$0.25 (> 200k tokens)<br>$4.50 / 1M tokens per hour (storage) |
+| **Grounding with Google Search** | Not available      | 1,500 RPD (free), then $35 / 1,000 grounded prompts                                     |
+| **Grounding with Google Maps**   | Not available      | 10,000 RPD (free), then $25 / 1,000 grounded prompts                                    |
+| **Used to improve products**     | Yes                | No                                                                                      |
 
 **Önemli Notlar**:
+
 - ✅ **Input ve Output tamamen ücretsiz**
 - ✅ **Sınırsız token kullanımı** (rate limit dahilinde)
 - ⚠️ İçerik Google'ın ürünlerini geliştirmek için kullanılabilir
@@ -30,14 +31,15 @@
 
 **Daha hızlı ve hafif model** (1M token context window):
 
-| Özellik | Free Tier | Paid Tier |
-|---------|-----------|-----------|
-| **Input price** | **Free of charge** | $0.075 (≤ 200k tokens)<br>$0.15 (> 200k tokens) |
-| **Output price** | **Free of charge** | $0.30 (≤ 200k tokens)<br>$0.60 (> 200k tokens) |
+| Özellik          | Free Tier          | Paid Tier                                       |
+| ---------------- | ------------------ | ----------------------------------------------- |
+| **Input price**  | **Free of charge** | $0.075 (≤ 200k tokens)<br>$0.15 (> 200k tokens) |
+| **Output price** | **Free of charge** | $0.30 (≤ 200k tokens)<br>$0.60 (> 200k tokens)  |
 
 ### 3. Imagen 4 (Görsel Oluşturma)
 
 **Fiyatlandırma**:
+
 - **Free Tier**: Sınırlı kullanım (günlük/aylık kota)
 - **Paid Tier**: ~$0.039 per image
 
@@ -50,6 +52,7 @@
 ### Gemini Advanced Aboneliği ($19.99/month)
 
 **Özellikler**:
+
 - Gemini 2.5 Pro modeline tam erişim
 - Daha yüksek rate limit
 - 2 TB Google One depolama
@@ -60,12 +63,14 @@
 ### API Kullanımı
 
 **Free Tier**:
+
 - API key ile kullanım
 - Google AI Studio erişimi
 - Ücretsiz input/output tokens
 - Rate limit: 15 RPM (requests per minute)
 
 **Paid Tier**:
+
 - Billing account bağlantısı gerekli
 - Daha yüksek rate limit
 - Context caching
@@ -80,12 +85,14 @@
 **Önerilen Model**: `gemini-2.5-pro` (Free Tier)
 
 **Avantajlar**:
+
 - ✅ Tamamen ücretsiz
 - ✅ Yüksek kalite
 - ✅ Coding ve complex reasoning'de mükemmel
 - ✅ Mevcut API key ile çalışıyor
 
 **Dezavantajlar**:
+
 - ⚠️ Rate limit: 15 RPM (günde ~21,600 request)
 - ⚠️ İçerik Google'ın ürünlerini geliştirmek için kullanılabilir
 
@@ -94,11 +101,13 @@
 **Önerilen Model**: `imagen-4.0-generate-001`
 
 **Durum**:
+
 - ⚠️ Free tier sınırlı (günlük/aylık kota)
 - ⚠️ Paid tier: $0.039 per image
 - ⚠️ Yüksek kullanımda maliyet artabilir
 
 **Alternatif**:
+
 - Kaynak görselleri mümkün olduğunca kullan
 - Cache mekanizması ekle
 - Sadece yüksek kaliteli haberlerde görsel oluştur
@@ -107,7 +116,8 @@
 
 **Kullanıcının Durumu**: 1 yıllık Gemini Pro aboneliği mevcut
 
-**Önemli Not**: 
+**Önemli Not**:
+
 - ❌ Gemini Pro aboneliği **API kullanımını etkilemiyor**
 - ❌ Abonelik sadece Gemini Apps (web, mobile) için
 - ✅ API kullanımı için **Free Tier** kullanılabilir

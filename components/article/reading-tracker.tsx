@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
- 
+
 "use client"
 
 import { useEffect, useRef, useState } from "react"
@@ -10,14 +10,11 @@ interface ReadingTrackerProps {
   estimatedReadTime: number // minutes
 }
 
-export function ReadingTracker({
-  articleId,
-  estimatedReadTime,
-}: ReadingTrackerProps) {
+export function ReadingTracker({ articleId, estimatedReadTime }: ReadingTrackerProps) {
   const { data: session, status } = useSession()
   const [, setProgress] = useState(0)
   const [, setReadDuration] = useState(0)
-  
+
   // Refs for tracking
   const startTimeRef = useRef<number>(Date.now()) // eslint-disable-line @typescript-eslint/no-unused-vars
   const lastSaveTimeRef = useRef<number>(Date.now())
@@ -29,7 +26,7 @@ export function ReadingTracker({
 
   // Calculate progress based on scroll position
   const calculateScrollProgress = (): number => {
-    const articleContent = document.querySelector('.article-content')
+    const articleContent = document.querySelector(".article-content")
     if (!articleContent) return 0
 
     // const rect = articleContent.getBoundingClientRect() // Not used currently
@@ -41,7 +38,7 @@ export function ReadingTracker({
     // Calculate how much of the article is visible/scrolled
     const scrolled = scrollTop + windowHeight - articleTop
     const percentage = Math.min(Math.max((scrolled / contentHeight) * 100, 0), 100)
-    
+
     return Math.round(percentage * 10) / 10 // Round to 1 decimal
   }
 
@@ -62,9 +59,11 @@ export function ReadingTracker({
     const currentDuration = Math.floor(activeTimeRef.current)
 
     // Don't save if no significant change (unless final save)
-    if (!finalSave && 
-        Math.abs(currentProgress - lastProgressRef.current) < 5 && 
-        currentDuration < 10) {
+    if (
+      !finalSave &&
+      Math.abs(currentProgress - lastProgressRef.current) < 5 &&
+      currentDuration < 10
+    ) {
       return
     }
 
@@ -109,7 +108,7 @@ export function ReadingTracker({
       if (isActiveRef.current && !document.hidden) {
         activeTimeRef.current += 1
         setReadDuration(activeTimeRef.current)
-        
+
         // Auto-save every 30 seconds
         if (activeTimeRef.current % 30 === 0) {
           saveProgress()
@@ -131,7 +130,7 @@ export function ReadingTracker({
     }
 
     window.addEventListener("scroll", handleScroll, { passive: true })
-    
+
     // Initial calculation
     handleScroll()
 
@@ -146,7 +145,7 @@ export function ReadingTracker({
 
     const handleVisibilityChange = () => {
       isActiveRef.current = !document.hidden
-      
+
       if (document.hidden) {
         // Tab became inactive, save progress
         saveProgress()
@@ -201,9 +200,7 @@ export function ReadingTracker({
 
     const fetchExistingProgress = async () => {
       try {
-        const response = await fetch(
-          `/api/reading-history?articleId=${articleId}`
-        )
+        const response = await fetch(`/api/reading-history?articleId=${articleId}`)
         if (response.ok) {
           const data = await response.json()
           if (data.readingHistory) {

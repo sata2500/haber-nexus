@@ -11,28 +11,19 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const body = await request.json()
     const { userId } = body
 
     if (!userId) {
-      return NextResponse.json(
-        { error: "User ID is required" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "User ID is required" }, { status: 400 })
     }
 
     // Can't follow yourself
     if (userId === session.user.id) {
-      return NextResponse.json(
-        { error: "Cannot follow yourself" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Cannot follow yourself" }, { status: 400 })
     }
 
     // Check if already following
@@ -78,10 +69,7 @@ export async function POST(request: NextRequest) {
     }
   } catch (error: unknown) {
     console.error("Error toggling follow:", error)
-    return NextResponse.json(
-      { error: "Failed to toggle follow" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to toggle follow" }, { status: 500 })
   }
 }
 
@@ -100,10 +88,7 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get("userId")
 
     if (!userId) {
-      return NextResponse.json(
-        { error: "User ID is required" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "User ID is required" }, { status: 400 })
     }
 
     const follow = await prisma.follow.findUnique({
@@ -118,9 +103,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ following: !!follow })
   } catch (error: unknown) {
     console.error("Error checking follow:", error)
-    return NextResponse.json(
-      { error: "Failed to check follow" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to check follow" }, { status: 500 })
   }
 }

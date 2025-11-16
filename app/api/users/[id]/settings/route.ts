@@ -7,26 +7,17 @@ import { prisma } from "@/lib/prisma"
  * GET /api/users/[id]/settings
  * Kullanıcının ayarlarını getirir
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
     const { id } = await params
 
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Oturum açmanız gerekiyor" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Oturum açmanız gerekiyor" }, { status: 401 })
     }
 
     if (session.user.id !== id) {
-      return NextResponse.json(
-        { error: "Bu ayarları görme yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu ayarları görme yetkiniz yok" }, { status: 403 })
     }
 
     // Ayarları getir veya varsayılan değerlerle oluştur
@@ -45,10 +36,7 @@ export async function GET(
     return NextResponse.json(settings)
   } catch (error: unknown) {
     console.error("Error fetching user settings:", error)
-    return NextResponse.json(
-      { error: "Ayarlar alınırken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Ayarlar alınırken bir hata oluştu" }, { status: 500 })
   }
 }
 
@@ -56,26 +44,17 @@ export async function GET(
  * PATCH /api/users/[id]/settings
  * Kullanıcının ayarlarını günceller
  */
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
     const { id } = await params
 
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Oturum açmanız gerekiyor" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Oturum açmanız gerekiyor" }, { status: 401 })
     }
 
     if (session.user.id !== id) {
-      return NextResponse.json(
-        { error: "Bu ayarları güncelleme yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu ayarları güncelleme yetkiniz yok" }, { status: 403 })
     }
 
     const body = await request.json()
@@ -93,31 +72,19 @@ export async function PATCH(
 
     // Geçerli değerleri kontrol et
     if (profileVisibility && !["public", "private"].includes(profileVisibility)) {
-      return NextResponse.json(
-        { error: "Geçersiz profil görünürlüğü değeri" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Geçersiz profil görünürlüğü değeri" }, { status: 400 })
     }
 
     if (theme && !["light", "dark", "system"].includes(theme)) {
-      return NextResponse.json(
-        { error: "Geçersiz tema değeri" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Geçersiz tema değeri" }, { status: 400 })
     }
 
     if (fontSize && !["small", "medium", "large"].includes(fontSize)) {
-      return NextResponse.json(
-        { error: "Geçersiz font boyutu değeri" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Geçersiz font boyutu değeri" }, { status: 400 })
     }
 
     if (readingMode && !["default", "focus"].includes(readingMode)) {
-      return NextResponse.json(
-        { error: "Geçersiz okuma modu değeri" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Geçersiz okuma modu değeri" }, { status: 400 })
     }
 
     // Ayarları güncelle veya oluştur
@@ -154,9 +121,6 @@ export async function PATCH(
     })
   } catch (error: unknown) {
     console.error("Error updating user settings:", error)
-    return NextResponse.json(
-      { error: "Ayarlar güncellenirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Ayarlar güncellenirken bir hata oluştu" }, { status: 500 })
   }
 }

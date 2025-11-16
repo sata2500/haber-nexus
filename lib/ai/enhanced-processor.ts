@@ -1,5 +1,9 @@
 import { processRssItem, type ProcessedContent } from "./processor"
-import { enhanceArticleWithImages, insertImagesIntoContent, type VisionEnhancementResult } from "./vision-enhancer"
+import {
+  enhanceArticleWithImages,
+  insertImagesIntoContent,
+  type VisionEnhancementResult,
+} from "./vision-enhancer"
 import { enrichArticleContent, type EnrichmentResult } from "./content-enricher"
 import type { RssItem } from "../rss/parser"
 
@@ -9,7 +13,7 @@ export interface EnhancedProcessedContent extends ProcessedContent {
   coverImage: string | null
   coverImageAltText: string | null
   coverImageDescription: string | null
-  
+
   // Content enrichment
   contentEnrichment: EnrichmentResult
   enrichedContent: string
@@ -115,16 +119,16 @@ export async function enhancedProcessRssItem(
   // Prepare final result
   const result: EnhancedProcessedContent = {
     ...basicProcessed,
-    
+
     // Override content with enriched and image-enhanced version
     content: contentWithImages,
-    
+
     // Vision enhancement
     visionEnhancement,
     coverImage: visionEnhancement.coverImage?.url || null,
     coverImageAltText: visionEnhancement.coverImage?.altText || null,
     coverImageDescription: visionEnhancement.coverImage?.description || null,
-    
+
     // Content enrichment
     contentEnrichment,
     enrichedContent: contentWithImages,
@@ -134,8 +138,12 @@ export async function enhancedProcessRssItem(
   console.error(`[Enhanced Processor] Enhanced processing completed for: ${item.title}`)
   console.error(`[Enhanced Processor] - Cover image: ${result.coverImage ? "✓" : "✗"}`)
   console.error(`[Enhanced Processor] - Content images: ${visionEnhancement.contentImages.length}`)
-  console.error(`[Enhanced Processor] - Content enriched: ${contentEnrichment.enriched ? "✓" : "✗"}`)
-  console.error(`[Enhanced Processor] - Research sources: ${contentEnrichment.researchSources.length}`)
+  console.error(
+    `[Enhanced Processor] - Content enriched: ${contentEnrichment.enriched ? "✓" : "✗"}`
+  )
+  console.error(
+    `[Enhanced Processor] - Research sources: ${contentEnrichment.researchSources.length}`
+  )
 
   return result
 }

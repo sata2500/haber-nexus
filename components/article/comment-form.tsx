@@ -41,7 +41,7 @@ export function CommentForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!content.trim()) {
       setError("Yorum içeriği boş olamaz")
       return
@@ -89,19 +89,14 @@ export function CommentForm({
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder={placeholder}
-        className="w-full min-h-[100px] px-3 py-2 border rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+        className="focus:ring-primary min-h-[100px] w-full resize-none rounded-md border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
         disabled={loading}
       />
-      
-      {error && (
-        <p className="text-sm text-red-500">{error}</p>
-      )}
-      
+
+      {error && <p className="text-sm text-red-500">{error}</p>}
+
       <div className="flex items-center gap-2">
-        <Button
-          type="submit"
-          disabled={loading || !content.trim()}
-        >
+        <Button type="submit" disabled={loading || !content.trim()}>
           {loading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -111,21 +106,16 @@ export function CommentForm({
             submitLabel
           )}
         </Button>
-        
+
         {onCancel && (
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onCancel}
-            disabled={loading}
-          >
+          <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>
             İptal
           </Button>
         )}
       </div>
-      
+
       {!parentId && (
-        <p className="text-xs text-muted-foreground">
+        <p className="text-muted-foreground text-xs">
           Yorumunuz moderasyon sonrası yayınlanacaktır.
         </p>
       )}

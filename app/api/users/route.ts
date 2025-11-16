@@ -7,21 +7,15 @@ import { prisma } from "@/lib/prisma"
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session) {
-      return NextResponse.json(
-        { error: "Yetkilendirme gerekli" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Yetkilendirme gerekli" }, { status: 401 })
     }
 
     // Sadece admin ve editor kullanıcıları görebilir
     const userRole = session.user?.role
     if (!["ADMIN", "SUPER_ADMIN", "EDITOR"].includes(userRole || "")) {
-      return NextResponse.json(
-        { error: "Bu işlem için yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu işlem için yetkiniz yok" }, { status: 403 })
     }
 
     const { searchParams } = new URL(request.url)
@@ -32,12 +26,12 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit
 
     const where: Record<string, unknown> = {}
-    
+
     if (role) {
       where.role = role
     } else if (roles) {
       // Support multiple roles like "AUTHOR,ADMIN,SUPER_ADMIN"
-      const roleList = roles.split(",").map(r => r.trim())
+      const roleList = roles.split(",").map((r) => r.trim())
       where.role = { in: roleList }
     }
 
@@ -80,9 +74,6 @@ export async function GET(request: NextRequest) {
     })
   } catch (error: unknown) {
     console.error("Error fetching users:", error)
-    return NextResponse.json(
-      { error: "Kullanıcılar yüklenirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Kullanıcılar yüklenirken bir hata oluştu" }, { status: 500 })
   }
 }

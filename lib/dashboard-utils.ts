@@ -1,12 +1,12 @@
 import { UserRole } from "@prisma/client"
-import { 
-  PenTool, 
-  FileCheck, 
-  Settings, 
-  User, 
+import {
+  PenTool,
+  FileCheck,
+  Settings,
+  User,
   Crown,
   LayoutDashboard,
-  LucideIcon
+  LucideIcon,
 } from "lucide-react"
 
 export interface Dashboard {
@@ -57,7 +57,7 @@ export function getAccessibleDashboards(role: UserRole): Dashboard[] {
       icon: PenTool,
       description: "Makalelerinizi yönetin ve istatistiklerinizi görüntüleyin",
       color: "text-blue-600",
-      gradient: "from-blue-500/10 to-blue-600/10"
+      gradient: "from-blue-500/10 to-blue-600/10",
     })
   }
 
@@ -70,7 +70,7 @@ export function getAccessibleDashboards(role: UserRole): Dashboard[] {
       icon: FileCheck,
       description: "Makaleleri inceleyin ve yorumları moderasyon edin",
       color: "text-purple-600",
-      gradient: "from-purple-500/10 to-purple-600/10"
+      gradient: "from-purple-500/10 to-purple-600/10",
     })
   }
 
@@ -83,7 +83,7 @@ export function getAccessibleDashboards(role: UserRole): Dashboard[] {
       icon: Settings,
       description: "Tüm sistemi yönetin ve ayarları düzenleyin",
       color: "text-red-600",
-      gradient: "from-red-500/10 to-red-600/10"
+      gradient: "from-red-500/10 to-red-600/10",
     })
   }
 
@@ -96,20 +96,20 @@ export function getAccessibleDashboards(role: UserRole): Dashboard[] {
 export function getDashboardInfo(role: UserRole): DashboardInfo {
   const accessible = getAccessibleDashboards(role)
   const primaryUrl = getDashboardUrl(role)
-  
-  const primary = accessible.find(d => d.href === primaryUrl) || {
+
+  const primary = accessible.find((d) => d.href === primaryUrl) || {
     id: "profile",
     label: "Profilim",
     href: "/profile",
     icon: User,
     description: "Profil bilgilerinizi görüntüleyin ve düzenleyin",
     color: "text-gray-600",
-    gradient: "from-gray-500/10 to-gray-600/10"
+    gradient: "from-gray-500/10 to-gray-600/10",
   }
 
   return {
     primary,
-    accessible
+    accessible,
   }
 }
 
@@ -118,7 +118,7 @@ export function getDashboardInfo(role: UserRole): DashboardInfo {
  */
 export function canAccessDashboard(role: UserRole, dashboardPath: string): boolean {
   const accessible = getAccessibleDashboards(role)
-  return accessible.some(d => d.href === dashboardPath)
+  return accessible.some((d) => d.href === dashboardPath)
 }
 
 /**

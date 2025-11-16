@@ -19,9 +19,7 @@ export function LikedArticlesTab({ userId }: LikedArticlesTabProps) {
   const fetchLikedArticles = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await fetch(
-        `/api/users/${userId}/liked-articles?page=${page}&limit=10`
-      )
+      const response = await fetch(`/api/users/${userId}/liked-articles?page=${page}&limit=10`)
       if (response.ok) {
         const data = await response.json()
         setLikes((prev) => (page === 1 ? data.likes : [...prev, ...data.likes]))
@@ -57,19 +55,17 @@ export function LikedArticlesTab({ userId }: LikedArticlesTabProps) {
   if (loading && page === 1) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="text-primary h-8 w-8 animate-spin" />
       </div>
     )
   }
 
   if (likes.length === 0) {
     return (
-      <div className="text-center py-12">
-        <Heart className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-        <h3 className="text-lg font-semibold mb-2">Henüz beğenilen makale yok</h3>
-        <p className="text-muted-foreground">
-          Beğendiğiniz makaleler burada görünecek
-        </p>
+      <div className="py-12 text-center">
+        <Heart className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
+        <h3 className="mb-2 text-lg font-semibold">Henüz beğenilen makale yok</h3>
+        <p className="text-muted-foreground">Beğendiğiniz makaleler burada görünecek</p>
       </div>
     )
   }
@@ -91,11 +87,7 @@ export function LikedArticlesTab({ userId }: LikedArticlesTabProps) {
 
       {hasMore && (
         <div className="flex justify-center pt-4">
-          <Button
-            onClick={() => setPage((p) => p + 1)}
-            disabled={loading}
-            variant="outline"
-          >
+          <Button onClick={() => setPage((p) => p + 1)} disabled={loading} variant="outline">
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

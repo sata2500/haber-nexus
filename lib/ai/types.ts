@@ -42,7 +42,7 @@ export interface ProcessedRssItem {
   originalTitle: string
   originalContent: string
   originalLink: string
-  
+
   // AI Generated
   title: string
   slug: string
@@ -52,12 +52,12 @@ export interface ProcessedRssItem {
   keywords: string[]
   metaTitle: string
   metaDescription: string
-  
+
   // Analysis
   qualityScore: number
   suggestedCategory?: string
   isSpam: boolean
-  
+
   // Metadata
   publishedAt?: Date
   author?: string

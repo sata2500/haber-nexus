@@ -74,7 +74,7 @@ export async function evaluateContentDepth(
  */
 export async function conductResearch(
   searchQueries: string[],
-  maxResultsPerQuery: number = 3
+  _maxResultsPerQuery: number = 3
 ): Promise<{
   findings: string
   sources: string[]
@@ -83,10 +83,10 @@ export async function conductResearch(
 
   // Use search helper to conduct actual web search
   const searchResults = await searchWeb(searchQueries)
-  
+
   // Format findings from search results
   const findings = formatResearchFindings(searchResults)
-  const allSources = searchResults.map(r => r.url)
+  const allSources = searchResults.map((r) => r.url)
 
   console.error(`[Content Enricher] Research completed. Found ${allSources.length} sources.`)
 
@@ -142,7 +142,7 @@ export async function enrichArticleContent(
   title: string,
   content: string,
   excerpt: string,
-  keywords: string[]
+  _keywords: string[]
 ): Promise<EnrichmentResult> {
   console.error(`[Content Enricher] Starting content enrichment for: ${title}`)
 
@@ -198,7 +198,9 @@ export async function enrichArticleContentWithSearch(
   content: string,
   excerpt: string,
   keywords: string[],
-  searchFunction: (queries: string[]) => Promise<Array<{ title: string; url: string; snippet: string }>>
+  searchFunction: (
+    queries: string[]
+  ) => Promise<Array<{ title: string; url: string; snippet: string }>>
 ): Promise<EnrichmentResult> {
   console.error(`[Content Enricher] Starting enhanced content enrichment for: ${title}`)
 
@@ -227,8 +229,7 @@ export async function enrichArticleContentWithSearch(
   // Format findings from search results
   const findings = searchResults
     .map(
-      (result, i) =>
-        `**Kaynak ${i + 1}: ${result.title}**\nURL: ${result.url}\n${result.snippet}`
+      (result, i) => `**Kaynak ${i + 1}: ${result.title}**\nURL: ${result.url}\n${result.snippet}`
     )
     .join("\n\n")
 

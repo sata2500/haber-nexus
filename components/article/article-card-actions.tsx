@@ -25,7 +25,7 @@ export function ArticleCardActions({
   className = "",
 }: ArticleCardActionsProps) {
   return (
-    <div className={cn("flex items-center gap-3 text-sm text-muted-foreground", className)}>
+    <div className={cn("text-muted-foreground flex items-center gap-3 text-sm", className)}>
       {/* View Count (Static) */}
       <div className="flex items-center gap-1">
         <Eye className="h-4 w-4" />

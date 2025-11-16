@@ -75,10 +75,7 @@ export function getPermissions(role: UserRole): Permission {
 /**
  * Kullanıcının belirli bir yetkiye sahip olup olmadığını kontrol eder
  */
-export function hasPermission(
-  role: UserRole,
-  permission: keyof Permission
-): boolean {
+export function hasPermission(role: UserRole, permission: keyof Permission): boolean {
   const permissions = getPermissions(role)
   return permissions[permission]
 }
@@ -135,9 +132,7 @@ export function canEditContent(
 /**
  * Kullanıcının belirli bir içeriği silme yetkisi olup olmadığını kontrol eder
  */
-export function canDeleteContent(
-  userRole: UserRole
-): boolean {
+export function canDeleteContent(userRole: UserRole): boolean {
   // Sadece admin ve editörler içerik silebilir
   return isAdminOrEditor(userRole)
 }
@@ -207,10 +202,7 @@ export function isHigherRole(role1: UserRole, role2: UserRole): boolean {
 /**
  * Kullanıcının başka bir kullanıcıyı yönetme yetkisi olup olmadığını kontrol eder
  */
-export function canManageUser(
-  managerRole: UserRole,
-  targetUserRole: UserRole
-): boolean {
+export function canManageUser(managerRole: UserRole, targetUserRole: UserRole): boolean {
   // Sadece admin ve super admin kullanıcı yönetebilir
   if (!isAdmin(managerRole)) {
     return false

@@ -1,4 +1,3 @@
- 
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
@@ -36,12 +35,12 @@ export default function EditArticlePage() {
   const router = useRouter()
   const params = useParams()
   const articleId = params.id as string
-  
+
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(true)
   const [categories, setCategories] = useState<Category[]>([])
   const [previewMode, setPreviewMode] = useState(false)
-  
+
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -117,7 +116,7 @@ export default function EditArticlePage() {
         .filter((kw) => kw.length > 0)
 
       let publishedAt = null
-      
+
       if (formData.status === "PUBLISHED") {
         publishedAt = new Date().toISOString()
       }
@@ -152,18 +151,14 @@ export default function EditArticlePage() {
   if (fetching) {
     return (
       <div className="container mx-auto py-10">
-        <p className="text-center text-muted-foreground">Yükleniyor...</p>
+        <p className="text-muted-foreground text-center">Yükleniyor...</p>
       </div>
     )
   }
 
   return (
-    <div className="container mx-auto py-10 max-w-4xl">
-      <Button
-        variant="ghost"
-        className="mb-6"
-        onClick={() => router.back()}
-      >
+    <div className="container mx-auto max-w-4xl py-10">
+      <Button variant="ghost" className="mb-6" onClick={() => router.back()}>
         <ArrowLeft className="mr-2 h-4 w-4" />
         Geri
       </Button>
@@ -171,9 +166,7 @@ export default function EditArticlePage() {
       <Card>
         <CardHeader>
           <CardTitle>Makale Düzenle</CardTitle>
-          <CardDescription>
-            Makale bilgilerini güncelleyin
-          </CardDescription>
+          <CardDescription>Makale bilgilerini güncelleyin</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -204,7 +197,7 @@ export default function EditArticlePage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Özet</label>
               <textarea
-                className="w-full min-h-[80px] px-3 py-2 border rounded-md text-sm"
+                className="min-h-[80px] w-full rounded-md border px-3 py-2 text-sm"
                 value={formData.excerpt}
                 onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                 placeholder="Kısa özet..."
@@ -223,7 +216,7 @@ export default function EditArticlePage() {
                     size="sm"
                     onClick={() => setPreviewMode(false)}
                   >
-                    <Edit3 className="h-4 w-4 mr-2" />
+                    <Edit3 className="mr-2 h-4 w-4" />
                     Düzenle
                   </Button>
                   <Button
@@ -232,7 +225,7 @@ export default function EditArticlePage() {
                     size="sm"
                     onClick={() => setPreviewMode(true)}
                   >
-                    <Eye className="h-4 w-4 mr-2" />
+                    <Eye className="mr-2 h-4 w-4" />
                     Önizle
                   </Button>
                 </div>
@@ -245,12 +238,12 @@ export default function EditArticlePage() {
                   minHeight="400px"
                 />
               ) : (
-                <div className="border rounded-md p-6 min-h-[400px] bg-white dark:bg-gray-900">
+                <div className="min-h-[400px] rounded-md border bg-white p-6 dark:bg-gray-900">
                   <MarkdownRenderer content={formData.content} />
                 </div>
               )}
-              <p className="text-xs text-muted-foreground">
-                Markdown formatını kullanabilirsiniz. <strong>**kalın**</strong>, <em>*italik*</em>, 
+              <p className="text-muted-foreground text-xs">
+                Markdown formatını kullanabilirsiniz. <strong>**kalın**</strong>, <em>*italik*</em>,
                 başlıklar için # kullanın.
               </p>
             </div>
@@ -261,7 +254,7 @@ export default function EditArticlePage() {
                   Kategori <span className="text-destructive">*</span>
                 </label>
                 <select
-                  className="w-full px-3 py-2 border rounded-md text-sm"
+                  className="w-full rounded-md border px-3 py-2 text-sm"
                   value={formData.categoryId}
                   onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
                   required
@@ -278,7 +271,7 @@ export default function EditArticlePage() {
               <div className="space-y-2">
                 <label className="text-sm font-medium">Tür</label>
                 <select
-                  className="w-full px-3 py-2 border rounded-md text-sm"
+                  className="w-full rounded-md border px-3 py-2 text-sm"
                   value={formData.type}
                   onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                 >
@@ -295,7 +288,7 @@ export default function EditArticlePage() {
               label="Kapak Görseli"
               value={formData.coverImage}
               onChange={(value) => setFormData({ ...formData, coverImage: value })}
-              placeholder="Kapak görseli URL&apos;si"
+              placeholder="Kapak görseli URL'si"
             />
 
             <div className="space-y-2">
@@ -328,18 +321,18 @@ export default function EditArticlePage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Meta Açıklama</label>
               <textarea
-                className="w-full min-h-[60px] px-3 py-2 border rounded-md text-sm"
+                className="min-h-[60px] w-full rounded-md border px-3 py-2 text-sm"
                 value={formData.metaDescription}
                 onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })}
                 placeholder="SEO için meta açıklama..."
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Durum</label>
                 <select
-                  className="w-full px-3 py-2 border rounded-md text-sm"
+                  className="w-full rounded-md border px-3 py-2 text-sm"
                   value={formData.status}
                   onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                 >
@@ -354,11 +347,7 @@ export default function EditArticlePage() {
               <Button type="submit" disabled={loading}>
                 {loading ? "Güncelleniyor..." : "Güncelle"}
               </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.back()}
-              >
+              <Button type="button" variant="outline" onClick={() => router.back()}>
                 İptal
               </Button>
             </div>

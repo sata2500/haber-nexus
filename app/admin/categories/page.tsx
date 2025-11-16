@@ -1,4 +1,3 @@
- 
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
@@ -71,9 +70,10 @@ export default function CategoriesPage() {
     }
   }
 
-  const filteredCategories = categories.filter((category) =>
-    category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    category.slug.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredCategories = categories.filter(
+    (category) =>
+      category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      category.slug.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   const topLevelCategories = filteredCategories.filter((c) => !c.parent)
@@ -83,9 +83,7 @@ export default function CategoriesPage() {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Kategori Yönetimi</h1>
-          <p className="text-muted-foreground mt-2">
-            Haber kategorilerini yönetin
-          </p>
+          <p className="text-muted-foreground mt-2">Haber kategorilerini yönetin</p>
         </div>
         <Button onClick={() => router.push("/admin/categories/new")}>
           <Plus className="mr-2 h-4 w-4" />
@@ -107,13 +105,13 @@ export default function CategoriesPage() {
       </Card>
 
       {loading ? (
-        <div className="text-center py-12">
+        <div className="py-12 text-center">
           <p className="text-muted-foreground">Yükleniyor...</p>
         </div>
       ) : topLevelCategories.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <FolderTree className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+            <FolderTree className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
             <p className="text-muted-foreground">Henüz kategori oluşturulmamış</p>
             <Button className="mt-4" onClick={() => router.push("/admin/categories/new")}>
               İlk Kategoriyi Oluştur
@@ -127,22 +125,17 @@ export default function CategoriesPage() {
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      {category.icon && (
-                        <span className="text-2xl">{category.icon}</span>
-                      )}
+                    <div className="mb-2 flex items-center gap-3">
+                      {category.icon && <span className="text-2xl">{category.icon}</span>}
                       <CardTitle className="text-xl">{category.name}</CardTitle>
-                      {!category.isActive && (
-                        <Badge variant="secondary">Pasif</Badge>
-                      )}
-                      <Badge variant="outline">
-                        {category._count.articles} makale
-                      </Badge>
+                      {!category.isActive && <Badge variant="secondary">Pasif</Badge>}
+                      <Badge variant="outline">{category._count.articles} makale</Badge>
                     </div>
                     <CardDescription>
-                      Slug: <code className="text-xs bg-muted px-1 py-0.5 rounded">{category.slug}</code>
+                      Slug:{" "}
+                      <code className="bg-muted rounded px-1 py-0.5 text-xs">{category.slug}</code>
                       {category.description && (
-                        <span className="block mt-1">{category.description}</span>
+                        <span className="mt-1 block">{category.description}</span>
                       )}
                     </CardDescription>
                   </div>
@@ -165,17 +158,20 @@ export default function CategoriesPage() {
                   </div>
                 </div>
               </CardHeader>
-              
+
               {category.children.length > 0 && (
                 <CardContent>
-                  <div className="border-l-2 border-muted pl-4 space-y-2">
-                    <p className="text-sm font-medium text-muted-foreground mb-2">
+                  <div className="border-muted space-y-2 border-l-2 pl-4">
+                    <p className="text-muted-foreground mb-2 text-sm font-medium">
                       Alt Kategoriler:
                     </p>
                     {category.children.map((child) => {
                       const childCategory = categories.find((c) => c.id === child.id)
                       return (
-                        <div key={child.id} className="flex items-center justify-between py-2 px-3 bg-muted/50 rounded">
+                        <div
+                          key={child.id}
+                          className="bg-muted/50 flex items-center justify-between rounded px-3 py-2"
+                        >
                           <div className="flex items-center gap-2">
                             <span className="font-medium">{child.name}</span>
                             {childCategory && (

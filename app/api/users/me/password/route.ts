@@ -17,12 +17,9 @@ const passwordChangeSchema = z.object({
 export async function PATCH(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: "Yetkilendirme gerekli" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Yetkilendirme gerekli" }, { status: 401 })
     }
 
     const body = await request.json()
@@ -38,23 +35,14 @@ export async function PATCH(request: NextRequest) {
     })
 
     if (!user || !user.password) {
-      return NextResponse.json(
-        { error: "Kullanıcı bulunamadı veya şifre yok" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "Kullanıcı bulunamadı veya şifre yok" }, { status: 404 })
     }
 
     // Mevcut şifreyi kontrol et
-    const isPasswordValid = await bcrypt.compare(
-      validatedData.currentPassword,
-      user.password
-    )
+    const isPasswordValid = await bcrypt.compare(validatedData.currentPassword, user.password)
 
     if (!isPasswordValid) {
-      return NextResponse.json(
-        { error: "Mevcut şifre yanlış" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Mevcut şifre yanlış" }, { status: 400 })
     }
 
     // Yeni şifreyi hashle
@@ -74,16 +62,10 @@ export async function PATCH(request: NextRequest) {
     })
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Geçersiz veri", details: error.issues },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Geçersiz veri", details: error.issues }, { status: 400 })
     }
 
     console.error("Error changing password:", error)
-    return NextResponse.json(
-      { error: "Şifre değiştirilirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Şifre değiştirilirken bir hata oluştu" }, { status: 500 })
   }
 }

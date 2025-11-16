@@ -38,7 +38,7 @@ export default function EditorReviewDetailPage() {
   const router = useRouter()
   const params = useParams()
   const articleId = params.id as string
-  
+
   const [article, setArticle] = useState<Article | null>(null)
   const [loading, setLoading] = useState(true)
   const [actionLoading, setActionLoading] = useState(false)
@@ -157,15 +157,15 @@ export default function EditorReviewDetailPage() {
 
   if (loading) {
     return (
-      <div className="max-w-5xl mx-auto py-10">
-        <p className="text-center text-muted-foreground">Yükleniyor...</p>
+      <div className="mx-auto max-w-5xl py-10">
+        <p className="text-muted-foreground text-center">Yükleniyor...</p>
       </div>
     )
   }
 
   if (!article) {
     return (
-      <div className="max-w-5xl mx-auto py-10">
+      <div className="mx-auto max-w-5xl py-10">
         <Card className="border-destructive">
           <CardHeader>
             <CardTitle className="text-destructive">Makale Bulunamadı</CardTitle>
@@ -182,20 +182,14 @@ export default function EditorReviewDetailPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <div className="mx-auto max-w-5xl space-y-6">
       <div className="flex items-center justify-between">
-        <Button
-          variant="ghost"
-          onClick={() => router.back()}
-        >
+        <Button variant="ghost" onClick={() => router.back()}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Geri
         </Button>
         <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={() => setShowFeedback(!showFeedback)}
-          >
+          <Button variant="outline" onClick={() => setShowFeedback(!showFeedback)}>
             <MessageSquare className="mr-2 h-4 w-4" />
             Feedback Gönder
           </Button>
@@ -208,10 +202,7 @@ export default function EditorReviewDetailPage() {
             <XCircle className="mr-2 h-4 w-4" />
             Reddet
           </Button>
-          <Button
-            onClick={handleApprove}
-            disabled={actionLoading}
-          >
+          <Button onClick={handleApprove} disabled={actionLoading}>
             <CheckCircle className="mr-2 h-4 w-4" />
             {actionLoading ? "İşleniyor..." : "Onayla ve Yayınla"}
           </Button>
@@ -222,13 +213,11 @@ export default function EditorReviewDetailPage() {
         <Card className="border-orange-500 bg-orange-50/50 dark:bg-orange-950/20">
           <CardHeader>
             <CardTitle className="text-base">Editör Feedback</CardTitle>
-            <CardDescription>
-              Yazara geri bildirim gönderin
-            </CardDescription>
+            <CardDescription>Yazara geri bildirim gönderin</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <textarea
-              className="w-full min-h-[120px] px-3 py-2 border rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring"
+              className="focus:ring-ring min-h-[120px] w-full resize-none rounded-md border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
               value={feedback}
               onChange={(e) => setFeedback(e.target.value)}
               placeholder="Makale hakkında yorumlarınızı yazın..."
@@ -260,11 +249,11 @@ export default function EditorReviewDetailPage() {
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
-              <CardTitle className="text-2xl mb-2">{article.title}</CardTitle>
-              <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
+              <CardTitle className="mb-2 text-2xl">{article.title}</CardTitle>
+              <div className="text-muted-foreground flex flex-wrap items-center gap-3 text-sm">
                 <Badge variant="secondary">{article.status}</Badge>
                 {article.category && (
-                  <span className="px-2 py-0.5 bg-secondary rounded text-xs">
+                  <span className="bg-secondary rounded px-2 py-0.5 text-xs">
                     {article.category.name}
                   </span>
                 )}
@@ -294,7 +283,7 @@ export default function EditorReviewDetailPage() {
               alt={article.title}
               width={1200}
               height={630}
-              className="w-full h-auto rounded-lg"
+              className="h-auto w-full rounded-lg"
             />
           </CardContent>
         </Card>
@@ -328,7 +317,7 @@ export default function EditorReviewDetailPage() {
             <CardTitle className="text-base">Etiketler</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex flex-wrap gap-2">
               {article.tags.map((tag) => (
                 <Badge key={tag.id} variant="outline">
                   {tag.name}
@@ -343,7 +332,7 @@ export default function EditorReviewDetailPage() {
         <CardHeader>
           <CardTitle className="text-base">Editör Notları</CardTitle>
         </CardHeader>
-        <CardContent className="text-sm text-muted-foreground space-y-2">
+        <CardContent className="text-muted-foreground space-y-2 text-sm">
           <p>
             <strong>Onaylama:</strong> Makaleyi onayladığınızda otomatik olarak yayınlanacaktır.
           </p>

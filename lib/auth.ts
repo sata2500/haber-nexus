@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
       name: "credentials",
       credentials: {
         email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
@@ -27,18 +27,15 @@ export const authOptions: NextAuthOptions = {
 
         const user = await prisma.user.findUnique({
           where: {
-            email: credentials.email
-          }
+            email: credentials.email,
+          },
         })
 
         if (!user || !user.password) {
           throw new Error("Geçersiz email veya şifre")
         }
 
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password,
-          user.password
-        )
+        const isPasswordValid = await bcrypt.compare(credentials.password, user.password)
 
         if (!isPasswordValid) {
           throw new Error("Geçersiz email veya şifre")
@@ -51,22 +48,22 @@ export const authOptions: NextAuthOptions = {
           image: user.image,
           role: user.role,
         }
-      }
-    })
+      },
+    }),
   ],
   callbacks: {
     async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.sub!
-        
+
         // Her session çağrısında veritabanından güncel rol bilgisini al
         // Bu sayede rol değişiklikleri anında yansır
         try {
           const user = await prisma.user.findUnique({
             where: { id: token.sub! },
-            select: { role: true, name: true, image: true, email: true, username: true, bio: true }
+            select: { role: true, name: true, image: true, email: true, username: true, bio: true },
           })
-          
+
           if (user) {
             session.user.role = user.role as UserRole
             session.user.name = user.name
@@ -74,7 +71,7 @@ export const authOptions: NextAuthOptions = {
             session.user.email = user.email
             session.user.username = user.username
             session.user.bio = user.bio
-            
+
             // KRİTİK: JWT token'daki rolü de güncelle
             // Bu sayede middleware güncel rolü görebilir
             token.role = user.role as UserRole
@@ -95,15 +92,15 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.role = user.role as UserRole
       }
-      
+
       // Session güncellendiğinde (update trigger) veritabanından yeni rol bilgisini al
       if (trigger === "update") {
         try {
           const dbUser = await prisma.user.findUnique({
             where: { id: token.sub! },
-            select: { role: true }
+            select: { role: true },
           })
-          
+
           if (dbUser) {
             token.role = dbUser.role as UserRole
           }
@@ -111,9 +108,9 @@ export const authOptions: NextAuthOptions = {
           console.error("Error updating token role:", error)
         }
       }
-      
+
       return token
-    }
+    },
   },
   session: {
     strategy: "jwt",

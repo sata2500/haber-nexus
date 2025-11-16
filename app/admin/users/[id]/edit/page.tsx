@@ -24,19 +24,19 @@ const roleDescriptions: Record<string, string> = {
   AUTHOR: "İçerik üreticisi - Makale yazma ve yönetme yetkisi",
   EDITOR: "İçerik editörü - Makale inceleme ve yorum moderasyonu",
   ADMIN: "Sistem yöneticisi - Kullanıcı ve içerik yönetimi",
-  SUPER_ADMIN: "Süper yönetici - Tüm sisteme tam erişim"
+  SUPER_ADMIN: "Süper yönetici - Tüm sisteme tam erişim",
 }
 
 export default function EditUserPage() {
   const router = useRouter()
   const params = useParams()
   const userId = params.id as string
-  
+
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(true)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState("")
-  
+
   const [formData, setFormData] = useState({
     name: "",
     username: "",
@@ -91,7 +91,7 @@ export default function EditUserPage() {
 
       if (response.ok) {
         setSuccess(true)
-        
+
         // Eğer rol değiştiyse kullanıcıya bildirim gönder ve session refresh tetikle
         if (roleChanged) {
           try {
@@ -106,7 +106,7 @@ export default function EditUserPage() {
                 newRole: ROLE_LABELS[formData.role],
               }),
             })
-            
+
             // Session refresh tetikle
             // Bu sayede kullanıcının session'ı 5 saniye içinde güncellenecek
             await fetch(`/api/users/${userId}/force-session-refresh`, {
@@ -120,7 +120,7 @@ export default function EditUserPage() {
             // Bildirim hatası kullanıcı güncellemesini engellemez
           }
         }
-        
+
         setTimeout(() => {
           router.push("/admin/users")
         }, 1500)
@@ -139,7 +139,7 @@ export default function EditUserPage() {
   if (fetching) {
     return (
       <div className="container mx-auto py-10">
-        <p className="text-center text-muted-foreground">Yükleniyor...</p>
+        <p className="text-muted-foreground text-center">Yükleniyor...</p>
       </div>
     )
   }
@@ -147,12 +147,8 @@ export default function EditUserPage() {
   const roleChanged = formData.role !== originalRole
 
   return (
-    <div className="container mx-auto py-10 max-w-3xl">
-      <Button
-        variant="ghost"
-        className="mb-6"
-        onClick={() => router.back()}
-      >
+    <div className="container mx-auto max-w-3xl py-10">
+      <Button variant="ghost" className="mb-6" onClick={() => router.back()}>
         <ArrowLeft className="mr-2 h-4 w-4" />
         Geri
       </Button>
@@ -162,7 +158,9 @@ export default function EditUserPage() {
           <CardContent className="py-4">
             <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
               <CheckCircle2 className="h-5 w-5" />
-              <span className="font-medium">Kullanıcı başarıyla güncellendi! Yönlendiriliyorsunuz...</span>
+              <span className="font-medium">
+                Kullanıcı başarıyla güncellendi! Yönlendiriliyorsunuz...
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -182,9 +180,7 @@ export default function EditUserPage() {
       <Card>
         <CardHeader>
           <CardTitle>Kullanıcı Düzenle</CardTitle>
-          <CardDescription>
-            Kullanıcı bilgilerini ve rolünü güncelleyin
-          </CardDescription>
+          <CardDescription>Kullanıcı bilgilerini ve rolünü güncelleyin</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -204,15 +200,13 @@ export default function EditUserPage() {
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 placeholder="username"
               />
-              <p className="text-xs text-muted-foreground">
-                Benzersiz kullanıcı adı
-              </p>
+              <p className="text-muted-foreground text-xs">Benzersiz kullanıcı adı</p>
             </div>
 
             <div className="space-y-2">
               <label className="text-sm font-medium">Biyografi</label>
               <textarea
-                className="w-full min-h-[100px] px-3 py-2 border rounded-md text-sm"
+                className="min-h-[100px] w-full rounded-md border px-3 py-2 text-sm"
                 value={formData.bio}
                 onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                 placeholder="Kullanıcı hakkında..."
@@ -222,20 +216,28 @@ export default function EditUserPage() {
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <label className="text-sm font-medium">Kullanıcı Rolü</label>
-                <Badge variant={ROLE_COLORS[formData.role] as "default" | "secondary" | "destructive" | "outline"}>
-                  <Shield className="h-3 w-3 mr-1" />
+                <Badge
+                  variant={
+                    ROLE_COLORS[formData.role] as
+                      | "default"
+                      | "secondary"
+                      | "destructive"
+                      | "outline"
+                  }
+                >
+                  <Shield className="mr-1 h-3 w-3" />
                   {ROLE_LABELS[formData.role]}
                 </Badge>
               </div>
-              
+
               {roleChanged && (
                 <Card className="border-orange-500 bg-orange-50 dark:bg-orange-900/10">
                   <CardContent className="py-3">
                     <div className="flex items-start gap-2 text-sm text-orange-600 dark:text-orange-400">
-                      <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+                      <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
                       <div>
                         <p className="font-medium">Rol değişikliği tespit edildi</p>
-                        <p className="text-xs mt-1">
+                        <p className="mt-1 text-xs">
                           {ROLE_LABELS[originalRole]} → {ROLE_LABELS[formData.role]}
                         </p>
                       </div>
@@ -245,53 +247,59 @@ export default function EditUserPage() {
               )}
 
               <div className="grid gap-3">
-                {(["USER", "AUTHOR", "EDITOR", "ADMIN", "SUPER_ADMIN"] as UserRole[]).map((role) => (
-                  <Card
-                    key={role}
-                    className={`
-                      cursor-pointer transition-all
-                      ${formData.role === role 
-                        ? 'border-2 border-primary bg-primary/5' 
-                        : 'hover:border-primary/50'
-                      }
-                    `}
-                    onClick={() => setFormData({ ...formData, role })}
-                  >
-                    <CardContent className="py-4">
-                      <div className="flex items-start gap-3">
-                        <div className={`
-                          w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5
-                          ${formData.role === role 
-                            ? 'border-primary bg-primary' 
-                            : 'border-muted-foreground'
-                          }
-                        `}>
-                          {formData.role === role && (
-                            <div className="w-2 h-2 rounded-full bg-white" />
-                          )}
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="font-medium">{ROLE_LABELS[role]}</span>
-                            <Badge 
-                              variant={ROLE_COLORS[role] as "default" | "secondary" | "destructive" | "outline"}
-                              className="text-xs"
-                            >
-                              {role}
-                            </Badge>
+                {(["USER", "AUTHOR", "EDITOR", "ADMIN", "SUPER_ADMIN"] as UserRole[]).map(
+                  (role) => (
+                    <Card
+                      key={role}
+                      className={`cursor-pointer transition-all ${
+                        formData.role === role
+                          ? "border-primary bg-primary/5 border-2"
+                          : "hover:border-primary/50"
+                      } `}
+                      onClick={() => setFormData({ ...formData, role })}
+                    >
+                      <CardContent className="py-4">
+                        <div className="flex items-start gap-3">
+                          <div
+                            className={`mt-0.5 flex h-5 w-5 items-center justify-center rounded-full border-2 ${
+                              formData.role === role
+                                ? "border-primary bg-primary"
+                                : "border-muted-foreground"
+                            } `}
+                          >
+                            {formData.role === role && (
+                              <div className="h-2 w-2 rounded-full bg-white" />
+                            )}
                           </div>
-                          <p className="text-xs text-muted-foreground">
-                            {roleDescriptions[role]}
-                          </p>
+                          <div className="flex-1">
+                            <div className="mb-1 flex items-center gap-2">
+                              <span className="font-medium">{ROLE_LABELS[role]}</span>
+                              <Badge
+                                variant={
+                                  ROLE_COLORS[role] as
+                                    | "default"
+                                    | "secondary"
+                                    | "destructive"
+                                    | "outline"
+                                }
+                                className="text-xs"
+                              >
+                                {role}
+                              </Badge>
+                            </div>
+                            <p className="text-muted-foreground text-xs">
+                              {roleDescriptions[role]}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                      </CardContent>
+                    </Card>
+                  )
+                )}
               </div>
             </div>
 
-            <div className="flex gap-3 pt-4 border-t">
+            <div className="flex gap-3 border-t pt-4">
               <Button type="submit" disabled={loading || success}>
                 {loading ? "Güncelleniyor..." : success ? "Güncellendi ✓" : "Güncelle"}
               </Button>

@@ -3,10 +3,10 @@ import { HeaderClient } from "./header-client"
 
 /**
  * Server-side Header Wrapper
- * 
+ *
  * Kategorileri veritabanından çeker ve client component'e iletir.
  * Bu sayede kategoriler dinamik olarak güncellenir.
- * 
+ *
  * Avantajlar:
  * - Admin panelden kategori eklendiğinde otomatik güncellenir
  * - Kategori sıralaması değiştiğinde otomatik yansır

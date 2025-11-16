@@ -8,7 +8,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Mail, Calendar, Shield, Save, CheckCircle2, AlertCircle, Sparkles, Award } from "lucide-react"
+import {
+  Mail,
+  Calendar,
+  Shield,
+  Save,
+  CheckCircle2,
+  AlertCircle,
+  Sparkles,
+  Award,
+} from "lucide-react"
 import { InterestsSelector } from "@/components/profile/interests-selector"
 
 export default function AuthorProfilePage() {
@@ -17,7 +26,7 @@ export default function AuthorProfilePage() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState("")
-  
+
   const [formData, setFormData] = useState({
     name: "",
     username: "",
@@ -25,26 +34,26 @@ export default function AuthorProfilePage() {
     interests: [] as string[],
     expertise: [] as string[],
   })
-  
+
   const [profileLoaded, setProfileLoaded] = useState(false)
 
   useEffect(() => {
     const loadProfile = async () => {
       if (session?.user) {
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
           name: session.user.name || "",
           username: (session.user as any).username || "",
           bio: (session.user as any).bio || "",
         }))
-        
+
         // Load author profile data
         try {
-          const response = await fetch('/api/users/me')
+          const response = await fetch("/api/users/me")
           if (response.ok) {
             const data = await response.json()
             if (data.authorProfile) {
-              setFormData(prev => ({
+              setFormData((prev) => ({
                 ...prev,
                 interests: data.authorProfile.interests || [],
                 expertise: data.authorProfile.expertise || [],
@@ -52,7 +61,7 @@ export default function AuthorProfilePage() {
             }
           }
         } catch (err) {
-          console.error('Error loading profile:', err)
+          console.error("Error loading profile:", err)
         } finally {
           setProfileLoaded(true)
         }
@@ -104,19 +113,17 @@ export default function AuthorProfilePage() {
 
   if (!session) {
     return (
-      <div className="text-center py-12">
+      <div className="py-12 text-center">
         <p className="text-muted-foreground">Yükleniyor...</p>
       </div>
     )
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <div className="mx-auto max-w-3xl space-y-6">
       <div>
         <h1 className="text-3xl font-bold">Profil Ayarları</h1>
-        <p className="text-muted-foreground mt-2">
-          Yazar profilinizi yönetin
-        </p>
+        <p className="text-muted-foreground mt-2">Yazar profilinizi yönetin</p>
       </div>
 
       {success && (
@@ -144,21 +151,19 @@ export default function AuthorProfilePage() {
       <Card>
         <CardHeader>
           <CardTitle>Hesap Bilgileri</CardTitle>
-          <CardDescription>
-            Temel hesap bilgilerinizi görüntüleyin
-          </CardDescription>
+          <CardDescription>Temel hesap bilgilerinizi görüntüleyin</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-            <Mail className="h-5 w-5 text-muted-foreground" />
+          <div className="bg-muted flex items-center gap-3 rounded-lg p-3">
+            <Mail className="text-muted-foreground h-5 w-5" />
             <div className="flex-1">
               <p className="text-sm font-medium">Email</p>
-              <p className="text-sm text-muted-foreground">{session.user?.email}</p>
+              <p className="text-muted-foreground text-sm">{session.user?.email}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-            <Shield className="h-5 w-5 text-muted-foreground" />
+          <div className="bg-muted flex items-center gap-3 rounded-lg p-3">
+            <Shield className="text-muted-foreground h-5 w-5" />
             <div className="flex-1">
               <p className="text-sm font-medium">Rol</p>
               <Badge variant="default" className="mt-1">
@@ -171,12 +176,12 @@ export default function AuthorProfilePage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-            <Calendar className="h-5 w-5 text-muted-foreground" />
+          <div className="bg-muted flex items-center gap-3 rounded-lg p-3">
+            <Calendar className="text-muted-foreground h-5 w-5" />
             <div className="flex-1">
               <p className="text-sm font-medium">Üyelik Tarihi</p>
-              <p className="text-sm text-muted-foreground">
-                {(session.user as any).createdAt 
+              <p className="text-muted-foreground text-sm">
+                {(session.user as any).createdAt
                   ? new Date((session.user as any).createdAt).toLocaleDateString("tr-TR")
                   : "Bilinmiyor"}
               </p>
@@ -188,9 +193,7 @@ export default function AuthorProfilePage() {
       <Card>
         <CardHeader>
           <CardTitle>Profil Bilgileri</CardTitle>
-          <CardDescription>
-            Yazar profilinizi düzenleyin
-          </CardDescription>
+          <CardDescription>Yazar profilinizi düzenleyin</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -204,47 +207,42 @@ export default function AuthorProfilePage() {
                 placeholder="Ad Soyad"
                 required
               />
-              <p className="text-xs text-muted-foreground">
-                Makalelerinizde görünecek isim
-              </p>
+              <p className="text-muted-foreground text-xs">Makalelerinizde görünecek isim</p>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">
-                Kullanıcı Adı
-              </label>
+              <label className="text-sm font-medium">Kullanıcı Adı</label>
               <Input
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 placeholder="kullaniciadi"
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Benzersiz kullanıcı adınız (profil URL&apos;inde kullanılır)
               </p>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">
-                Biyografi
-              </label>
+              <label className="text-sm font-medium">Biyografi</label>
               <textarea
-                className="w-full min-h-[120px] px-3 py-2 border rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring"
+                className="focus:ring-ring min-h-[120px] w-full resize-none rounded-md border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
                 value={formData.bio}
                 onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                 placeholder="Kendiniz hakkında kısa bir açıklama yazın..."
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Yazar sayfanızda görünecek kısa biyografi
               </p>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-primary" />
+              <label className="flex items-center gap-2 text-sm font-medium">
+                <Sparkles className="text-primary h-4 w-4" />
                 İlgi Alanları
               </label>
-              <p className="text-xs text-muted-foreground mb-3">
-                İlgi alanlarınız otomatik yazar ataması için kullanılır. RSS Feed&apos;lerden gelen makaleler ilgi alanlarınıza göre size atanabilir.
+              <p className="text-muted-foreground mb-3 text-xs">
+                İlgi alanlarınız otomatik yazar ataması için kullanılır. RSS Feed&apos;lerden gelen
+                makaleler ilgi alanlarınıza göre size atanabilir.
               </p>
               {profileLoaded ? (
                 <InterestsSelector
@@ -252,17 +250,18 @@ export default function AuthorProfilePage() {
                   onChange={(interests) => setFormData({ ...formData, interests })}
                 />
               ) : (
-                <div className="text-sm text-muted-foreground">Yükleniyor...</div>
+                <div className="text-muted-foreground text-sm">Yükleniyor...</div>
               )}
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium flex items-center gap-2">
-                <Award className="h-4 w-4 text-primary" />
+              <label className="flex items-center gap-2 text-sm font-medium">
+                <Award className="text-primary h-4 w-4" />
                 Uzmanlık Alanları
               </label>
-              <p className="text-xs text-muted-foreground mb-3">
-                Uzmanlık alanlarınızı belirtin. Bu bilgiler yazar sayfanızda görüntülenecek ve otomatik atamada kullanılacaktır.
+              <p className="text-muted-foreground mb-3 text-xs">
+                Uzmanlık alanlarınızı belirtin. Bu bilgiler yazar sayfanızda görüntülenecek ve
+                otomatik atamada kullanılacaktır.
               </p>
               {profileLoaded ? (
                 <InterestsSelector
@@ -292,24 +291,16 @@ export default function AuthorProfilePage() {
                   ]}
                 />
               ) : (
-                <div className="text-sm text-muted-foreground">Yükleniyor...</div>
+                <div className="text-muted-foreground text-sm">Yükleniyor...</div>
               )}
             </div>
 
             <div className="flex gap-2">
-              <Button
-                type="submit"
-                disabled={loading || !formData.name}
-                className="gap-2"
-              >
+              <Button type="submit" disabled={loading || !formData.name} className="gap-2">
                 <Save className="h-4 w-4" />
                 {loading ? "Kaydediliyor..." : "Değişiklikleri Kaydet"}
               </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.back()}
-              >
+              <Button type="button" variant="outline" onClick={() => router.back()}>
                 İptal
               </Button>
             </div>
@@ -321,11 +312,9 @@ export default function AuthorProfilePage() {
         <CardHeader>
           <CardTitle className="text-base">Gelecek Özellikler</CardTitle>
         </CardHeader>
-        <CardContent className="text-sm text-muted-foreground space-y-2">
-          <p>
-            Yakında eklenecek özellikler:
-          </p>
-          <ul className="list-disc list-inside space-y-1 ml-2">
+        <CardContent className="text-muted-foreground space-y-2 text-sm">
+          <p>Yakında eklenecek özellikler:</p>
+          <ul className="ml-2 list-inside list-disc space-y-1">
             <li>Avatar/profil fotoğrafı yükleme</li>
             <li>Sosyal medya bağlantıları</li>
             <li>Uzmanlık alanları</li>

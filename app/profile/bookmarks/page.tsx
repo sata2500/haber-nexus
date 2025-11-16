@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { BookmarksClient } from "./bookmarks-client"
-import {  } from "@/components/ui/card"
+import {} from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Bookmark } from "lucide-react"
 import Link from "next/link"
@@ -43,7 +43,7 @@ export default async function BookmarksPage() {
   })
 
   // Date tiplerini string'e çevir
-  const bookmarks = bookmarksData.map(bookmark => ({
+  const bookmarks = bookmarksData.map((bookmark) => ({
     ...bookmark,
     createdAt: bookmark.createdAt.toISOString(),
     article: {
@@ -53,10 +53,10 @@ export default async function BookmarksPage() {
   }))
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-12">
-        <div className="max-w-5xl mx-auto space-y-6">
+      <main className="container mx-auto flex-1 px-4 py-12">
+        <div className="mx-auto max-w-5xl space-y-6">
           <div className="flex items-center gap-4">
             <Link href="/profile">
               <Button variant="ghost" size="sm">
@@ -65,13 +65,11 @@ export default async function BookmarksPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold flex items-center gap-2">
+              <h1 className="flex items-center gap-2 text-3xl font-bold">
                 <Bookmark className="h-8 w-8" />
                 Kaydedilenler
               </h1>
-              <p className="text-muted-foreground mt-1">
-                Kaydettiğiniz makaleleri görüntüleyin
-              </p>
+              <p className="text-muted-foreground mt-1">Kaydettiğiniz makaleleri görüntüleyin</p>
             </div>
           </div>
 

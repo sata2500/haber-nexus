@@ -24,7 +24,7 @@ import { UserRole } from "@prisma/client"
 
 /**
  * Client-side Header Bileşeni
- * 
+ *
  * Kullanıcı etkileşimlerini (arama, menü, oturum) yönetir.
  * Kategoriler parent component'ten prop olarak alınır.
  * Rol bazlı dashboard navigasyonu sağlar.
@@ -58,30 +58,30 @@ export function HeaderClient({ categories }: HeaderClientProps) {
   }
 
   // Kullanıcının erişebileceği dashboard'ları al
-  const accessibleDashboards = session?.user?.role 
+  const accessibleDashboards = session?.user?.role
     ? getAccessibleDashboards(session.user.role as UserRole)
     : []
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur">
       {/* Top Bar */}
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
           <div className="flex items-center">
-            <span className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            <span className="from-primary to-primary/60 bg-gradient-to-r bg-clip-text text-2xl font-bold text-transparent">
               Haber Nexus
             </span>
           </div>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-6">
+        <nav className="hidden items-center space-x-6 md:flex">
           {categories.map((category) => (
             <Link
               key={category.slug}
               href={`/categories/${category.slug}`}
-              className="text-sm font-medium transition-colors hover:text-primary"
+              className="hover:text-primary text-sm font-medium transition-colors"
             >
               {category.name}
             </Link>
@@ -91,12 +91,12 @@ export function HeaderClient({ categories }: HeaderClientProps) {
         {/* Right Section */}
         <div className="flex items-center space-x-4">
           {/* Search */}
-          <form onSubmit={handleSearch} className="hidden lg:flex items-center space-x-2">
+          <form onSubmit={handleSearch} className="hidden items-center space-x-2 lg:flex">
             <div className="relative">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Search className="text-muted-foreground absolute top-2.5 left-2 h-4 w-4" />
               <Input
                 placeholder="Haber ara..."
-                className="pl-8 w-[200px] lg:w-[300px]"
+                className="w-[200px] pl-8 lg:w-[300px]"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -139,14 +139,14 @@ export function HeaderClient({ categories }: HeaderClientProps) {
               <DropdownMenuContent align="end" className="w-64">
                 <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1.5">
-                    <p className="text-sm font-medium leading-none">
+                    <p className="text-sm leading-none font-medium">
                       {session.user.name || "İsimsiz"}
                     </p>
-                    <p className="text-xs leading-none text-muted-foreground">
+                    <p className="text-muted-foreground text-xs leading-none">
                       {session.user.email}
                     </p>
                     {session.user.role && (
-                      <Badge 
+                      <Badge
                         variant={ROLE_COLORS[session.user.role as UserRole]}
                         className="w-fit text-xs"
                       >
@@ -155,18 +155,18 @@ export function HeaderClient({ categories }: HeaderClientProps) {
                     )}
                   </div>
                 </DropdownMenuLabel>
-                
+
                 {/* Dashboard Links */}
                 {accessibleDashboards.length > 0 && (
                   <>
                     <DropdownMenuSeparator />
-                    <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">
+                    <DropdownMenuLabel className="text-muted-foreground text-xs font-normal">
                       Dashboard Erişimi
                     </DropdownMenuLabel>
                     {accessibleDashboards.map((dashboard) => {
                       const Icon = dashboard.icon
                       return (
-                        <DropdownMenuItem 
+                        <DropdownMenuItem
                           key={dashboard.id}
                           onClick={() => router.push(dashboard.href)}
                         >
@@ -177,7 +177,7 @@ export function HeaderClient({ categories }: HeaderClientProps) {
                     })}
                   </>
                 )}
-                
+
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => router.push("/profile")}>
                   <User className="mr-2 h-4 w-4" />
@@ -195,11 +195,7 @@ export function HeaderClient({ categories }: HeaderClientProps) {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button
-              variant="default"
-              size="sm"
-              onClick={() => router.push("/auth/signin")}
-            >
+            <Button variant="default" size="sm" onClick={() => router.push("/auth/signin")}>
               Giriş Yap
             </Button>
           )}

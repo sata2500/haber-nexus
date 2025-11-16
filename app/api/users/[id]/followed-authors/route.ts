@@ -7,27 +7,18 @@ import { prisma } from "@/lib/prisma"
  * GET /api/users/[id]/followed-authors
  * Kullanıcının takip ettiği yazarları getirir
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
     const { id } = await params
 
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Oturum açmanız gerekiyor" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Oturum açmanız gerekiyor" }, { status: 401 })
     }
 
     // Kullanıcı sadece kendi takiplerini görebilir
     if (session.user.id !== id) {
-      return NextResponse.json(
-        { error: "Bu takipleri görme yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu takipleri görme yetkiniz yok" }, { status: 403 })
     }
 
     const { searchParams } = new URL(request.url)

@@ -1,4 +1,3 @@
- 
 "use client"
 
 import { useState, useEffect } from "react"
@@ -21,7 +20,7 @@ export default function NewArticlePage() {
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState<Category[]>([])
   const [previewMode, setPreviewMode] = useState(false)
-  
+
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -117,12 +116,8 @@ export default function NewArticlePage() {
   }
 
   return (
-    <div className="container mx-auto py-10 max-w-4xl">
-      <Button
-        variant="ghost"
-        className="mb-6"
-        onClick={() => router.back()}
-      >
+    <div className="container mx-auto max-w-4xl py-10">
+      <Button variant="ghost" className="mb-6" onClick={() => router.back()}>
         <ArrowLeft className="mr-2 h-4 w-4" />
         Geri
       </Button>
@@ -130,9 +125,7 @@ export default function NewArticlePage() {
       <Card>
         <CardHeader>
           <CardTitle>Yeni Makale Oluştur</CardTitle>
-          <CardDescription>
-            Yeni bir makale yazın ve yayınlayın
-          </CardDescription>
+          <CardDescription>Yeni bir makale yazın ve yayınlayın</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -158,7 +151,7 @@ export default function NewArticlePage() {
                 placeholder="makale-slug"
                 required
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 URL&apos;de kullanılacak benzersiz tanımlayıcı
               </p>
             </div>
@@ -166,7 +159,7 @@ export default function NewArticlePage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Özet</label>
               <textarea
-                className="w-full min-h-[80px] px-3 py-2 border rounded-md text-sm"
+                className="min-h-[80px] w-full rounded-md border px-3 py-2 text-sm"
                 value={formData.excerpt}
                 onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                 placeholder="Kısa özet (opsiyonel)..."
@@ -185,7 +178,7 @@ export default function NewArticlePage() {
                     size="sm"
                     onClick={() => setPreviewMode(false)}
                   >
-                    <Edit3 className="h-4 w-4 mr-2" />
+                    <Edit3 className="mr-2 h-4 w-4" />
                     Düzenle
                   </Button>
                   <Button
@@ -194,7 +187,7 @@ export default function NewArticlePage() {
                     size="sm"
                     onClick={() => setPreviewMode(true)}
                   >
-                    <Eye className="h-4 w-4 mr-2" />
+                    <Eye className="mr-2 h-4 w-4" />
                     Önizle
                   </Button>
                 </div>
@@ -207,12 +200,12 @@ export default function NewArticlePage() {
                   minHeight="400px"
                 />
               ) : (
-                <div className="border rounded-md p-6 min-h-[400px] bg-white dark:bg-gray-900">
+                <div className="min-h-[400px] rounded-md border bg-white p-6 dark:bg-gray-900">
                   <MarkdownRenderer content={formData.content} />
                 </div>
               )}
-              <p className="text-xs text-muted-foreground">
-                Markdown formatını kullanabilirsiniz. <strong>**kalın**</strong>, <em>*italik*</em>, 
+              <p className="text-muted-foreground text-xs">
+                Markdown formatını kullanabilirsiniz. <strong>**kalın**</strong>, <em>*italik*</em>,
                 başlıklar için # kullanın.
               </p>
             </div>
@@ -223,7 +216,7 @@ export default function NewArticlePage() {
                   Kategori <span className="text-destructive">*</span>
                 </label>
                 <select
-                  className="w-full px-3 py-2 border rounded-md text-sm"
+                  className="w-full rounded-md border px-3 py-2 text-sm"
                   value={formData.categoryId}
                   onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
                   required
@@ -240,7 +233,7 @@ export default function NewArticlePage() {
               <div className="space-y-2">
                 <label className="text-sm font-medium">Tür</label>
                 <select
-                  className="w-full px-3 py-2 border rounded-md text-sm"
+                  className="w-full rounded-md border px-3 py-2 text-sm"
                   value={formData.type}
                   onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                 >
@@ -290,7 +283,7 @@ export default function NewArticlePage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Meta Açıklama</label>
               <textarea
-                className="w-full min-h-[60px] px-3 py-2 border rounded-md text-sm"
+                className="min-h-[60px] w-full rounded-md border px-3 py-2 text-sm"
                 value={formData.metaDescription}
                 onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })}
                 placeholder="SEO için meta açıklama (opsiyonel)..."
@@ -300,13 +293,12 @@ export default function NewArticlePage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Durum</label>
               <select
-                className="w-full px-3 py-2 border rounded-md text-sm"
+                className="w-full rounded-md border px-3 py-2 text-sm"
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
               >
                 <option value="DRAFT">Taslak</option>
                 <option value="PUBLISHED">Yayınla</option>
-                
               </select>
             </div>
 
@@ -314,11 +306,7 @@ export default function NewArticlePage() {
               <Button type="submit" disabled={loading}>
                 {loading ? "Oluşturuluyor..." : "Makale Oluştur"}
               </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.back()}
-              >
+              <Button type="button" variant="outline" onClick={() => router.back()}>
                 İptal
               </Button>
             </div>

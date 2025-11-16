@@ -8,7 +8,7 @@ import "easymde/dist/easymde.min.css"
 // Dynamically import SimpleMDE to avoid SSR issues
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
-  loading: () => <div className="border rounded-md p-4">Editör yükleniyor...</div>
+  loading: () => <div className="rounded-md border p-4">Editör yükleniyor...</div>,
 })
 
 interface MarkdownEditorProps {
@@ -22,7 +22,7 @@ export function MarkdownEditor({
   value,
   onChange,
   placeholder = "İçeriğinizi markdown formatında yazın...",
-  minHeight = "400px"
+  minHeight = "400px",
 }: MarkdownEditorProps) {
   const handleChange = useCallback(
     (value: string) => {
@@ -32,48 +32,49 @@ export function MarkdownEditor({
   )
 
   const options = useMemo(
-    () => ({
-      spellChecker: false,
-      placeholder,
-      minHeight,
-      maxHeight: "800px",
-      autofocus: false,
-      status: ["lines", "words", "cursor"] as any,
-      toolbar: [
-        "bold",
-        "italic",
-        "heading",
-        "|",
-        "quote",
-        "unordered-list",
-        "ordered-list",
-        "|",
-        "link",
-        "image",
-        "|",
-        "preview",
-        "side-by-side",
-        "fullscreen",
-        "|",
-        "guide"
-      ] as any,
-      shortcuts: {
-        toggleBold: "Cmd-B",
-        toggleItalic: "Cmd-I",
-        toggleHeadingSmaller: "Cmd-H",
-        toggleHeadingBigger: "Shift-Cmd-H",
-        cleanBlock: "Cmd-E",
-        drawLink: "Cmd-K",
-        drawImage: "Cmd-Alt-I",
-        togglePreview: "Cmd-P",
-        toggleSideBySide: "F9",
-        toggleFullScreen: "F11"
-      },
-      previewRender: (plainText: string) => {
-        // Simple markdown preview (you can enhance this with react-markdown)
-        return `<div class="prose dark:prose-invert max-w-none">${plainText}</div>`
-      }
-    } as any),
+    () =>
+      ({
+        spellChecker: false,
+        placeholder,
+        minHeight,
+        maxHeight: "800px",
+        autofocus: false,
+        status: ["lines", "words", "cursor"] as any,
+        toolbar: [
+          "bold",
+          "italic",
+          "heading",
+          "|",
+          "quote",
+          "unordered-list",
+          "ordered-list",
+          "|",
+          "link",
+          "image",
+          "|",
+          "preview",
+          "side-by-side",
+          "fullscreen",
+          "|",
+          "guide",
+        ] as any,
+        shortcuts: {
+          toggleBold: "Cmd-B",
+          toggleItalic: "Cmd-I",
+          toggleHeadingSmaller: "Cmd-H",
+          toggleHeadingBigger: "Shift-Cmd-H",
+          cleanBlock: "Cmd-E",
+          drawLink: "Cmd-K",
+          drawImage: "Cmd-Alt-I",
+          togglePreview: "Cmd-P",
+          toggleSideBySide: "F9",
+          toggleFullScreen: "F11",
+        },
+        previewRender: (plainText: string) => {
+          // Simple markdown preview (you can enhance this with react-markdown)
+          return `<div class="prose dark:prose-invert max-w-none">${plainText}</div>`
+        },
+      }) as any,
     [placeholder, minHeight]
   )
 

@@ -28,6 +28,7 @@ Kullanıcı talebi: "Görsel oluşturmayı tamamen ücretsiz hale getirmemiz ger
 **Yeni Modül**: `lib/services/api-key-manager.ts` (~250 satır)
 
 **Özellikler**:
+
 - ✅ Çoklu API key desteği (sınırsız hesap)
 - ✅ Round-robin rotasyon stratejisi
 - ✅ Otomatik günlük limit takibi
@@ -37,6 +38,7 @@ Kullanıcı talebi: "Görsel oluşturmayı tamamen ücretsiz hale getirmemiz ger
 ### Yapılandırma
 
 **Environment Variables**:
+
 ```bash
 # .env
 GOOGLE_API_KEY=your_primary_key_here
@@ -49,18 +51,19 @@ GOOGLE_API_KEY_5=your_account_5_key_here
 
 ### Kapasite Hesaplaması
 
-| Hesap Sayısı | Günlük Limit | Aylık Limit | Maliyet |
-|---------------|--------------|-------------|---------|
-| 1 hesap | 100 görsel | 3,000 görsel | **$0** |
-| 3 hesap | 300 görsel | 9,000 görsel | **$0** |
-| 5 hesap | 500 görsel | 15,000 görsel | **$0** |
-| 6 hesap | 600 görsel | 18,000 görsel | **$0** |
+| Hesap Sayısı | Günlük Limit | Aylık Limit   | Maliyet |
+| ------------ | ------------ | ------------- | ------- |
+| 1 hesap      | 100 görsel   | 3,000 görsel  | **$0**  |
+| 3 hesap      | 300 görsel   | 9,000 görsel  | **$0**  |
+| 5 hesap      | 500 görsel   | 15,000 görsel | **$0**  |
+| 6 hesap      | 600 görsel   | 18,000 görsel | **$0**  |
 
 **Not**: Her hesap için Google'ın ücretsiz tier'ı kullanılıyor, ek ücret yok!
 
 ### Kullanım
 
 **Otomatik Kullanım** (vision-enhancer.ts):
+
 ```typescript
 // Automatically selects next available API key
 const { key: apiKey, accountName } = getNextGoogleApiKey()
@@ -73,6 +76,7 @@ recordApiUsage(accountName)
 ```
 
 **Manuel Kontrol**:
+
 ```typescript
 import { getApiUsageStats } from "@/lib/services/api-key-manager"
 
@@ -92,6 +96,7 @@ console.log(`Total Usage: ${stats.totalUsage}/${stats.totalLimit}`)
 ✅ Otomatik devre dışı bırakma: Başarılı
 
 **Örnek Çıktı**:
+
 ```
 Total Keys: 1
 Active Keys: 1
@@ -115,6 +120,7 @@ Kullanıcı talebi: "Günlük 100 haber fazla, daha kaliteli ve daha az sayıda 
 **Yeni Modül**: `lib/services/quality-filter.ts` (~200 satır)
 
 **Özellikler**:
+
 - ✅ Otomatik kalite skorlaması (0-1 arası)
 - ✅ Minimum başlık/içerik uzunluğu kontrolü
 - ✅ Öncelikli anahtar kelime sistemi
@@ -125,12 +131,14 @@ Kullanıcı talebi: "Günlük 100 haber fazla, daha kaliteli ve daha az sayıda 
 ### Kalite Kriterleri
 
 **Pozitif Faktörler** (+puan):
+
 - Yeterli başlık uzunluğu (>20 karakter): +0.1
 - Yeterli içerik uzunluğu (>500 karakter): +0.2
 - Öncelikli anahtar kelimeler: +0.2 (her biri için)
 - Yapılandırılmış başlık (`:` veya `-` içeren): +0.1
 
 **Negatif Faktörler** (-puan):
+
 - Kısa başlık (<20 karakter): -0.2
 - Kısa içerik (<200 karakter): -0.3
 - Düşük kalite göstergeleri: -0.3 (her biri için)
@@ -141,25 +149,31 @@ Kullanıcı talebi: "Günlük 100 haber fazla, daha kaliteli ve daha az sayıda 
 ### Öncelikli Anahtar Kelimeler
 
 ```typescript
-[
-  "ekonomi", "teknoloji", "sağlık", "eğitim",
-  "bilim", "çevre", "politika", "dünya",
-  "analiz", "özel haber", "röportaj"
+;[
+  "ekonomi",
+  "teknoloji",
+  "sağlık",
+  "eğitim",
+  "bilim",
+  "çevre",
+  "politika",
+  "dünya",
+  "analiz",
+  "özel haber",
+  "röportaj",
 ]
 ```
 
 ### Düşük Kalite Göstergeleri
 
 ```typescript
-[
-  "tıkla", "şok", "inanılmaz", "reklam",
-  "sponsor", "çekiliş", "kampanya"
-]
+;["tıkla", "şok", "inanılmaz", "reklam", "sponsor", "çekiliş", "kampanya"]
 ```
 
 ### Yapılandırma
 
 **Environment Variables**:
+
 ```bash
 # .env
 QUALITY_MIN_TITLE_LENGTH=20
@@ -171,6 +185,7 @@ QUALITY_MIN_SCORE=0.7
 ### Entegrasyon
 
 **enhanced-scanner.ts**:
+
 ```typescript
 // Quality filtering: Select high-quality items
 const qualityConfig = getQualityFilterConfig()
@@ -187,16 +202,19 @@ itemsToProcess = qualityFiltered.map((r) => r.item)
 ### Sonuçlar
 
 **Önceki Durum**:
+
 - Günlük haber: ~100
 - Kalite: Karışık
 - Görsel maliyeti: ~$3.12/gün
 
 **Yeni Durum**:
+
 - Günlük haber: ~30 (en kaliteli)
 - Kalite: Yüksek (skor ≥0.7)
 - Görsel maliyeti: **$0/gün** (ücretsiz tier dahilinde)
 
 **İyileşme**:
+
 - ✅ %70 daha az içerik
 - ✅ %100 daha yüksek kalite
 - ✅ %100 maliyet tasarrufu
@@ -208,6 +226,7 @@ itemsToProcess = qualityFiltered.map((r) => r.item)
 ### Sorun
 
 Kullanıcı bildirimi:
+
 ```
 Error: Input required and not supplied: path
 ```
@@ -222,12 +241,13 @@ Error: Input required and not supplied: path
     key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
     restore-keys: |
       ${{ runner.os }}-pnpm-store-
-  if: steps.pnpm-cache.outputs.STORE_PATH != ''  # ❌ Yanlış yer
+  if: steps.pnpm-cache.outputs.STORE_PATH != '' # ❌ Yanlış yer
 ```
 
 ### Çözüm
 
 **Düzeltilmiş Kod**:
+
 ```yaml
 - name: Setup pnpm cache
   uses: actions/cache@v4
@@ -248,6 +268,7 @@ Error: Input required and not supplied: path
 ### Test
 
 **Manuel Test**:
+
 ```bash
 # GitHub Actions workflow'u manuel olarak tetikleme
 gh workflow run ci.yml
@@ -272,21 +293,23 @@ gh workflow run ci.yml
 **Sonuç**: ✅ **0 hata, 0 uyarı**
 
 **Düzeltilen Hatalar**:
+
 - ❌ Kullanılmayan import'lar kaldırıldı
 - ❌ Kullanılmayan parametreler `_` ile işaretlendi
 - ✅ Tüm kod ESLint kurallarına uygun
 
 ### Test Coverage
 
-| Modül | Test | Sonuç |
-|-------|------|-------|
-| API Key Manager | ✅ | Başarılı |
-| Quality Filter | ✅ | Başarılı |
-| Vision Enhancer | ✅ | Başarılı |
-| Content Enricher | ✅ | Başarılı |
-| Duplicate Checker | ✅ | Başarılı |
+| Modül             | Test | Sonuç    |
+| ----------------- | ---- | -------- |
+| API Key Manager   | ✅   | Başarılı |
+| Quality Filter    | ✅   | Başarılı |
+| Vision Enhancer   | ✅   | Başarılı |
+| Content Enricher  | ✅   | Başarılı |
+| Duplicate Checker | ✅   | Başarılı |
 
 **Test Scriptleri**:
+
 - `scripts/test-api-key-manager.ts`
 - `scripts/test-duplicate-checker.ts`
 - `scripts/test-enhanced-processor-detailed.ts`
@@ -298,34 +321,35 @@ gh workflow run ci.yml
 
 ### Teknik Başarı
 
-| Metrik | Hedef | Gerçekleşen | Durum |
-|--------|-------|-------------|-------|
-| Yeni Kod | ~500 satır | ~700 satır | ✅ Aşıldı |
-| TypeScript Hataları | 0 | 0 | ✅ Başarılı |
-| ESLint Hataları | 0 | 0 | ✅ Başarılı |
-| Test Coverage | %80 | %100 | ✅ Aşıldı |
+| Metrik              | Hedef      | Gerçekleşen | Durum       |
+| ------------------- | ---------- | ----------- | ----------- |
+| Yeni Kod            | ~500 satır | ~700 satır  | ✅ Aşıldı   |
+| TypeScript Hataları | 0          | 0           | ✅ Başarılı |
+| ESLint Hataları     | 0          | 0           | ✅ Başarılı |
+| Test Coverage       | %80        | %100        | ✅ Aşıldı   |
 
 ### Maliyet Başarısı
 
-| Senaryo | Önceki | Yeni | Tasarruf |
-|---------|--------|------|----------|
-| **Günlük** | $3.12 | **$0** | **%100** |
-| **Aylık** | $93.60 | **$0** | **%100** |
+| Senaryo    | Önceki    | Yeni   | Tasarruf |
+| ---------- | --------- | ------ | -------- |
+| **Günlük** | $3.12     | **$0** | **%100** |
+| **Aylık**  | $93.60    | **$0** | **%100** |
 | **Yıllık** | $1,123.20 | **$0** | **%100** |
 
 **Strateji**:
+
 - ✅ 6 Google hesabı × 100 görsel/gün = 600 görsel/gün (ücretsiz)
 - ✅ Kalite filtresi: 30 haber/gün (600 görsel kapasitesinin çok altında)
 - ✅ Tamamen ücretsiz tier dahilinde
 
 ### Kalite Başarısı
 
-| Metrik | Önceki | Yeni | İyileşme |
-|--------|--------|------|----------|
-| Günlük Haber | 100 | 30 | **-%70** |
-| Ortalama Kalite Skoru | 0.65 | 0.80+ | **+%23** |
-| İçerik Uzunluğu | 1,422 | 3,976 | **+%180** |
-| Duplicate Rate | %15 | %0 | **-100%** |
+| Metrik                | Önceki | Yeni  | İyileşme  |
+| --------------------- | ------ | ----- | --------- |
+| Günlük Haber          | 100    | 30    | **-%70**  |
+| Ortalama Kalite Skoru | 0.65   | 0.80+ | **+%23**  |
+| İçerik Uzunluğu       | 1,422  | 3,976 | **+%180** |
+| Duplicate Rate        | %15    | %0    | **-100%** |
 
 ---
 
@@ -333,22 +357,22 @@ gh workflow run ci.yml
 
 ### Yeni Dosyalar
 
-| Dosya | Satır | Açıklama |
-|-------|-------|----------|
-| `lib/services/api-key-manager.ts` | ~250 | Çoklu API key yönetimi |
-| `lib/services/quality-filter.ts` | ~200 | Kalite odaklı filtreleme |
-| `scripts/test-api-key-manager.ts` | ~120 | API key manager testi |
-| `docs/reports/FINAL_IMPROVEMENTS_REPORT.md` | - | Son geliştirmeler raporu |
+| Dosya                                       | Satır | Açıklama                 |
+| ------------------------------------------- | ----- | ------------------------ |
+| `lib/services/api-key-manager.ts`           | ~250  | Çoklu API key yönetimi   |
+| `lib/services/quality-filter.ts`            | ~200  | Kalite odaklı filtreleme |
+| `scripts/test-api-key-manager.ts`           | ~120  | API key manager testi    |
+| `docs/reports/FINAL_IMPROVEMENTS_REPORT.md` | -     | Son geliştirmeler raporu |
 
 **Toplam Yeni Kod**: ~570 satır
 
 ### Güncellenen Dosyalar
 
-| Dosya | Değişiklik |
-|-------|------------|
-| `lib/ai/vision-enhancer.ts` | Çoklu API key desteği eklendi |
-| `lib/rss/enhanced-scanner.ts` | Quality filter entegrasyonu |
-| `.github/workflows/ci.yml` | Cache hatası düzeltildi |
+| Dosya                         | Değişiklik                    |
+| ----------------------------- | ----------------------------- |
+| `lib/ai/vision-enhancer.ts`   | Çoklu API key desteği eklendi |
+| `lib/rss/enhanced-scanner.ts` | Quality filter entegrasyonu   |
+| `.github/workflows/ci.yml`    | Cache hatası düzeltildi       |
 
 ---
 
@@ -409,11 +433,13 @@ pnpm build
 ### Senaryo 1: Konservatif (Mevcut)
 
 **Yapılandırma**:
+
 - 6 Google hesabı
 - 30 haber/gün
 - %80 görsel kullanımı
 
 **Kapasite**:
+
 - Günlük: 30 haber × 0.8 = 24 görsel
 - Aylık: 720 görsel
 - Yıllık: 8,640 görsel
@@ -423,11 +449,13 @@ pnpm build
 ### Senaryo 2: Agresif
 
 **Yapılandırma**:
+
 - 6 Google hesabı
 - 50 haber/gün
 - %90 görsel kullanımı
 
 **Kapasite**:
+
 - Günlük: 50 haber × 0.9 = 45 görsel
 - Aylık: 1,350 görsel
 - Yıllık: 16,425 görsel
@@ -437,11 +465,13 @@ pnpm build
 ### Senaryo 3: Maksimum
 
 **Yapılandırma**:
+
 - 10 Google hesabı
 - 100 haber/gün
 - %100 görsel kullanımı
 
 **Kapasite**:
+
 - Günlük: 100 haber × 1.0 = 100 görsel
 - Aylık: 3,000 görsel
 - Yıllık: 36,000 görsel
@@ -505,6 +535,7 @@ pnpm build
 **✅ Production-Ready**
 
 **Önerilen Yapılandırma**:
+
 ```bash
 # .env
 GOOGLE_API_KEY=AIza...primary
@@ -519,6 +550,7 @@ QUALITY_MIN_SCORE=0.7
 ```
 
 **Beklenen Sonuçlar**:
+
 - 📊 30 yüksek kaliteli haber/gün
 - 🎨 24 AI görseli/gün (ücretsiz)
 - 💰 $0 maliyet

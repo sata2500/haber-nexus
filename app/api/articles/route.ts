@@ -32,15 +32,15 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit
 
     const where: Record<string, unknown> = {}
-    
+
     if (status) {
       where.status = status
     }
-    
+
     if (categoryId) {
       where.categoryId = categoryId
     }
-    
+
     if (authorId) {
       where.authorId = authorId
     }
@@ -99,10 +99,7 @@ export async function GET(request: NextRequest) {
     })
   } catch (error: unknown) {
     console.error("Error fetching articles:", error)
-    return NextResponse.json(
-      { error: "Makaleler yüklenirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Makaleler yüklenirken bir hata oluştu" }, { status: 500 })
   }
 }
 
@@ -110,21 +107,15 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session) {
-      return NextResponse.json(
-        { error: "Yetkilendirme gerekli" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Yetkilendirme gerekli" }, { status: 401 })
     }
 
     // Sadece yazar, editör ve admin makale oluşturabilir
     const userRole = session.user?.role
     if (!["AUTHOR", "EDITOR", "ADMIN", "SUPER_ADMIN"].includes(userRole || "")) {
-      return NextResponse.json(
-        { error: "Bu işlem için yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu işlem için yetkiniz yok" }, { status: 403 })
     }
 
     const body = await request.json()
@@ -136,10 +127,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (existingArticle) {
-      return NextResponse.json(
-        { error: "Bu slug zaten kullanılıyor" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Bu slug zaten kullanılıyor" }, { status: 400 })
     }
 
     // Tag'leri işle (varsa oluştur, yoksa bağla)
@@ -209,16 +197,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(article, { status: 201 })
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Geçersiz veri", details: error.issues },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Geçersiz veri", details: error.issues }, { status: 400 })
     }
 
     console.error("Error creating article:", error)
-    return NextResponse.json(
-      { error: "Makale oluşturulurken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Makale oluşturulurken bir hata oluştu" }, { status: 500 })
   }
 }

@@ -13,10 +13,7 @@ export async function GET(request: NextRequest) {
     const articleId = searchParams.get("articleId")
 
     if (!articleId) {
-      return NextResponse.json(
-        { error: "Article ID is required" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Article ID is required" }, { status: 400 })
     }
 
     const comments = await prisma.comment.findMany({
@@ -59,10 +56,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(comments)
   } catch (error: unknown) {
     console.error("Error fetching comments:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch comments" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to fetch comments" }, { status: 500 })
   }
 }
 
@@ -74,20 +68,14 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const body = await request.json()
     const { articleId, content, parentId } = body
 
     if (!articleId || !content) {
-      return NextResponse.json(
-        { error: "Article ID and content are required" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Article ID and content are required" }, { status: 400 })
     }
 
     // Check if article exists
@@ -96,10 +84,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (!article) {
-      return NextResponse.json(
-        { error: "Article not found" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "Article not found" }, { status: 404 })
     }
 
     // Auto-approve for admins, pending for others
@@ -138,9 +123,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(comment, { status: 201 })
   } catch (error: unknown) {
     console.error("Error creating comment:", error)
-    return NextResponse.json(
-      { error: "Failed to create comment" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to create comment" }, { status: 500 })
   }
 }

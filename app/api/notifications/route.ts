@@ -11,10 +11,7 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const notifications = await prisma.notification.findMany({
@@ -40,9 +37,6 @@ export async function GET() {
     })
   } catch (error: unknown) {
     console.error("Error fetching notifications:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch notifications" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to fetch notifications" }, { status: 500 })
   }
 }

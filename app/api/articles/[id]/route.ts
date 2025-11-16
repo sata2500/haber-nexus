@@ -21,13 +21,10 @@ const articleUpdateSchema = z.object({
 })
 
 // GET - Makale detayı
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
-    
+
     const article = await prisma.article.findUnique({
       where: { id },
       include: {
@@ -53,49 +50,34 @@ export async function GET(
     })
 
     if (!article) {
-      return NextResponse.json(
-        { error: "Makale bulunamadı" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "Makale bulunamadı" }, { status: 404 })
     }
 
     return NextResponse.json(article)
   } catch (error: unknown) {
     console.error("Error fetching article:", error)
-    return NextResponse.json(
-      { error: "Makale yüklenirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Makale yüklenirken bir hata oluştu" }, { status: 500 })
   }
 }
 
 // PATCH - Makale güncelle
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session) {
-      return NextResponse.json(
-        { error: "Yetkilendirme gerekli" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Yetkilendirme gerekli" }, { status: 401 })
     }
 
     const { id } = await params
-    
+
     // Mevcut makaleyi kontrol et
     const existingArticle = await prisma.article.findUnique({
       where: { id },
     })
 
     if (!existingArticle) {
-      return NextResponse.json(
-        { error: "Makale bulunamadı" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "Makale bulunamadı" }, { status: 404 })
     }
 
     // Yetki kontrolü - sadece makale sahibi, editör veya admin düzenleyebilir
@@ -104,10 +86,7 @@ export async function PATCH(
     const canEdit = isOwner || ["EDITOR", "ADMIN", "SUPER_ADMIN"].includes(userRole || "")
 
     if (!canEdit) {
-      return NextResponse.json(
-        { error: "Bu makaleyi düzenleme yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu makaleyi düzenleme yetkiniz yok" }, { status: 403 })
     }
 
     const body = await request.json()
@@ -123,10 +102,7 @@ export async function PATCH(
       })
 
       if (slugExists) {
-        return NextResponse.json(
-          { error: "Bu slug zaten kullanılıyor" },
-          { status: 400 }
-        )
+        return NextResponse.json({ error: "Bu slug zaten kullanılıyor" }, { status: 400 })
       }
     }
 
@@ -179,7 +155,7 @@ export async function PATCH(
     }
 
     // Undefined değerleri temizle
-    Object.keys(updateData).forEach(key => {
+    Object.keys(updateData).forEach((key) => {
       if (updateData[key] === undefined) {
         delete updateData[key]
       }
@@ -210,17 +186,11 @@ export async function PATCH(
     return NextResponse.json(article)
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Geçersiz veri", details: error.issues },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Geçersiz veri", details: error.issues }, { status: 400 })
     }
 
     console.error("Error updating article:", error)
-    return NextResponse.json(
-      { error: "Makale güncellenirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Makale güncellenirken bir hata oluştu" }, { status: 500 })
   }
 }
 
@@ -231,12 +201,9 @@ export async function DELETE(
 ) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session) {
-      return NextResponse.json(
-        { error: "Yetkilendirme gerekli" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Yetkilendirme gerekli" }, { status: 401 })
     }
 
     const { id } = await params
@@ -247,10 +214,7 @@ export async function DELETE(
     })
 
     if (!existingArticle) {
-      return NextResponse.json(
-        { error: "Makale bulunamadı" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "Makale bulunamadı" }, { status: 404 })
     }
 
     // Yetki kontrolü - sadece makale sahibi veya admin silebilir
@@ -259,10 +223,7 @@ export async function DELETE(
     const canDelete = isOwner || ["ADMIN", "SUPER_ADMIN"].includes(userRole || "")
 
     if (!canDelete) {
-      return NextResponse.json(
-        { error: "Bu makaleyi silme yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu makaleyi silme yetkiniz yok" }, { status: 403 })
     }
 
     await prisma.article.delete({
@@ -272,9 +233,6 @@ export async function DELETE(
     return NextResponse.json({ success: true })
   } catch (error: unknown) {
     console.error("Error deleting article:", error)
-    return NextResponse.json(
-      { error: "Makale silinirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Makale silinirken bir hata oluştu" }, { status: 500 })
   }
 }

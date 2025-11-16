@@ -15,6 +15,7 @@
 **Dosya**: `lib/ai/gemini.ts`
 
 **Özellikler**:
+
 - ✅ Tamamen ücretsiz (Free Tier)
 - ✅ Yüksek kalite metin üretimi
 - ✅ Coding ve complex reasoning'de mükemmel
@@ -22,11 +23,13 @@
 - ✅ 1M token context window
 
 **Rate Limits** (Free Tier):
+
 - 15 RPM (requests per minute)
 - ~21,600 requests/day
 - Sınırsız token kullanımı
 
 **Kullanım Alanları**:
+
 - Haber içeriği yeniden yazma
 - Başlık ve özet oluşturma
 - SEO meta verisi oluşturma
@@ -46,6 +49,7 @@
 **Dosya**: `lib/ai/vision-enhancer.ts`
 
 **Özellikler**:
+
 - ✅ Yüksek kaliteli, fotorealistik görseller
 - ✅ 1K-2K çözünürlük
 - ✅ Aspect ratio kontrolü
@@ -53,19 +57,23 @@
 - ✅ Hızlı üretim (~10-15 saniye)
 
 **Rate Limits**:
+
 - Free Tier: Günlük/aylık kota (sınırlı)
 - Paid Tier: Sınırsız (ücretli)
 
 **Kullanım Alanları**:
+
 - Haber kapak görselleri
 - İçerik görselleri
 - Sosyal medya görselleri
 
 **Maliyet**:
+
 - Free Tier: **$0** (Sınırlı kullanım)
 - Paid Tier: **~$0.039 per image**
 
 **Optimizasyon Stratejisi**:
+
 1. Kaynak görselleri mümkün olduğunca kullan
 2. Cache mekanizması ekle
 3. Benzer haberlerde görselleri yeniden kullan
@@ -86,6 +94,7 @@
 **Görsel Üretimi**: `imagen-4.0-generate-001` (Free Tier)
 
 **Avantajlar**:
+
 - ✅ Daha yüksek kalite
 - ✅ Tamamen ücretsiz (metin için)
 - ✅ Mevcut API key ile çalışıyor
@@ -136,11 +145,11 @@ const image = await generateArticleImage(
 
 **Senaryo**: 100 haber/gün
 
-| İşlem | Model | Miktar | Maliyet |
-|-------|-------|--------|---------|
-| Metin Üretimi | Gemini 2.5 Pro | 100 | **$0** |
-| Görsel Üretimi | Imagen 4 | 80 | **$3.12** |
-| **Toplam** | | | **$3.12/gün** |
+| İşlem          | Model          | Miktar | Maliyet       |
+| -------------- | -------------- | ------ | ------------- |
+| Metin Üretimi  | Gemini 2.5 Pro | 100    | **$0**        |
+| Görsel Üretimi | Imagen 4       | 80     | **$3.12**     |
+| **Toplam**     |                |        | **$3.12/gün** |
 
 **Aylık Maliyet**: ~$93.60
 
@@ -150,11 +159,11 @@ const image = await generateArticleImage(
 **Görsel Cache**: %30  
 **Yeni Görsel Üretimi**: %20
 
-| İşlem | Model | Miktar | Maliyet |
-|-------|-------|--------|---------|
-| Metin Üretimi | Gemini 2.5 Pro | 100 | **$0** |
-| Görsel Üretimi | Imagen 4 | 20 | **$0.78** |
-| **Toplam** | | | **$0.78/gün** |
+| İşlem          | Model          | Miktar | Maliyet       |
+| -------------- | -------------- | ------ | ------------- |
+| Metin Üretimi  | Gemini 2.5 Pro | 100    | **$0**        |
+| Görsel Üretimi | Imagen 4       | 20     | **$0.78**     |
+| **Toplam**     |                |        | **$0.78/gün** |
 
 **Aylık Maliyet**: ~$23.40
 
@@ -163,12 +172,14 @@ const image = await generateArticleImage(
 ## Sonuç
 
 **Mevcut Yapılandırma**:
+
 - ✅ Metin üretimi tamamen ücretsiz (Gemini 2.5 Pro Free Tier)
 - ✅ Görsel üretimi sınırlı ücretsiz (Imagen 4 Free Tier)
 - ✅ Yüksek kalite
 - ✅ Ek abonelik gerekmez
 
 **Önerilen Strateji**:
+
 1. Metin üretimi için Gemini 2.5 Pro kullan (ücretsiz)
 2. Görsel üretimi için Imagen 4 kullan (free tier dahilinde)
 3. Kaynak görselleri önceliklendir

@@ -1,4 +1,3 @@
- 
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
@@ -38,7 +37,7 @@ export default function UsersPage() {
     try {
       const params = new URLSearchParams()
       if (roleFilter) params.append("role", roleFilter)
-      
+
       const response = await fetch(`/api/users?${params.toString()}`)
       if (response.ok) {
         const data = await response.json()
@@ -77,22 +76,23 @@ export default function UsersPage() {
     }
   }
 
-  const filteredUsers = users.filter((user) =>
-    user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.username?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredUsers = users.filter(
+    (user) =>
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.username?.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   // İstatistikler
   const stats = {
     total: users.length,
     byRole: {
-      USER: users.filter(u => u.role === "USER").length,
-      AUTHOR: users.filter(u => u.role === "AUTHOR").length,
-      EDITOR: users.filter(u => u.role === "EDITOR").length,
-      ADMIN: users.filter(u => u.role === "ADMIN").length,
-      SUPER_ADMIN: users.filter(u => u.role === "SUPER_ADMIN").length,
-    }
+      USER: users.filter((u) => u.role === "USER").length,
+      AUTHOR: users.filter((u) => u.role === "AUTHOR").length,
+      EDITOR: users.filter((u) => u.role === "EDITOR").length,
+      ADMIN: users.filter((u) => u.role === "ADMIN").length,
+      SUPER_ADMIN: users.filter((u) => u.role === "SUPER_ADMIN").length,
+    },
   }
 
   return (
@@ -105,7 +105,7 @@ export default function UsersPage() {
       </div>
 
       {/* İstatistikler */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6 mb-6">
+      <div className="mb-6 grid gap-4 md:grid-cols-2 lg:grid-cols-6">
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>Toplam</CardDescription>
@@ -136,7 +136,7 @@ export default function UsersPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex flex-wrap gap-2">
             <Button
               variant={roleFilter === "" ? "default" : "outline"}
               size="sm"
@@ -162,25 +162,25 @@ export default function UsersPage() {
 
       {/* Kullanıcı Listesi */}
       {loading ? (
-        <div className="text-center py-12">
+        <div className="py-12 text-center">
           <p className="text-muted-foreground">Yükleniyor...</p>
         </div>
       ) : filteredUsers.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <Users className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+            <Users className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
             <p className="text-muted-foreground">Kullanıcı bulunamadı</p>
           </CardContent>
         </Card>
       ) : (
         <div className="space-y-4">
           {filteredUsers.map((user) => (
-            <Card key={user.id} className="hover:shadow-md transition-shadow">
+            <Card key={user.id} className="transition-shadow hover:shadow-md">
               <CardHeader>
                 <div className="flex items-start justify-between gap-4">
-                  <div className="flex items-start gap-4 flex-1">
+                  <div className="flex flex-1 items-start gap-4">
                     {user.image ? (
-                      <div className="relative w-14 h-14 shrink-0">
+                      <div className="relative h-14 w-14 shrink-0">
                         <Image
                           src={user.image}
                           alt={user.name || user.email}
@@ -189,17 +189,25 @@ export default function UsersPage() {
                         />
                       </div>
                     ) : (
-                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center border-2">
-                        <Users className="h-7 w-7 text-primary" />
+                      <div className="from-primary/20 to-primary/5 flex h-14 w-14 items-center justify-center rounded-full border-2 bg-gradient-to-br">
+                        <Users className="text-primary h-7 w-7" />
                       </div>
                     )}
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2 flex-wrap">
+                      <div className="mb-2 flex flex-wrap items-center gap-2">
                         <CardTitle className="text-lg">
                           {user.name || user.username || "İsimsiz"}
                         </CardTitle>
-                        <Badge variant={ROLE_COLORS[user.role as UserRole] as "default" | "secondary" | "destructive" | "outline"}>
-                          <Shield className="h-3 w-3 mr-1" />
+                        <Badge
+                          variant={
+                            ROLE_COLORS[user.role as UserRole] as
+                              | "default"
+                              | "secondary"
+                              | "destructive"
+                              | "outline"
+                          }
+                        >
+                          <Shield className="mr-1 h-3 w-3" />
                           {ROLE_LABELS[user.role as UserRole]}
                         </Badge>
                         {user.emailVerified && (
@@ -213,12 +221,8 @@ export default function UsersPage() {
                           <Mail className="h-3 w-3" />
                           <span>{user.email}</span>
                         </div>
-                        {user.username && (
-                          <div className="text-xs">
-                            @{user.username}
-                          </div>
-                        )}
-                        <div className="flex items-center gap-4 text-xs mt-2 flex-wrap">
+                        {user.username && <div className="text-xs">@{user.username}</div>}
+                        <div className="mt-2 flex flex-wrap items-center gap-4 text-xs">
                           <span className="flex items-center gap-1">
                             <TrendingUp className="h-3 w-3" />
                             {user._count.articles} makale

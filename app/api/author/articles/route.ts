@@ -8,20 +8,14 @@ import { ArticleStatus } from "@prisma/client"
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: "Oturum açmanız gerekiyor" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Oturum açmanız gerekiyor" }, { status: 401 })
     }
 
     const userRole = session.user.role
     if (!isAuthor(userRole) && !isAdminOrEditor(userRole)) {
-      return NextResponse.json(
-        { error: "Bu sayfaya erişim yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu sayfaya erişim yetkiniz yok" }, { status: 403 })
     }
 
     const { searchParams } = new URL(request.url)
@@ -33,7 +27,7 @@ export async function GET(request: NextRequest) {
     }
 
     const where: WhereClause = {
-      authorId: session.user.id
+      authorId: session.user.id,
     }
 
     if (status) {
@@ -56,17 +50,14 @@ export async function GET(request: NextRequest) {
         category: {
           select: {
             name: true,
-          }
-        }
-      }
+          },
+        },
+      },
     })
 
     return NextResponse.json({ articles })
   } catch (error: unknown) {
     console.error("Error fetching author articles:", error)
-    return NextResponse.json(
-      { error: "Makaleler yüklenirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Makaleler yüklenirken bir hata oluştu" }, { status: 500 })
   }
 }

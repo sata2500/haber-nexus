@@ -7,27 +7,18 @@ import { prisma } from "@/lib/prisma"
  * GET /api/users/[id]/bookmarked-articles
  * Kullanıcının kaydettiği makaleleri getirir
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
     const { id } = await params
 
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Oturum açmanız gerekiyor" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Oturum açmanız gerekiyor" }, { status: 401 })
     }
 
     // Kullanıcı sadece kendi kayıtlarını görebilir
     if (session.user.id !== id) {
-      return NextResponse.json(
-        { error: "Bu kayıtları görme yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu kayıtları görme yetkiniz yok" }, { status: 403 })
     }
 
     const { searchParams } = new URL(request.url)

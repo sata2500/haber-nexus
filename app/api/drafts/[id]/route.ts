@@ -7,10 +7,7 @@ import { prisma } from "@/lib/prisma"
  * Get draft by ID
  * GET /api/drafts/[id]
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   try {
     const session = await getServerSession(authOptions)
@@ -26,19 +23,19 @@ export async function GET(
             id: true,
             name: true,
             email: true,
-            image: true
-          }
+            image: true,
+          },
         },
         article: {
           select: {
             id: true,
             title: true,
             slug: true,
-            status: true
-          }
+            status: true,
+          },
         },
-        sources: true
-      }
+        sources: true,
+      },
     })
 
     if (!draft) {
@@ -55,14 +52,11 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
-      draft
+      draft,
     })
   } catch (error: unknown) {
     console.error("Draft fetch error:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch draft" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to fetch draft" }, { status: 500 })
   }
 }
 
@@ -70,10 +64,7 @@ export async function GET(
  * Update draft
  * PATCH /api/drafts/[id]
  */
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   try {
     const session = await getServerSession(authOptions)
@@ -82,7 +73,7 @@ export async function PATCH(
     }
 
     const draft = await prisma.contentDraft.findUnique({
-      where: { id: id }
+      where: { id: id },
     })
 
     if (!draft) {
@@ -98,7 +89,15 @@ export async function PATCH(
     }
 
     const body = await request.json()
-    const { topic, outline, draft: draftContent, status, qualityScore, readabilityScore, seoScore } = body
+    const {
+      topic,
+      outline,
+      draft: draftContent,
+      status,
+      qualityScore,
+      readabilityScore,
+      seoScore,
+    } = body
 
     const updated = await prisma.contentDraft.update({
       where: { id: id },
@@ -109,7 +108,7 @@ export async function PATCH(
         status: status !== undefined ? status : undefined,
         qualityScore: qualityScore !== undefined ? qualityScore : undefined,
         readabilityScore: readabilityScore !== undefined ? readabilityScore : undefined,
-        seoScore: seoScore !== undefined ? seoScore : undefined
+        seoScore: seoScore !== undefined ? seoScore : undefined,
       },
       include: {
         author: {
@@ -117,22 +116,19 @@ export async function PATCH(
             id: true,
             name: true,
             email: true,
-            image: true
-          }
-        }
-      }
+            image: true,
+          },
+        },
+      },
     })
 
     return NextResponse.json({
       success: true,
-      draft: updated
+      draft: updated,
     })
   } catch (error: unknown) {
     console.error("Draft update error:", error)
-    return NextResponse.json(
-      { error: "Failed to update draft" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to update draft" }, { status: 500 })
   }
 }
 
@@ -152,7 +148,7 @@ export async function DELETE(
     }
 
     const draft = await prisma.contentDraft.findUnique({
-      where: { id: id }
+      where: { id: id },
     })
 
     if (!draft) {
@@ -168,18 +164,15 @@ export async function DELETE(
     }
 
     await prisma.contentDraft.delete({
-      where: { id: id }
+      where: { id: id },
     })
 
     return NextResponse.json({
       success: true,
-      message: "Draft deleted successfully"
+      message: "Draft deleted successfully",
     })
   } catch (error: unknown) {
     console.error("Draft deletion error:", error)
-    return NextResponse.json(
-      { error: "Failed to delete draft" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to delete draft" }, { status: 500 })
   }
 }

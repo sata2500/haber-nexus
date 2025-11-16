@@ -8,7 +8,7 @@ export function ReadingProgressBar() {
 
   useEffect(() => {
     const calculateProgress = () => {
-      const articleContent = document.querySelector('.article-content')
+      const articleContent = document.querySelector(".article-content")
       if (!articleContent) return 0
 
       // const rect = articleContent.getBoundingClientRect() // Not used
@@ -19,7 +19,7 @@ export function ReadingProgressBar() {
 
       const scrolled = scrollTop + windowHeight - articleTop
       const percentage = Math.min(Math.max((scrolled / contentHeight) * 100, 0), 100)
-      
+
       return percentage
     }
 
@@ -37,13 +37,11 @@ export function ReadingProgressBar() {
   }, [])
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-transparent">
+    <div className="fixed top-0 right-0 left-0 z-50 h-1 bg-transparent">
       <div
         className={cn(
           "h-full transition-all duration-150 ease-out",
-          progress >= 100
-            ? "bg-green-500"
-            : "bg-gradient-to-r from-primary to-primary/80"
+          progress >= 100 ? "bg-green-500" : "from-primary to-primary/80 bg-gradient-to-r"
         )}
         style={{ width: `${progress}%` }}
       />

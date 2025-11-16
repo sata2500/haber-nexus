@@ -13,17 +13,11 @@ interface RouteParams {
  * Get RSS feed by ID
  * GET /api/rss-feeds/[id]
  */
-export async function GET(
-  request: NextRequest,
-  { params }: RouteParams
-) {
+export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const session = await getServerSession(authOptions)
     if (!session || !["ADMIN", "EDITOR", "SUPER_ADMIN"].includes(session.user.role)) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const { id } = await params
@@ -48,23 +42,17 @@ export async function GET(
     })
 
     if (!feed) {
-      return NextResponse.json(
-        { error: "RSS feed not found" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "RSS feed not found" }, { status: 404 })
     }
 
     return NextResponse.json(feed, {
       headers: {
-        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
       },
     })
   } catch (error: unknown) {
     console.error("Error fetching RSS feed:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch RSS feed" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to fetch RSS feed" }, { status: 500 })
   }
 }
 
@@ -72,17 +60,11 @@ export async function GET(
  * Update RSS feed
  * PATCH /api/rss-feeds/[id]
  */
-export async function PATCH(
-  request: NextRequest,
-  { params }: RouteParams
-) {
+export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
     const session = await getServerSession(authOptions)
     if (!session || !["ADMIN", "SUPER_ADMIN"].includes(session.user.role)) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const { id } = await params
@@ -106,10 +88,7 @@ export async function PATCH(
     })
 
     if (!existing) {
-      return NextResponse.json(
-        { error: "RSS feed not found" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "RSS feed not found" }, { status: 404 })
     }
 
     // Update feed
@@ -139,36 +118,27 @@ export async function PATCH(
 
     return NextResponse.json(feed, {
       headers: {
-        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
       },
     })
   } catch (error: unknown) {
     console.error("Error updating RSS feed:", error)
-    return NextResponse.json(
-      { error: "Failed to update RSS feed" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to update RSS feed" }, { status: 500 })
   }
 }
 
 /**
  * Delete RSS feed
  * DELETE /api/rss-feeds/[id]
- * 
+ *
  * Deletes the RSS feed and its scan logs.
  * Associated articles are NOT deleted, their sourceRssId is set to null.
  */
-export async function DELETE(
-  request: NextRequest,
-  { params }: RouteParams
-) {
+export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     const session = await getServerSession(authOptions)
     if (!session || !["ADMIN", "SUPER_ADMIN"].includes(session.user.role)) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const { id } = await params
@@ -186,10 +156,7 @@ export async function DELETE(
     })
 
     if (!existing) {
-      return NextResponse.json(
-        { error: "RSS feed not found" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "RSS feed not found" }, { status: 404 })
     }
 
     // Disconnect articles from this feed (set sourceRssId to null)
@@ -211,16 +178,13 @@ export async function DELETE(
       where: { id },
     })
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       message: "RSS feed başarıyla silindi. Makaleler korundu.",
       preservedArticles: existing._count.articles,
     })
   } catch (error: unknown) {
     console.error("Error deleting RSS feed:", error)
-    return NextResponse.json(
-      { error: "Failed to delete RSS feed" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to delete RSS feed" }, { status: 500 })
   }
 }

@@ -70,7 +70,7 @@ export function BookmarkButton({
 
       const data = await response.json()
       setBookmarked(data.bookmarked)
-      
+
       // Refresh to sync state
       setTimeout(() => {
         router.refresh()
@@ -102,7 +102,7 @@ export function BookmarkButton({
       disabled={loading}
       className={cn(
         "flex items-center gap-2 rounded-md transition-all",
-        "hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed",
+        "hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50",
         bookmarked
           ? "text-yellow-600 dark:text-yellow-500"
           : "text-muted-foreground hover:text-yellow-600",
@@ -110,13 +110,7 @@ export function BookmarkButton({
       )}
       aria-label={bookmarked ? "Kaydı kaldır" : "Kaydet"}
     >
-      <Bookmark
-        className={cn(
-          iconSizes[size],
-          "transition-all",
-          bookmarked && "fill-current"
-        )}
-      />
+      <Bookmark className={cn(iconSizes[size], "transition-all", bookmarked && "fill-current")} />
       {showLabel && <span className="font-medium">Kaydet</span>}
     </button>
   )

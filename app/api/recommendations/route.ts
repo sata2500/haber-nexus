@@ -24,9 +24,6 @@ export async function GET(request: NextRequest) {
     })
   } catch (error: unknown) {
     console.error("Error fetching recommendations:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch recommendations" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to fetch recommendations" }, { status: 500 })
   }
 }

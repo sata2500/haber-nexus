@@ -17,13 +17,10 @@ const categoryUpdateSchema = z.object({
 })
 
 // GET - Kategori detayı
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
-    
+
     const category = await prisma.category.findUnique({
       where: { id },
       include: {
@@ -39,43 +36,28 @@ export async function GET(
     })
 
     if (!category) {
-      return NextResponse.json(
-        { error: "Kategori bulunamadı" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "Kategori bulunamadı" }, { status: 404 })
     }
 
     return NextResponse.json(category)
   } catch (error: unknown) {
     console.error("Error fetching category:", error)
-    return NextResponse.json(
-      { error: "Kategori yüklenirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Kategori yüklenirken bir hata oluştu" }, { status: 500 })
   }
 }
 
 // PATCH - Kategori güncelle
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session) {
-      return NextResponse.json(
-        { error: "Yetkilendirme gerekli" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Yetkilendirme gerekli" }, { status: 401 })
     }
 
     const userRole = session.user?.role
     if (userRole !== "ADMIN" && userRole !== "SUPER_ADMIN" && userRole !== "EDITOR") {
-      return NextResponse.json(
-        { error: "Bu işlem için yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu işlem için yetkiniz yok" }, { status: 403 })
     }
 
     const { id } = await params
@@ -92,10 +74,7 @@ export async function PATCH(
       })
 
       if (existingCategory) {
-        return NextResponse.json(
-          { error: "Bu slug zaten kullanılıyor" },
-          { status: 400 }
-        )
+        return NextResponse.json({ error: "Bu slug zaten kullanılıyor" }, { status: 400 })
       }
     }
 
@@ -109,23 +88,17 @@ export async function PATCH(
     })
 
     // Cache'i temizle - Kategoriler anında güncellensin
-    revalidatePath('/', 'layout')
-    revalidatePath('/categories/[slug]', 'page')
-    
+    revalidatePath("/", "layout")
+    revalidatePath("/categories/[slug]", "page")
+
     return NextResponse.json(category)
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Geçersiz veri", details: error.issues },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Geçersiz veri", details: error.issues }, { status: 400 })
     }
 
     console.error("Error updating category:", error)
-    return NextResponse.json(
-      { error: "Kategori güncellenirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Kategori güncellenirken bir hata oluştu" }, { status: 500 })
   }
 }
 
@@ -136,20 +109,14 @@ export async function DELETE(
 ) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session) {
-      return NextResponse.json(
-        { error: "Yetkilendirme gerekli" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Yetkilendirme gerekli" }, { status: 401 })
     }
 
     const userRole = session.user?.role
     if (userRole !== "ADMIN" && userRole !== "SUPER_ADMIN") {
-      return NextResponse.json(
-        { error: "Bu işlem için yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu işlem için yetkiniz yok" }, { status: 403 })
     }
 
     const { id } = await params
@@ -171,15 +138,12 @@ export async function DELETE(
     })
 
     // Cache'i temizle - Kategoriler anında güncellensin
-    revalidatePath('/', 'layout')
-    revalidatePath('/categories/[slug]', 'page')
+    revalidatePath("/", "layout")
+    revalidatePath("/categories/[slug]", "page")
 
     return NextResponse.json({ success: true })
   } catch (error: unknown) {
     console.error("Error deleting category:", error)
-    return NextResponse.json(
-      { error: "Kategori silinirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Kategori silinirken bir hata oluştu" }, { status: 500 })
   }
 }

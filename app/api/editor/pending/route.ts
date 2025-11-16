@@ -7,26 +7,20 @@ import { isEditor, isAdminOrEditor } from "@/lib/permissions"
 export async function GET() {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: "Oturum açmanız gerekiyor" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Oturum açmanız gerekiyor" }, { status: 401 })
     }
 
     const userRole = session.user.role
     if (!isEditor(userRole) && !isAdminOrEditor(userRole)) {
-      return NextResponse.json(
-        { error: "Bu sayfaya erişim yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu sayfaya erişim yetkiniz yok" }, { status: 403 })
     }
 
     const articles = await prisma.article.findMany({
       where: {
         status: "DRAFT",
-        submittedAt: { not: null }
+        submittedAt: { not: null },
       },
       orderBy: { submittedAt: "desc" },
       select: {
@@ -40,22 +34,19 @@ export async function GET() {
           select: {
             name: true,
             email: true,
-          }
+          },
         },
         category: {
           select: {
             name: true,
-          }
-        }
-      }
+          },
+        },
+      },
     })
 
     return NextResponse.json({ articles })
   } catch (error: unknown) {
     console.error("Error fetching pending articles:", error)
-    return NextResponse.json(
-      { error: "Makaleler yüklenirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Makaleler yüklenirken bir hata oluştu" }, { status: 500 })
   }
 }

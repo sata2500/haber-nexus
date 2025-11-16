@@ -28,10 +28,8 @@ export function ImageInput({ value, onChange, label, placeholder }: ImageInputPr
 
   return (
     <div className="space-y-2">
-      {label && (
-        <label className="text-sm font-medium">{label}</label>
-      )}
-      
+      {label && <label className="text-sm font-medium">{label}</label>}
+
       <div className="space-y-3">
         <div className="flex gap-2">
           <Input
@@ -41,19 +39,14 @@ export function ImageInput({ value, onChange, label, placeholder }: ImageInputPr
             placeholder={placeholder || "https://example.com/image.jpg"}
           />
           {value && (
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={handleClear}
-            >
+            <Button type="button" variant="outline" size="icon" onClick={handleClear}>
               <X className="h-4 w-4" />
             </Button>
           )}
         </div>
 
         {preview && (
-          <div className="relative border rounded-lg overflow-hidden bg-muted h-[300px]">
+          <div className="bg-muted relative h-[300px] overflow-hidden rounded-lg border">
             <Image
               src={preview}
               alt="Önizleme"
@@ -65,16 +58,16 @@ export function ImageInput({ value, onChange, label, placeholder }: ImageInputPr
         )}
 
         {!preview && (
-          <div className="border-2 border-dashed rounded-lg p-8 text-center bg-muted/50">
-            <ImageIcon className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
-            <p className="text-sm text-muted-foreground">
+          <div className="bg-muted/50 rounded-lg border-2 border-dashed p-8 text-center">
+            <ImageIcon className="text-muted-foreground mx-auto mb-3 h-12 w-12" />
+            <p className="text-muted-foreground text-sm">
               Görsel URL&apos;sini yukarıya yapıştırın
             </p>
           </div>
         )}
       </div>
 
-      <p className="text-xs text-muted-foreground">
+      <p className="text-muted-foreground text-xs">
         Unsplash, Pexels gibi ücretsiz görsel sitelerinden URL kullanabilirsiniz
       </p>
     </div>

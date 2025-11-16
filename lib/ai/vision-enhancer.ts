@@ -58,33 +58,33 @@ export async function analyzeSourceImage(
   // Check if URL or title contains keywords that suggest special images
   const lowerTitle = title.toLowerCase()
   const lowerUrl = imageUrl.toLowerCase()
-  
+
   const productCatalogKeywords = ["bim", "a101", "şok", "migros", "carrefour", "katalog", "ürün"]
   const infographicKeywords = ["infografik", "grafik", "chart", "diagram", "veri"]
-  
-  const isProductCatalog = productCatalogKeywords.some(kw => 
-    lowerTitle.includes(kw) || lowerUrl.includes(kw)
+
+  const isProductCatalog = productCatalogKeywords.some(
+    (kw) => lowerTitle.includes(kw) || lowerUrl.includes(kw)
   )
-  
-  const isInfographic = infographicKeywords.some(kw => 
-    lowerTitle.includes(kw) || lowerUrl.includes(kw)
+
+  const isInfographic = infographicKeywords.some(
+    (kw) => lowerTitle.includes(kw) || lowerUrl.includes(kw)
   )
-  
+
   const shouldUseSource = isProductCatalog || isInfographic
-  
+
   if (shouldUseSource) {
     console.error(
       `[Vision Enhancer] Source image detected as special content: ${isProductCatalog ? "Product Catalog" : "Infographic"}`
     )
   }
-  
+
   return {
     hasImage: true,
     imageUrl,
     isProductCatalog,
     isInfographic,
     shouldUseSource,
-    reasoning: shouldUseSource 
+    reasoning: shouldUseSource
       ? `Kaynak görsel ${isProductCatalog ? "ürün kataloğu" : "infografik"} olarak tespit edildi ve korundu.`
       : "Kaynak görsel genel bir görsel, yeni görsel oluşturulacak.",
   }
@@ -108,7 +108,7 @@ export async function generateArticleImage(
     // Get next available API key
     const { key: apiKey, accountName } = getNextGoogleApiKey()
     console.error(`[Vision Enhancer] Using ${accountName} for image generation`)
-    
+
     // Initialize client with selected API key
     const genAI = new GoogleGenAI({
       apiKey,
@@ -145,7 +145,7 @@ export async function generateArticleImage(
     const imageUrl = `data:${generatedImage.image.mimeType};base64,${generatedImage.image.imageBytes}`
 
     console.error(`[Vision Enhancer] Image generated successfully`)
-    
+
     // Record API usage
     recordApiUsage(accountName)
 

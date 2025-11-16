@@ -159,7 +159,7 @@ export function SettingsTab({ userId, user }: SettingsTabProps) {
   if (!settings) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="text-primary h-8 w-8 animate-spin" />
       </div>
     )
   }
@@ -168,12 +168,12 @@ export function SettingsTab({ userId, user }: SettingsTabProps) {
     <div className="space-y-6">
       {/* Messages */}
       {message && (
-        <div className="p-3 text-sm text-green-600 bg-green-50 dark:bg-green-900/10 rounded-md">
+        <div className="rounded-md bg-green-50 p-3 text-sm text-green-600 dark:bg-green-900/10">
           {message}
         </div>
       )}
       {error && (
-        <div className="p-3 text-sm text-red-500 bg-red-50 dark:bg-red-900/10 rounded-md">
+        <div className="rounded-md bg-red-50 p-3 text-sm text-red-500 dark:bg-red-900/10">
           {error}
         </div>
       )}
@@ -191,9 +191,7 @@ export function SettingsTab({ userId, user }: SettingsTabProps) {
               <Input
                 id="name"
                 value={profileData.name}
-                onChange={(e) =>
-                  setProfileData({ ...profileData, name: e.target.value })
-                }
+                onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
                 placeholder="Adınız Soyadınız"
               />
             </div>
@@ -203,9 +201,7 @@ export function SettingsTab({ userId, user }: SettingsTabProps) {
               <Input
                 id="username"
                 value={profileData.username}
-                onChange={(e) =>
-                  setProfileData({ ...profileData, username: e.target.value })
-                }
+                onChange={(e) => setProfileData({ ...profileData, username: e.target.value })}
                 placeholder="kullaniciadi"
               />
             </div>
@@ -214,11 +210,9 @@ export function SettingsTab({ userId, user }: SettingsTabProps) {
               <Label htmlFor="bio">Biyografi</Label>
               <textarea
                 id="bio"
-                className="w-full min-h-[100px] px-3 py-2 border rounded-md text-sm"
+                className="min-h-[100px] w-full rounded-md border px-3 py-2 text-sm"
                 value={profileData.bio}
-                onChange={(e) =>
-                  setProfileData({ ...profileData, bio: e.target.value })
-                }
+                onChange={(e) => setProfileData({ ...profileData, bio: e.target.value })}
                 placeholder="Kendiniz hakkında..."
               />
             </div>
@@ -270,9 +264,7 @@ export function SettingsTab({ userId, user }: SettingsTabProps) {
                 id="newPassword"
                 type="password"
                 value={passwordData.newPassword}
-                onChange={(e) =>
-                  setPasswordData({ ...passwordData, newPassword: e.target.value })
-                }
+                onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                 placeholder="••••••••"
               />
             </div>
@@ -317,15 +309,11 @@ export function SettingsTab({ userId, user }: SettingsTabProps) {
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label>E-posta Bildirimleri</Label>
-              <p className="text-sm text-muted-foreground">
-                E-posta ile bildirim alın
-              </p>
+              <p className="text-muted-foreground text-sm">E-posta ile bildirim alın</p>
             </div>
             <Switch
               checked={settings.emailNotifications}
-              onCheckedChange={(checked) =>
-                handleSettingsUpdate({ emailNotifications: checked })
-              }
+              onCheckedChange={(checked) => handleSettingsUpdate({ emailNotifications: checked })}
             />
           </div>
         </CardContent>

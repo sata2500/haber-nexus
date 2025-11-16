@@ -158,7 +158,9 @@ export function calculateQualityScore(
 /**
  * Filter RSS items by quality
  */
-export function filterByQuality<T extends { title: string; description?: string | null; content?: string }>(
+export function filterByQuality<
+  T extends { title: string; description?: string | null; content?: string },
+>(
   items: T[],
   config: QualityFilterConfig = DEFAULT_CONFIG
 ): Array<{
@@ -175,9 +177,7 @@ export function filterByQuality<T extends { title: string; description?: string 
   const passed = results.filter((r) => r.qualityResult.passed)
   const failed = results.filter((r) => !r.qualityResult.passed)
 
-  console.error(
-    `[Quality Filter] Results: ${passed.length} passed, ${failed.length} failed`
-  )
+  console.error(`[Quality Filter] Results: ${passed.length} passed, ${failed.length} failed`)
 
   // Sort by quality score (descending)
   passed.sort((a, b) => b.qualityResult.score - a.qualityResult.score)

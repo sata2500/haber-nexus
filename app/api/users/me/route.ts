@@ -8,10 +8,12 @@ const userUpdateSchema = z.object({
   name: z.string().min(1, "Ad soyad gerekli").optional(),
   username: z.string().optional(),
   bio: z.string().optional(),
-  authorProfile: z.object({
-    interests: z.array(z.string()).optional(),
-    expertise: z.array(z.string()).optional(),
-  }).optional(),
+  authorProfile: z
+    .object({
+      interests: z.array(z.string()).optional(),
+      expertise: z.array(z.string()).optional(),
+    })
+    .optional(),
 })
 
 /**
@@ -21,12 +23,9 @@ const userUpdateSchema = z.object({
 export async function GET() {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: "Yetkilendirme gerekli" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Yetkilendirme gerekli" }, { status: 401 })
     }
 
     const user = await prisma.user.findUnique({
@@ -53,19 +52,13 @@ export async function GET() {
     })
 
     if (!user) {
-      return NextResponse.json(
-        { error: "Kullanıcı bulunamadı" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "Kullanıcı bulunamadı" }, { status: 404 })
     }
 
     return NextResponse.json(user)
   } catch (error: unknown) {
     console.error("Error fetching current user:", error)
-    return NextResponse.json(
-      { error: "Kullanıcı yüklenirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Kullanıcı yüklenirken bir hata oluştu" }, { status: 500 })
   }
 }
 
@@ -76,12 +69,9 @@ export async function GET() {
 export async function PATCH(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: "Yetkilendirme gerekli" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Yetkilendirme gerekli" }, { status: 401 })
     }
 
     const body = await request.json()
@@ -97,10 +87,7 @@ export async function PATCH(request: NextRequest) {
       })
 
       if (existingUser) {
-        return NextResponse.json(
-          { error: "Bu kullanıcı adı zaten kullanılıyor" },
-          { status: 400 }
-        )
+        return NextResponse.json({ error: "Bu kullanıcı adı zaten kullanılıyor" }, { status: 400 })
       }
     }
 
@@ -162,16 +149,10 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json(user)
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Geçersiz veri", details: error.issues },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Geçersiz veri", details: error.issues }, { status: 400 })
     }
 
     console.error("Error updating current user:", error)
-    return NextResponse.json(
-      { error: "Profil güncellenirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Profil güncellenirken bir hata oluştu" }, { status: 500 })
   }
 }

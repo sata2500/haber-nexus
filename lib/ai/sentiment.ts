@@ -119,8 +119,7 @@ export async function analyzeSentimentTrend(
   )
 
   // Calculate average
-  const averageScore =
-    sentiments.reduce((sum, s) => sum + s.score, 0) / sentiments.length
+  const averageScore = sentiments.reduce((sum, s) => sum + s.score, 0) / sentiments.length
 
   // Determine overall sentiment
   let overallSentiment: "positive" | "negative" | "neutral"
@@ -135,12 +134,11 @@ export async function analyzeSentimentTrend(
   // Determine trend
   let trend: "improving" | "declining" | "stable"
   if (sentiments.length >= 2) {
-    const firstHalf = sentiments
-      .slice(0, Math.floor(sentiments.length / 2))
-      .reduce((sum, s) => sum + s.score, 0) / Math.floor(sentiments.length / 2)
-    const secondHalf = sentiments
-      .slice(Math.floor(sentiments.length / 2))
-      .reduce((sum, s) => sum + s.score, 0) /
+    const firstHalf =
+      sentiments.slice(0, Math.floor(sentiments.length / 2)).reduce((sum, s) => sum + s.score, 0) /
+      Math.floor(sentiments.length / 2)
+    const secondHalf =
+      sentiments.slice(Math.floor(sentiments.length / 2)).reduce((sum, s) => sum + s.score, 0) /
       (sentiments.length - Math.floor(sentiments.length / 2))
 
     if (secondHalf - firstHalf > 0.1) {

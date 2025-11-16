@@ -98,47 +98,45 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const articles = await getCategoryArticles(category.id)
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Header />
-      
+
       <main className="flex-1">
         {/* Category Header */}
-        <section className="bg-muted/50 py-12 border-b">
+        <section className="bg-muted/50 border-b py-12">
           <div className="container">
-            <div className="max-w-4xl mx-auto">
+            <div className="mx-auto max-w-4xl">
               {/* Breadcrumb */}
-              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-                <Link href="/" className="hover:text-primary">Ana Sayfa</Link>
+              <div className="text-muted-foreground mb-4 flex items-center gap-2 text-sm">
+                <Link href="/" className="hover:text-primary">
+                  Ana Sayfa
+                </Link>
                 <span>/</span>
                 <span className="text-foreground">Kategoriler</span>
                 <span>/</span>
                 <span className="text-foreground">{category.name}</span>
               </div>
 
-              <div className="flex items-center gap-3 mb-4">
-                {category.icon && (
-                  <span className="text-4xl">{category.icon}</span>
-                )}
+              <div className="mb-4 flex items-center gap-3">
+                {category.icon && <span className="text-4xl">{category.icon}</span>}
                 <h1 className="text-4xl font-bold">{category.name}</h1>
               </div>
-              
+
               {category.description && (
-                <p className="text-lg text-muted-foreground">
-                  {category.description}
-                </p>
+                <p className="text-muted-foreground text-lg">{category.description}</p>
               )}
 
               {/* Sub Categories */}
               {category.children.length > 0 && (
                 <div className="mt-6">
-                  <p className="text-sm font-medium mb-3">Alt Kategoriler:</p>
+                  <p className="mb-3 text-sm font-medium">Alt Kategoriler:</p>
                   <div className="flex flex-wrap gap-2">
                     {category.children.map((child) => (
-                      <a
-                        key={child.id}
-                        href={`/categories/${child.slug}`}
-                      >
-                        <Badge variant="secondary" className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors">
+                      <a key={child.id} href={`/categories/${child.slug}`}>
+                        <Badge
+                          variant="secondary"
+                          className="hover:bg-primary hover:text-primary-foreground cursor-pointer transition-colors"
+                        >
                           {child.name}
                         </Badge>
                       </a>
@@ -152,7 +150,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
         {/* Articles List */}
         <section className="container py-12">
-          <div className="max-w-4xl mx-auto">
+          <div className="mx-auto max-w-4xl">
             {articles.length === 0 ? (
               <Card>
                 <CardContent className="py-12 text-center">
@@ -165,36 +163,30 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               <div className="space-y-6">
                 {articles.map((article) => {
                   const readingTime = Math.ceil(article.content.split(" ").length / 200)
-                  
+
                   return (
-                    <Card key={article.id} className="hover:shadow-md transition-shadow">
+                    <Card key={article.id} className="transition-shadow hover:shadow-md">
                       <CardHeader>
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
+                            <div className="mb-2 flex items-center gap-2">
                               {article.category && (
                                 <Badge variant="secondary">{article.category.name}</Badge>
                               )}
                               <Badge variant="outline">{article.type}</Badge>
-                              {article.aiGenerated && (
-                                <Badge variant="outline">AI</Badge>
-                              )}
+                              {article.aiGenerated && <Badge variant="outline">AI</Badge>}
                             </div>
-                            
-                            <CardTitle className="text-xl hover:text-primary transition-colors cursor-pointer mb-2">
-                              <a href={`/articles/${article.slug}`}>
-                                {article.title}
-                              </a>
+
+                            <CardTitle className="hover:text-primary mb-2 cursor-pointer text-xl transition-colors">
+                              <a href={`/articles/${article.slug}`}>{article.title}</a>
                             </CardTitle>
-                            
+
                             {article.excerpt && (
-                              <CardDescription className="mb-3">
-                                {article.excerpt}
-                              </CardDescription>
+                              <CardDescription className="mb-3">{article.excerpt}</CardDescription>
                             )}
-                            
+
                             <div className="flex items-center justify-between gap-4">
-                              <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                              <div className="text-muted-foreground flex items-center gap-3 text-sm">
                                 <span>{article.author.name || article.author.email}</span>
                                 <span className="flex items-center gap-1">
                                   <Clock className="h-3 w-3" />
@@ -210,7 +202,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                             </div>
 
                             {article.tags.length > 0 && (
-                              <div className="flex gap-1 mt-3">
+                              <div className="mt-3 flex gap-1">
                                 {article.tags.slice(0, 3).map((tag) => (
                                   <Badge key={tag.id} variant="outline" className="text-xs">
                                     {tag.name}
@@ -219,10 +211,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                               </div>
                             )}
                           </div>
-                          
+
                           {/* Thumbnail */}
                           {article.coverImage ? (
-                            <div className="relative w-32 h-24 shrink-0">
+                            <div className="relative h-24 w-32 shrink-0">
                               <Image
                                 src={article.coverImage}
                                 alt={article.title}
@@ -231,8 +223,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                               />
                             </div>
                           ) : (
-                            <div className="w-32 h-24 rounded-md bg-muted flex items-center justify-center shrink-0">
-                              <span className="text-xs text-muted-foreground">Görsel</span>
+                            <div className="bg-muted flex h-24 w-32 shrink-0 items-center justify-center rounded-md">
+                              <span className="text-muted-foreground text-xs">Görsel</span>
                             </div>
                           )}
                         </div>

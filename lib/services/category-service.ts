@@ -4,7 +4,7 @@ import { cache } from "react"
 
 /**
  * Kategori Servisi
- * 
+ *
  * Veritabanından kategori verilerini çeker ve önbelleğe alır.
  * React cache() fonksiyonu ile aynı request içinde tekrar eden
  * veritabanı sorgularını önler.

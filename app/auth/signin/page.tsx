@@ -6,7 +6,14 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 export default function SignInPage() {
   const router = useRouter()
@@ -54,23 +61,14 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+    <div className="bg-background flex min-h-screen items-center justify-center px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">
-            Giriş Yap
-          </CardTitle>
-          <CardDescription className="text-center">
-            Hesabınıza giriş yapın
-          </CardDescription>
+          <CardTitle className="text-center text-2xl font-bold">Giriş Yap</CardTitle>
+          <CardDescription className="text-center">Hesabınıza giriş yapın</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={handleGoogleSignIn}
-            type="button"
-          >
+          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} type="button">
             <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
               <path
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -97,20 +95,18 @@ export default function SignInPage() {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Veya
-              </span>
+              <span className="bg-background text-muted-foreground px-2">Veya</span>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {success && (
-              <div className="p-3 text-sm text-green-600 bg-green-50 dark:bg-green-900/10 rounded-md">
+              <div className="rounded-md bg-green-50 p-3 text-sm text-green-600 dark:bg-green-900/10">
                 {success}
               </div>
             )}
             {error && (
-              <div className="p-3 text-sm text-red-500 bg-red-50 dark:bg-red-900/10 rounded-md">
+              <div className="rounded-md bg-red-50 p-3 text-sm text-red-500 dark:bg-red-900/10">
                 {error}
               </div>
             )}
@@ -143,17 +139,13 @@ export default function SignInPage() {
               />
             </div>
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={loading}
-            >
+            <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Giriş yapılıyor..." : "Giriş Yap"}
             </Button>
           </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
-          <div className="text-sm text-center text-muted-foreground">
+          <div className="text-muted-foreground text-center text-sm">
             Hesabınız yok mu?{" "}
             <Link href="/auth/signup" className="text-primary hover:underline">
               Kayıt Ol

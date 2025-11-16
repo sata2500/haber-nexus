@@ -1,4 +1,3 @@
- 
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
@@ -37,13 +36,13 @@ export default function EditArticlePage() {
   const params = useParams()
   const { data: session } = useSession()
   const articleId = params.id as string
-  
+
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(true)
   const [categories, setCategories] = useState<Category[]>([])
   const [saveType, setSaveType] = useState<"draft" | "publish">("draft")
   const [error, setError] = useState("")
-  
+
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -64,13 +63,13 @@ export default function EditArticlePage() {
       const response = await fetch(`/api/articles/${articleId}`)
       if (response.ok) {
         const data: Article = await response.json()
-        
+
         // Yetki kontrolü - sadece kendi makalelerini düzenleyebilir
         if (data.authorId !== session?.user?.id) {
           setError("Bu makaleyi düzenleme yetkiniz yok")
           return
         }
-        
+
         setFormData({
           title: data.title,
           slug: data.slug,
@@ -164,9 +163,10 @@ export default function EditArticlePage() {
           status,
           tags,
           keywords,
-          publishedAt: status === "PUBLISHED" && formData.status !== "PUBLISHED" 
-            ? new Date().toISOString() 
-            : undefined,
+          publishedAt:
+            status === "PUBLISHED" && formData.status !== "PUBLISHED"
+              ? new Date().toISOString()
+              : undefined,
         }),
       })
 
@@ -191,15 +191,15 @@ export default function EditArticlePage() {
 
   if (fetching) {
     return (
-      <div className="max-w-5xl mx-auto py-10">
-        <p className="text-center text-muted-foreground">Yükleniyor...</p>
+      <div className="mx-auto max-w-5xl py-10">
+        <p className="text-muted-foreground text-center">Yükleniyor...</p>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="max-w-5xl mx-auto py-10">
+      <div className="mx-auto max-w-5xl py-10">
         <Card className="border-destructive">
           <CardHeader>
             <CardTitle className="text-destructive">Hata</CardTitle>
@@ -217,12 +217,9 @@ export default function EditArticlePage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <div className="mx-auto max-w-5xl space-y-6">
       <div className="flex items-center justify-between">
-        <Button
-          variant="ghost"
-          onClick={() => router.back()}
-        >
+        <Button variant="ghost" onClick={() => router.back()}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Geri
         </Button>
@@ -248,9 +245,7 @@ export default function EditArticlePage() {
       <Card>
         <CardHeader>
           <CardTitle>Makale Düzenle</CardTitle>
-          <CardDescription>
-            Makalenizi düzenleyin ve değişiklikleri kaydedin
-          </CardDescription>
+          <CardDescription>Makalenizi düzenleyin ve değişiklikleri kaydedin</CardDescription>
         </CardHeader>
         <CardContent>
           <form className="space-y-6">
@@ -279,7 +274,7 @@ export default function EditArticlePage() {
                 placeholder="makale-slug"
                 required
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 URL&apos;de kullanılacak benzersiz tanımlayıcı
               </p>
             </div>
@@ -288,7 +283,7 @@ export default function EditArticlePage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Özet</label>
               <textarea
-                className="w-full min-h-[80px] px-3 py-2 border rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring"
+                className="focus:ring-ring min-h-[80px] w-full resize-none rounded-md border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
                 value={formData.excerpt}
                 onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                 placeholder="Makalenizin kısa bir özeti..."
@@ -301,25 +296,23 @@ export default function EditArticlePage() {
                 İçerik <span className="text-destructive">*</span>
               </label>
               <textarea
-                className="w-full min-h-[400px] px-3 py-2 border rounded-md text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-ring"
+                className="focus:ring-ring min-h-[400px] w-full resize-none rounded-md border px-3 py-2 font-mono text-sm focus:ring-2 focus:outline-none"
                 value={formData.content}
                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                 placeholder="Makale içeriği (Markdown destekli)..."
                 required
               />
-              <p className="text-xs text-muted-foreground">
-                Markdown formatında yazabilirsiniz
-              </p>
+              <p className="text-muted-foreground text-xs">Markdown formatında yazabilirsiniz</p>
             </div>
 
             {/* Kategori ve Tür */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-medium">
                   Kategori <span className="text-destructive">*</span>
                 </label>
                 <select
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="focus:ring-ring w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
                   value={formData.categoryId}
                   onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
                   required
@@ -336,7 +329,7 @@ export default function EditArticlePage() {
               <div className="space-y-2">
                 <label className="text-sm font-medium">Makale Türü</label>
                 <select
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="focus:ring-ring w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
                   value={formData.type}
                   onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                 >
@@ -385,7 +378,7 @@ export default function EditArticlePage() {
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Meta Açıklama</label>
                   <textarea
-                    className="w-full min-h-[60px] px-3 py-2 border rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring"
+                    className="focus:ring-ring min-h-[60px] w-full resize-none rounded-md border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
                     value={formData.metaDescription}
                     onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })}
                     placeholder="Arama motorlarında görünecek açıklama"
@@ -408,7 +401,8 @@ export default function EditArticlePage() {
               <CardContent className="pt-6">
                 <div className="text-sm">
                   <p className="text-muted-foreground">
-                    <strong>Mevcut Durum:</strong> {formData.status === "PUBLISHED" ? "Yayında" : "Taslak"}
+                    <strong>Mevcut Durum:</strong>{" "}
+                    {formData.status === "PUBLISHED" ? "Yayında" : "Taslak"}
                   </p>
                 </div>
               </CardContent>

@@ -1,16 +1,7 @@
 "use client"
 
-
 import { cn } from "@/lib/utils"
-import { 
-  Heart, 
-  Bookmark, 
-  Clock, 
-  MessageSquare, 
-  BarChart3, 
-  Users, 
-  Settings 
-} from "lucide-react"
+import { Heart, Bookmark, Clock, MessageSquare, BarChart3, Users, Settings } from "lucide-react"
 
 interface ProfileTabsProps {
   activeTab: string
@@ -31,7 +22,7 @@ const tabs = [
 export function ProfileTabs({ activeTab, onTabChange }: ProfileTabsProps) {
   return (
     <div className="border-b">
-      <div className="flex overflow-x-auto scrollbar-hide">
+      <div className="scrollbar-hide flex overflow-x-auto">
         {tabs.map((tab) => {
           const Icon = tab.icon
           const isActive = activeTab === tab.id
@@ -41,10 +32,10 @@ export function ProfileTabs({ activeTab, onTabChange }: ProfileTabsProps) {
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
               className={cn(
-                "flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors border-b-2",
+                "flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors",
                 isActive
                   ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted"
+                  : "text-muted-foreground hover:text-foreground hover:border-muted border-transparent"
               )}
             >
               <Icon className="h-4 w-4" />

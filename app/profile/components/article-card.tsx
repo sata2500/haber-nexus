@@ -40,33 +40,39 @@ interface ArticleCardProps {
   additionalInfo?: React.ReactNode
 }
 
-export function ArticleCard({ article, metadata, onAction, actionLabel, additionalInfo }: ArticleCardProps) {
+export function ArticleCard({
+  article,
+  metadata,
+  onAction,
+  actionLabel,
+  additionalInfo,
+}: ArticleCardProps) {
   return (
-    <Card className="overflow-hidden hover:shadow-md transition-shadow">
+    <Card className="overflow-hidden transition-shadow hover:shadow-md">
       <CardContent className="p-0">
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row">
           {/* Cover Image */}
           {article.coverImage && (
             <Link
               href={`/articles/${article.slug}`}
-              className="relative w-full sm:w-48 h-48 sm:h-auto flex-shrink-0 overflow-hidden"
+              className="relative h-48 w-full flex-shrink-0 overflow-hidden sm:h-auto sm:w-48"
             >
               <Image
                 src={article.coverImage}
                 alt={article.title}
                 fill
-                className="object-cover hover:scale-105 transition-transform duration-300"
+                className="object-cover transition-transform duration-300 hover:scale-105"
               />
             </Link>
           )}
 
           {/* Content */}
-          <div className="flex-1 p-4 flex flex-col">
+          <div className="flex flex-1 flex-col p-4">
             {/* Category */}
             {article.category && (
               <Badge
                 variant="secondary"
-                className="w-fit mb-2"
+                className="mb-2 w-fit"
                 style={{
                   backgroundColor: article.category.color
                     ? `${article.category.color}20`
@@ -80,23 +86,21 @@ export function ArticleCard({ article, metadata, onAction, actionLabel, addition
 
             {/* Title */}
             <Link href={`/articles/${article.slug}`}>
-              <h3 className="text-lg font-semibold hover:text-primary transition-colors line-clamp-2 mb-2">
+              <h3 className="hover:text-primary mb-2 line-clamp-2 text-lg font-semibold transition-colors">
                 {article.title}
               </h3>
             </Link>
 
             {/* Excerpt */}
             {article.excerpt && (
-              <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                {article.excerpt}
-              </p>
+              <p className="text-muted-foreground mb-3 line-clamp-2 text-sm">{article.excerpt}</p>
             )}
 
             {/* Author */}
             {article.author && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+              <div className="text-muted-foreground mb-3 flex items-center gap-2 text-sm">
                 {article.author.image ? (
-                  <div className="relative w-6 h-6">
+                  <div className="relative h-6 w-6">
                     <Image
                       src={article.author.image}
                       alt={article.author.name || "Yazar"}
@@ -112,7 +116,7 @@ export function ArticleCard({ article, metadata, onAction, actionLabel, addition
             )}
 
             {/* Metadata */}
-            <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground mt-auto">
+            <div className="text-muted-foreground mt-auto flex flex-wrap items-center gap-4 text-xs">
               {metadata && (
                 <div className="flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
@@ -159,10 +163,7 @@ export function ArticleCard({ article, metadata, onAction, actionLabel, addition
 
             {/* Action Button */}
             {onAction && actionLabel && (
-              <button
-                onClick={onAction}
-                className="mt-3 text-sm text-destructive hover:underline"
-              >
+              <button onClick={onAction} className="text-destructive mt-3 text-sm hover:underline">
                 {actionLabel}
               </button>
             )}

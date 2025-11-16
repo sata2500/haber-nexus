@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const includeInactive = searchParams.get("includeInactive") === "true"
-    
+
     const categories = await prisma.category.findMany({
       where: includeInactive ? {} : { isActive: true },
       include: {
@@ -33,19 +33,13 @@ export async function GET(request: NextRequest) {
           },
         },
       },
-      orderBy: [
-        { order: "asc" },
-        { name: "asc" },
-      ],
+      orderBy: [{ order: "asc" }, { name: "asc" }],
     })
 
     return NextResponse.json(categories)
   } catch (error: unknown) {
     console.error("Error fetching categories:", error)
-    return NextResponse.json(
-      { error: "Kategoriler yüklenirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Kategoriler yüklenirken bir hata oluştu" }, { status: 500 })
   }
 }
 
@@ -53,21 +47,15 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session) {
-      return NextResponse.json(
-        { error: "Yetkilendirme gerekli" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Yetkilendirme gerekli" }, { status: 401 })
     }
 
     // Sadece admin ve editor kategori oluşturabilir
     const userRole = session.user?.role
     if (userRole !== "ADMIN" && userRole !== "SUPER_ADMIN" && userRole !== "EDITOR") {
-      return NextResponse.json(
-        { error: "Bu işlem için yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu işlem için yetkiniz yok" }, { status: 403 })
     }
 
     const body = await request.json()
@@ -79,10 +67,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (existingCategory) {
-      return NextResponse.json(
-        { error: "Bu slug zaten kullanılıyor" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Bu slug zaten kullanılıyor" }, { status: 400 })
     }
 
     const category = await prisma.category.create({
@@ -103,22 +88,16 @@ export async function POST(request: NextRequest) {
     })
 
     // Cache'i temizle - Kategoriler anında güncellensin
-    revalidatePath('/', 'layout')
-    revalidatePath('/categories/[slug]', 'page')
-    
+    revalidatePath("/", "layout")
+    revalidatePath("/categories/[slug]", "page")
+
     return NextResponse.json(category, { status: 201 })
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Geçersiz veri", details: error.issues },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Geçersiz veri", details: error.issues }, { status: 400 })
     }
 
     console.error("Error creating category:", error)
-    return NextResponse.json(
-      { error: "Kategori oluşturulurken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Kategori oluşturulurken bir hata oluştu" }, { status: 500 })
   }
 }

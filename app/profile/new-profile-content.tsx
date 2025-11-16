@@ -81,8 +81,8 @@ export function NewProfileContent() {
 
   if (status === "loading" || loading) {
     return (
-      <main className="flex-1 flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <main className="flex flex-1 items-center justify-center">
+        <Loader2 className="text-primary h-8 w-8 animate-spin" />
       </main>
     )
   }
@@ -92,8 +92,8 @@ export function NewProfileContent() {
   }
 
   return (
-    <main className="flex-1 container py-8">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <main className="container flex-1 py-8">
+      <div className="mx-auto max-w-7xl space-y-6">
         {/* Profile Header */}
         <ProfileHeader user={userData} stats={stats || undefined} />
 
@@ -104,18 +104,12 @@ export function NewProfileContent() {
         <div className="min-h-[400px]">
           {activeTab === "overview" && <OverviewTab userId={session.user.id} />}
           {activeTab === "liked" && <LikedArticlesTab userId={session.user.id} />}
-          {activeTab === "bookmarked" && (
-            <BookmarkedArticlesTab userId={session.user.id} />
-          )}
-          {activeTab === "history" && (
-            <ReadingHistoryTab userId={session.user.id} />
-          )}
+          {activeTab === "bookmarked" && <BookmarkedArticlesTab userId={session.user.id} />}
+          {activeTab === "history" && <ReadingHistoryTab userId={session.user.id} />}
           {activeTab === "comments" && <CommentsTab userId={session.user.id} />}
           {activeTab === "analytics" && <AnalyticsTab userId={session.user.id} />}
           {activeTab === "following" && <FollowingTab userId={session.user.id} />}
-          {activeTab === "settings" && (
-            <SettingsTab userId={session.user.id} user={userData} />
-          )}
+          {activeTab === "settings" && <SettingsTab userId={session.user.id} user={userData} />}
         </div>
       </div>
     </main>

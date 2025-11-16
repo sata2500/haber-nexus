@@ -11,20 +11,14 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const body = await request.json()
     const { articleId } = body
 
     if (!articleId) {
-      return NextResponse.json(
-        { error: "Article ID is required" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Article ID is required" }, { status: 400 })
     }
 
     // Check if already liked
@@ -75,10 +69,7 @@ export async function POST(request: NextRequest) {
     }
   } catch (error: unknown) {
     console.error("Error toggling like:", error)
-    return NextResponse.json(
-      { error: "Failed to toggle like" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to toggle like" }, { status: 500 })
   }
 }
 
@@ -97,10 +88,7 @@ export async function GET(request: NextRequest) {
     const articleId = searchParams.get("articleId")
 
     if (!articleId) {
-      return NextResponse.json(
-        { error: "Article ID is required" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Article ID is required" }, { status: 400 })
     }
 
     const like = await prisma.like.findUnique({
@@ -115,10 +103,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ liked: !!like })
   } catch (error: unknown) {
     console.error("Error checking like:", error)
-    return NextResponse.json(
-      { error: "Failed to check like" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to check like" }, { status: 500 })
   }
 }
 
@@ -130,20 +115,14 @@ export async function DELETE(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const { searchParams } = new URL(request.url)
     const articleId = searchParams.get("articleId")
 
     if (!articleId) {
-      return NextResponse.json(
-        { error: "Article ID is required" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Article ID is required" }, { status: 400 })
     }
 
     const existingLike = await prisma.like.findUnique({
@@ -156,10 +135,7 @@ export async function DELETE(request: NextRequest) {
     })
 
     if (!existingLike) {
-      return NextResponse.json(
-        { error: "Like not found" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "Like not found" }, { status: 404 })
     }
 
     await prisma.like.delete({
@@ -179,9 +155,6 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ success: true, liked: false })
   } catch (error: unknown) {
     console.error("Error deleting like:", error)
-    return NextResponse.json(
-      { error: "Failed to delete like" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to delete like" }, { status: 500 })
   }
 }

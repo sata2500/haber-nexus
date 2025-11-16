@@ -9,69 +9,64 @@ import Link from "next/link"
 
 export default async function EditorDashboard() {
   const session = await getServerSession(authOptions)
-  
+
   if (!session?.user?.id) {
     redirect("/auth/signin")
   }
 
   // İstatistikleri al
-  const [
-    pendingArticles,
-    pendingComments,
-    todayPublished,
-    weeklyReviewed,
-    recentSubmissions,
-  ] = await Promise.all([
-    prisma.article.count({
-      where: { 
-        status: "DRAFT",
-        submittedAt: { not: null }
-      }
-    }),
-    prisma.comment.count({
-      where: { status: "PENDING" }
-    }),
-    prisma.article.count({
-      where: {
-        status: "PUBLISHED",
-        publishedAt: {
-          gte: new Date(new Date().setHours(0, 0, 0, 0))
-        }
-      }
-    }),
-    prisma.article.count({
-      where: {
-        editorId: session.user.id,
-        reviewedAt: {
-          gte: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
-        }
-      }
-    }),
-    prisma.article.findMany({
-      where: {
-        status: "DRAFT",
-        submittedAt: { not: null }
-      },
-      orderBy: { submittedAt: "desc" },
-      take: 5,
-      select: {
-        id: true,
-        title: true,
-        submittedAt: true,
-        author: {
-          select: {
-            name: true,
-            email: true,
-          }
+  const [pendingArticles, pendingComments, todayPublished, weeklyReviewed, recentSubmissions] =
+    await Promise.all([
+      prisma.article.count({
+        where: {
+          status: "DRAFT",
+          submittedAt: { not: null },
         },
-        category: {
-          select: {
-            name: true,
-          }
-        }
-      }
-    })
-  ])
+      }),
+      prisma.comment.count({
+        where: { status: "PENDING" },
+      }),
+      prisma.article.count({
+        where: {
+          status: "PUBLISHED",
+          publishedAt: {
+            gte: new Date(new Date().setHours(0, 0, 0, 0)),
+          },
+        },
+      }),
+      prisma.article.count({
+        where: {
+          editorId: session.user.id,
+          reviewedAt: {
+            gte: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000),
+          },
+        },
+      }),
+      prisma.article.findMany({
+        where: {
+          status: "DRAFT",
+          submittedAt: { not: null },
+        },
+        orderBy: { submittedAt: "desc" },
+        take: 5,
+        select: {
+          id: true,
+          title: true,
+          submittedAt: true,
+          author: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          category: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      }),
+    ])
 
   const stats = [
     {
@@ -80,7 +75,7 @@ export default async function EditorDashboard() {
       description: "İnceleme gereken makale",
       icon: FileCheck,
       color: "text-orange-600",
-      link: "/editor/review"
+      link: "/editor/review",
     },
     {
       title: "Bekleyen Yorumlar",
@@ -88,7 +83,7 @@ export default async function EditorDashboard() {
       description: "Moderasyon gereken",
       icon: MessageSquare,
       color: "text-blue-600",
-      link: "/editor/moderation"
+      link: "/editor/moderation",
     },
     {
       title: "Bugün Yayınlanan",
@@ -96,7 +91,7 @@ export default async function EditorDashboard() {
       description: "Günlük yayın sayısı",
       icon: TrendingUp,
       color: "text-green-600",
-      link: "/editor/reports"
+      link: "/editor/reports",
     },
     {
       title: "Haftalık İnceleme",
@@ -104,7 +99,7 @@ export default async function EditorDashboard() {
       description: "Son 7 gün",
       icon: Clock,
       color: "text-purple-600",
-      link: "/editor/reports"
+      link: "/editor/reports",
     },
   ]
 
@@ -122,18 +117,14 @@ export default async function EditorDashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
           <Link key={stat.title} href={stat.link}>
-            <Card className="hover:bg-accent transition-colors cursor-pointer">
+            <Card className="hover:bg-accent cursor-pointer transition-colors">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  {stat.title}
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
                 <stat.icon className={`h-4 w-4 ${stat.color}`} />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {stat.description}
-                </p>
+                <p className="text-muted-foreground mt-1 text-xs">{stat.description}</p>
               </CardContent>
             </Card>
           </Link>
@@ -143,13 +134,11 @@ export default async function EditorDashboard() {
       {pendingArticles > 0 && (
         <Card className="border-orange-200 bg-orange-50/50 dark:bg-orange-950/20">
           <CardHeader>
-            <CardTitle className="text-orange-900 dark:text-orange-100 flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-orange-900 dark:text-orange-100">
               <AlertCircle className="h-5 w-5" />
               Dikkat Gereken Makaleler
             </CardTitle>
-            <CardDescription>
-              {pendingArticles} adet makale incelemenizi bekliyor
-            </CardDescription>
+            <CardDescription>{pendingArticles} adet makale incelemenizi bekliyor</CardDescription>
           </CardHeader>
           <CardContent>
             <Link href="/editor/review">
@@ -164,14 +153,12 @@ export default async function EditorDashboard() {
       <Card>
         <CardHeader>
           <CardTitle>Son Gönderilen Makaleler</CardTitle>
-          <CardDescription>
-            Yazarlar tarafından onay için gönderilen makaleler
-          </CardDescription>
+          <CardDescription>Yazarlar tarafından onay için gönderilen makaleler</CardDescription>
         </CardHeader>
         <CardContent>
           {recentSubmissions.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <FileCheck className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <div className="text-muted-foreground py-8 text-center">
+              <FileCheck className="mx-auto mb-4 h-12 w-12 opacity-50" />
               <p>Henüz onay bekleyen makale yok</p>
             </div>
           ) : (
@@ -179,14 +166,14 @@ export default async function EditorDashboard() {
               {recentSubmissions.map((article) => (
                 <div
                   key={article.id}
-                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent transition-colors"
+                  className="hover:bg-accent flex items-center justify-between rounded-lg border p-4 transition-colors"
                 >
                   <div className="flex-1">
-                    <h3 className="font-semibold mb-1">{article.title}</h3>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <h3 className="mb-1 font-semibold">{article.title}</h3>
+                    <div className="text-muted-foreground flex items-center gap-4 text-sm">
                       <span>Yazar: {article.author.name || article.author.email}</span>
                       {article.category && (
-                        <span className="px-2 py-0.5 bg-secondary rounded text-xs">
+                        <span className="bg-secondary rounded px-2 py-0.5 text-xs">
                           {article.category.name}
                         </span>
                       )}
@@ -211,7 +198,7 @@ export default async function EditorDashboard() {
 
       <div className="grid gap-4 md:grid-cols-3">
         <Link href="/editor/review">
-          <Card className="hover:bg-accent transition-colors cursor-pointer">
+          <Card className="hover:bg-accent cursor-pointer transition-colors">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <FileCheck className="h-5 w-5" />
@@ -219,15 +206,13 @@ export default async function EditorDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Onay bekleyen makaleleri inceleyin
-              </p>
+              <p className="text-muted-foreground text-sm">Onay bekleyen makaleleri inceleyin</p>
             </CardContent>
           </Card>
         </Link>
 
         <Link href="/editor/moderation">
-          <Card className="hover:bg-accent transition-colors cursor-pointer">
+          <Card className="hover:bg-accent cursor-pointer transition-colors">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MessageSquare className="h-5 w-5" />
@@ -235,15 +220,13 @@ export default async function EditorDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Yorumları moderasyon edin
-              </p>
+              <p className="text-muted-foreground text-sm">Yorumları moderasyon edin</p>
             </CardContent>
           </Card>
         </Link>
 
         <Link href="/editor/calendar">
-          <Card className="hover:bg-accent transition-colors cursor-pointer">
+          <Card className="hover:bg-accent cursor-pointer transition-colors">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Calendar className="h-5 w-5" />
@@ -251,9 +234,7 @@ export default async function EditorDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Yayın planlaması yapın
-              </p>
+              <p className="text-muted-foreground text-sm">Yayın planlaması yapın</p>
             </CardContent>
           </Card>
         </Link>

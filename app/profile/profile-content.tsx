@@ -20,7 +20,7 @@ export function ProfileContent() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
   const [error, setError] = useState("")
-  
+
   const [formData, setFormData] = useState({
     name: "",
     username: "",
@@ -43,7 +43,7 @@ export function ProfileContent() {
     if (session?.user?.id) {
       fetchUserData()
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session])
 
   const fetchUserData = async () => {
@@ -142,7 +142,7 @@ export function ProfileContent() {
 
   if (status === "loading") {
     return (
-      <main className="flex-1 flex items-center justify-center">
+      <main className="flex flex-1 items-center justify-center">
         <p className="text-muted-foreground">Yükleniyor...</p>
       </main>
     )
@@ -158,10 +158,10 @@ export function ProfileContent() {
   const roleDescription = getRoleDescription(userRole)
 
   return (
-    <main className="flex-1 container py-12">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <main className="container flex-1 py-12">
+      <div className="mx-auto max-w-6xl space-y-8">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Profil</h1>
+          <h1 className="mb-2 text-3xl font-bold">Profil</h1>
           <p className="text-muted-foreground">
             Hesap bilgilerinizi yönetin ve dashboard&apos;larınıza erişin
           </p>
@@ -175,7 +175,7 @@ export function ProfileContent() {
           <CardContent className="space-y-4">
             <div className="flex items-center gap-4">
               {session.user.image ? (
-                <div className="relative w-20 h-20 shrink-0">
+                <div className="relative h-20 w-20 shrink-0">
                   <Image
                     src={session.user.image}
                     alt={session.user.name || ""}
@@ -184,29 +184,27 @@ export function ProfileContent() {
                   />
                 </div>
               ) : (
-                <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">
-                  <User className="h-10 w-10 text-muted-foreground" />
+                <div className="bg-muted flex h-20 w-20 items-center justify-center rounded-full">
+                  <User className="text-muted-foreground h-10 w-10" />
                 </div>
               )}
               <div className="flex-1">
-                <h3 className="text-xl font-semibold">
-                  {session.user.name || "İsimsiz"}
-                </h3>
-                <div className="flex items-center gap-2 mt-1">
-                  <Mail className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">
-                    {session.user.email}
-                  </span>
+                <h3 className="text-xl font-semibold">{session.user.name || "İsimsiz"}</h3>
+                <div className="mt-1 flex items-center gap-2">
+                  <Mail className="text-muted-foreground h-4 w-4" />
+                  <span className="text-muted-foreground text-sm">{session.user.email}</span>
                 </div>
-                <div className="flex items-center gap-2 mt-2">
-                  <Badge variant={ROLE_COLORS[userRole] as "default" | "secondary" | "destructive" | "outline"}>
-                    <Shield className="h-3 w-3 mr-1" />
+                <div className="mt-2 flex items-center gap-2">
+                  <Badge
+                    variant={
+                      ROLE_COLORS[userRole] as "default" | "secondary" | "destructive" | "outline"
+                    }
+                  >
+                    <Shield className="mr-1 h-3 w-3" />
                     {ROLE_LABELS[userRole]}
                   </Badge>
                 </div>
-                <p className="text-sm text-muted-foreground mt-2">
-                  {roleDescription}
-                </p>
+                <p className="text-muted-foreground mt-2 text-sm">{roleDescription}</p>
               </div>
             </div>
           </CardContent>
@@ -214,7 +212,7 @@ export function ProfileContent() {
 
         {/* Dashboard Access Cards */}
         {accessibleDashboards.length > 0 && (
-          <DashboardCards 
+          <DashboardCards
             dashboards={accessibleDashboards}
             title="Dashboard Erişimi"
             description="Rolünüze özel dashboard'lara hızlı erişim"
@@ -226,19 +224,17 @@ export function ProfileContent() {
         <Card id="settings">
           <CardHeader>
             <CardTitle>Profil Bilgileri</CardTitle>
-            <CardDescription>
-              Profil bilgilerinizi güncelleyin
-            </CardDescription>
+            <CardDescription>Profil bilgilerinizi güncelleyin</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleProfileUpdate} className="space-y-4">
               {message && (
-                <div className="p-3 text-sm text-green-600 bg-green-50 dark:bg-green-900/10 rounded-md">
+                <div className="rounded-md bg-green-50 p-3 text-sm text-green-600 dark:bg-green-900/10">
                   {message}
                 </div>
               )}
               {error && (
-                <div className="p-3 text-sm text-red-500 bg-red-50 dark:bg-red-900/10 rounded-md">
+                <div className="rounded-md bg-red-50 p-3 text-sm text-red-500 dark:bg-red-900/10">
                   {error}
                 </div>
               )}
@@ -264,7 +260,7 @@ export function ProfileContent() {
               <div className="space-y-2">
                 <label className="text-sm font-medium">Biyografi</label>
                 <textarea
-                  className="w-full min-h-[100px] px-3 py-2 border rounded-md text-sm"
+                  className="min-h-[100px] w-full rounded-md border px-3 py-2 text-sm"
                   value={formData.bio}
                   onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                   placeholder="Kendiniz hakkında..."
@@ -282,9 +278,7 @@ export function ProfileContent() {
         <Card>
           <CardHeader>
             <CardTitle>Şifre Değiştir</CardTitle>
-            <CardDescription>
-              Hesap şifrenizi güncelleyin
-            </CardDescription>
+            <CardDescription>Hesap şifrenizi güncelleyin</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handlePasswordChange} className="space-y-4">
@@ -293,7 +287,9 @@ export function ProfileContent() {
                 <Input
                   type="password"
                   value={passwordData.currentPassword}
-                  onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                  onChange={(e) =>
+                    setPasswordData({ ...passwordData, currentPassword: e.target.value })
+                  }
                   placeholder="••••••••"
                 />
               </div>
@@ -303,7 +299,9 @@ export function ProfileContent() {
                 <Input
                   type="password"
                   value={passwordData.newPassword}
-                  onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                  onChange={(e) =>
+                    setPasswordData({ ...passwordData, newPassword: e.target.value })
+                  }
                   placeholder="••••••••"
                 />
               </div>
@@ -313,7 +311,9 @@ export function ProfileContent() {
                 <Input
                   type="password"
                   value={passwordData.confirmPassword}
-                  onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                  onChange={(e) =>
+                    setPasswordData({ ...passwordData, confirmPassword: e.target.value })
+                  }
                   placeholder="••••••••"
                 />
               </div>

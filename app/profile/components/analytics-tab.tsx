@@ -49,46 +49,46 @@ export function AnalyticsTab({ userId }: AnalyticsTabProps) {
 
   useEffect(() => {
     const fetchAnalytics = async () => {
-    try {
-      const response = await fetch(`/api/users/${userId}/analytics`)
-      if (response.ok) {
-        const data = await response.json()
-        setAnalytics(data)
+      try {
+        const response = await fetch(`/api/users/${userId}/analytics`)
+        if (response.ok) {
+          const data = await response.json()
+          setAnalytics(data)
+        }
+      } catch (error) {
+        console.error("Error fetching analytics:", error)
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error("Error fetching analytics:", error)
-    } finally {
-      setLoading(false)
     }
-  }
-    
+
     fetchAnalytics()
   }, [userId])
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="text-primary h-8 w-8 animate-spin" />
       </div>
     )
   }
 
   if (!analytics) {
-    return <div className="text-center py-12">Analizler yüklenemedi</div>
+    return <div className="py-12 text-center">Analizler yüklenemedi</div>
   }
 
   return (
     <div className="space-y-6">
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card>
           <CardContent className="pt-6">
             <div className="text-center">
-              <Clock className="h-8 w-8 mx-auto text-primary mb-2" />
+              <Clock className="text-primary mx-auto mb-2 h-8 w-8" />
               <p className="text-2xl font-bold">
                 {Math.floor(analytics.avgReadingTimeSeconds / 60)} dk
               </p>
-              <p className="text-sm text-muted-foreground">Ortalama Okuma Süresi</p>
+              <p className="text-muted-foreground text-sm">Ortalama Okuma Süresi</p>
             </div>
           </CardContent>
         </Card>
@@ -96,9 +96,9 @@ export function AnalyticsTab({ userId }: AnalyticsTabProps) {
         <Card>
           <CardContent className="pt-6">
             <div className="text-center">
-              <TrendingUp className="h-8 w-8 mx-auto text-green-600 mb-2" />
+              <TrendingUp className="mx-auto mb-2 h-8 w-8 text-green-600" />
               <p className="text-2xl font-bold">{analytics.completionRate}%</p>
-              <p className="text-sm text-muted-foreground">Tamamlama Oranı</p>
+              <p className="text-muted-foreground text-sm">Tamamlama Oranı</p>
             </div>
           </CardContent>
         </Card>
@@ -106,9 +106,9 @@ export function AnalyticsTab({ userId }: AnalyticsTabProps) {
         <Card>
           <CardContent className="pt-6">
             <div className="text-center">
-              <PieChart className="h-8 w-8 mx-auto text-blue-600 mb-2" />
+              <PieChart className="mx-auto mb-2 h-8 w-8 text-blue-600" />
               <p className="text-2xl font-bold">{analytics.categoryDistribution.length}</p>
-              <p className="text-sm text-muted-foreground">Farklı Kategori</p>
+              <p className="text-muted-foreground text-sm">Farklı Kategori</p>
             </div>
           </CardContent>
         </Card>
@@ -132,9 +132,7 @@ export function AnalyticsTab({ userId }: AnalyticsTabProps) {
                       <Badge
                         variant="secondary"
                         style={{
-                          backgroundColor: category.color
-                            ? `${category.color}20`
-                            : undefined,
+                          backgroundColor: category.color ? `${category.color}20` : undefined,
                           color: category.color || undefined,
                         }}
                       >
@@ -142,9 +140,9 @@ export function AnalyticsTab({ userId }: AnalyticsTabProps) {
                       </Badge>
                       <span className="font-medium">{category.count} makale</span>
                     </div>
-                    <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                    <div className="bg-secondary h-2 overflow-hidden rounded-full">
                       <div
-                        className="h-full bg-primary transition-all"
+                        className="bg-primary h-full transition-all"
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
@@ -165,21 +163,19 @@ export function AnalyticsTab({ userId }: AnalyticsTabProps) {
           <CardContent>
             <div className="space-y-3">
               {analytics.weeklyActivity.map((day) => {
-                const maxCount = Math.max(
-                  ...analytics.weeklyActivity.map((d) => d.count)
-                )
+                const maxCount = Math.max(...analytics.weeklyActivity.map((d) => d.count))
                 const percentage = maxCount > 0 ? (day.count / maxCount) * 100 : 0
 
                 return (
                   <div key={day.day} className="flex items-center gap-4">
                     <div className="w-24 text-sm font-medium">{day.day}</div>
-                    <div className="flex-1 h-8 bg-secondary rounded-md overflow-hidden">
+                    <div className="bg-secondary h-8 flex-1 overflow-hidden rounded-md">
                       <div
-                        className="h-full bg-primary flex items-center justify-end px-2 transition-all"
+                        className="bg-primary flex h-full items-center justify-end px-2 transition-all"
                         style={{ width: `${percentage}%` }}
                       >
                         {day.count > 0 && (
-                          <span className="text-xs font-medium text-primary-foreground">
+                          <span className="text-primary-foreground text-xs font-medium">
                             {day.count}
                           </span>
                         )}
@@ -207,15 +203,13 @@ export function AnalyticsTab({ userId }: AnalyticsTabProps) {
               {analytics.topAuthors.map((author, index) => (
                 <div
                   key={author.id}
-                  className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted transition-colors"
+                  className="hover:bg-muted flex items-center gap-4 rounded-lg p-3 transition-colors"
                 >
-                  <span className="text-lg font-bold text-muted-foreground w-8">
-                    #{index + 1}
-                  </span>
-                  
-                  <div className="flex items-center gap-3 flex-1">
+                  <span className="text-muted-foreground w-8 text-lg font-bold">#{index + 1}</span>
+
+                  <div className="flex flex-1 items-center gap-3">
                     {author.image ? (
-                      <div className="relative w-10 h-10">
+                      <div className="relative h-10 w-10">
                         <Image
                           src={author.image}
                           alt={author.name || "Yazar"}
@@ -224,17 +218,15 @@ export function AnalyticsTab({ userId }: AnalyticsTabProps) {
                         />
                       </div>
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                        <Users className="h-5 w-5 text-muted-foreground" />
+                      <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-full">
+                        <Users className="text-muted-foreground h-5 w-5" />
                       </div>
                     )}
-                    
+
                     <div className="flex-1">
                       <p className="font-semibold">{author.name || "İsimsiz"}</p>
                       {author.username && (
-                        <p className="text-sm text-muted-foreground">
-                          @{author.username}
-                        </p>
+                        <p className="text-muted-foreground text-sm">@{author.username}</p>
                       )}
                     </div>
                   </div>
@@ -255,26 +247,22 @@ export function AnalyticsTab({ userId }: AnalyticsTabProps) {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <div className="flex items-end gap-1 h-40">
+              <div className="flex h-40 items-end gap-1">
                 {analytics.readingTrend.slice(-30).map((item) => {
-                  const maxCount = Math.max(
-                    ...analytics.readingTrend.map((d) => d.count)
-                  )
+                  const maxCount = Math.max(...analytics.readingTrend.map((d) => d.count))
                   const height = maxCount > 0 ? (item.count / maxCount) * 100 : 0
 
                   return (
                     <div
                       key={item.date}
-                      className="flex-1 bg-primary rounded-t hover:opacity-80 transition-opacity"
+                      className="bg-primary flex-1 rounded-t transition-opacity hover:opacity-80"
                       style={{ height: `${height}%`, minHeight: item.count > 0 ? "4px" : "0" }}
                       title={`${item.date}: ${item.count} okuma`}
                     />
                   )
                 })}
               </div>
-              <p className="text-xs text-center text-muted-foreground">
-                Son 30 gün
-              </p>
+              <p className="text-muted-foreground text-center text-xs">Son 30 gün</p>
             </div>
           </CardContent>
         </Card>

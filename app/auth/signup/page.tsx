@@ -5,7 +5,14 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 export default function SignUpPage() {
   const router = useRouter()
@@ -62,20 +69,16 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+    <div className="bg-background flex min-h-screen items-center justify-center px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">
-            Kayıt Ol
-          </CardTitle>
-          <CardDescription className="text-center">
-            Yeni hesap oluşturun
-          </CardDescription>
+          <CardTitle className="text-center text-2xl font-bold">Kayıt Ol</CardTitle>
+          <CardDescription className="text-center">Yeni hesap oluşturun</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="p-3 text-sm text-red-500 bg-red-50 dark:bg-red-900/10 rounded-md">
+              <div className="rounded-md bg-red-50 p-3 text-sm text-red-500 dark:bg-red-900/10">
                 {error}
               </div>
             )}
@@ -136,17 +139,13 @@ export default function SignUpPage() {
               />
             </div>
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={loading}
-            >
+            <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Kaydediliyor..." : "Kayıt Ol"}
             </Button>
           </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
-          <div className="text-sm text-center text-muted-foreground">
+          <div className="text-muted-foreground text-center text-sm">
             Zaten hesabınız var mı?{" "}
             <Link href="/auth/signin" className="text-primary hover:underline">
               Giriş Yap

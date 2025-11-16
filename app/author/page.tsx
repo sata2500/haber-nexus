@@ -10,7 +10,7 @@ import Link from "next/link"
 export default async function AuthorDashboard() {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session?.user?.id) {
       redirect("/auth/signin")
     }
@@ -27,22 +27,26 @@ export default async function AuthorDashboard() {
       recentArticles,
     ] = await Promise.all([
       prisma.article.count({
-        where: { authorId: userId }
+        where: { authorId: userId },
       }),
       prisma.article.count({
-        where: { authorId: userId, status: "PUBLISHED" }
+        where: { authorId: userId, status: "PUBLISHED" },
       }),
       prisma.article.count({
-        where: { authorId: userId, status: "DRAFT" }
+        where: { authorId: userId, status: "DRAFT" },
       }),
-      prisma.article.aggregate({
-        where: { authorId: userId },
-        _sum: { viewCount: true }
-      }).catch(() => ({ _sum: { viewCount: 0 } })),
-      prisma.article.aggregate({
-        where: { authorId: userId },
-        _sum: { likeCount: true }
-      }).catch(() => ({ _sum: { likeCount: 0 } })),
+      prisma.article
+        .aggregate({
+          where: { authorId: userId },
+          _sum: { viewCount: true },
+        })
+        .catch(() => ({ _sum: { viewCount: 0 } })),
+      prisma.article
+        .aggregate({
+          where: { authorId: userId },
+          _sum: { likeCount: true },
+        })
+        .catch(() => ({ _sum: { likeCount: 0 } })),
       prisma.article.findMany({
         where: { authorId: userId },
         orderBy: { createdAt: "desc" },
@@ -55,8 +59,8 @@ export default async function AuthorDashboard() {
           likeCount: true,
           createdAt: true,
           publishedAt: true,
-        }
-      })
+        },
+      }),
     ])
 
     const stats = [
@@ -65,28 +69,28 @@ export default async function AuthorDashboard() {
         value: totalArticles,
         description: "Tüm makaleleriniz",
         icon: FileText,
-        color: "text-blue-600"
+        color: "text-blue-600",
       },
       {
         title: "Yayınlanan",
         value: publishedArticles,
         description: "Aktif makaleler",
         icon: TrendingUp,
-        color: "text-green-600"
+        color: "text-green-600",
       },
       {
         title: "Toplam Görüntülenme",
         value: totalViews?._sum?.viewCount ?? 0,
         description: "Tüm makaleleriniz",
         icon: Eye,
-        color: "text-purple-600"
+        color: "text-purple-600",
       },
       {
         title: "Toplam Beğeni",
         value: totalLikes?._sum?.likeCount ?? 0,
         description: "Okuyucu beğenileri",
         icon: Heart,
-        color: "text-red-600"
+        color: "text-red-600",
       },
     ]
 
@@ -94,7 +98,7 @@ export default async function AuthorDashboard() {
       DRAFT: "Taslak",
       PUBLISHED: "Yayında",
       SCHEDULED: "Zamanlanmış",
-      ARCHIVED: "Arşiv"
+      ARCHIVED: "Arşiv",
     }
 
     return (
@@ -118,16 +122,12 @@ export default async function AuthorDashboard() {
           {stats.map((stat) => (
             <Card key={stat.title}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  {stat.title}
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
                 <stat.icon className={`h-4 w-4 ${stat.color}`} />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {stat.description}
-                </p>
+                <p className="text-muted-foreground mt-1 text-xs">{stat.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -139,9 +139,7 @@ export default async function AuthorDashboard() {
               <CardTitle className="text-orange-900 dark:text-orange-100">
                 Taslak Makaleler
               </CardTitle>
-              <CardDescription>
-                {draftArticles} adet taslak makaleniz var
-              </CardDescription>
+              <CardDescription>{draftArticles} adet taslak makaleniz var</CardDescription>
             </CardHeader>
             <CardContent>
               <Link href="/author/articles?status=DRAFT">
@@ -156,14 +154,12 @@ export default async function AuthorDashboard() {
         <Card>
           <CardHeader>
             <CardTitle>Son Makaleler</CardTitle>
-            <CardDescription>
-              En son oluşturduğunuz makaleler
-            </CardDescription>
+            <CardDescription>En son oluşturduğunuz makaleler</CardDescription>
           </CardHeader>
           <CardContent>
             {recentArticles.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <div className="text-muted-foreground py-8 text-center">
+                <FileText className="mx-auto mb-4 h-12 w-12 opacity-50" />
                 <p>Henüz makale oluşturmadınız</p>
                 <Link href="/author/articles/new">
                   <Button className="mt-4" size="sm">
@@ -176,12 +172,12 @@ export default async function AuthorDashboard() {
                 {recentArticles.map((article) => (
                   <div
                     key={article.id}
-                    className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent transition-colors"
+                    className="hover:bg-accent flex items-center justify-between rounded-lg border p-4 transition-colors"
                   >
                     <div className="flex-1">
-                      <h3 className="font-semibold mb-1">{article.title}</h3>
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <span className="px-2 py-0.5 bg-secondary rounded text-xs">
+                      <h3 className="mb-1 font-semibold">{article.title}</h3>
+                      <div className="text-muted-foreground flex items-center gap-4 text-sm">
+                        <span className="bg-secondary rounded px-2 py-0.5 text-xs">
                           {statusLabels[article.status]}
                         </span>
                         <span className="flex items-center gap-1">
@@ -213,7 +209,7 @@ export default async function AuthorDashboard() {
 
         <div className="grid gap-4 md:grid-cols-3">
           <Link href="/author/articles">
-            <Card className="hover:bg-accent transition-colors cursor-pointer">
+            <Card className="hover:bg-accent cursor-pointer transition-colors">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <FileText className="h-5 w-5" />
@@ -221,7 +217,7 @@ export default async function AuthorDashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Tüm makalelerinizi görüntüleyin ve yönetin
                 </p>
               </CardContent>
@@ -229,7 +225,7 @@ export default async function AuthorDashboard() {
           </Link>
 
           <Link href="/author/drafts">
-            <Card className="hover:bg-accent transition-colors cursor-pointer">
+            <Card className="hover:bg-accent cursor-pointer transition-colors">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <FilePlus className="h-5 w-5" />
@@ -237,7 +233,7 @@ export default async function AuthorDashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   AI destekli taslak oluşturun ve yönetin
                 </p>
               </CardContent>
@@ -245,7 +241,7 @@ export default async function AuthorDashboard() {
           </Link>
 
           <Link href="/author/analytics">
-            <Card className="hover:bg-accent transition-colors cursor-pointer">
+            <Card className="hover:bg-accent cursor-pointer transition-colors">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5" />
@@ -253,9 +249,7 @@ export default async function AuthorDashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Detaylı performans analizleri
-                </p>
+                <p className="text-muted-foreground text-sm">Detaylı performans analizleri</p>
               </CardContent>
             </Card>
           </Link>
@@ -264,16 +258,14 @@ export default async function AuthorDashboard() {
     )
   } catch (error) {
     console.error("Author dashboard error:", error)
-    
+
     // Fallback UI
     return (
       <div className="space-y-8">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">Yazar Dashboard</h1>
-            <p className="text-muted-foreground mt-2">
-              Dashboard yüklenirken bir hata oluştu
-            </p>
+            <p className="text-muted-foreground mt-2">Dashboard yüklenirken bir hata oluştu</p>
           </div>
         </div>
         <Card>
@@ -285,9 +277,7 @@ export default async function AuthorDashboard() {
           </CardHeader>
           <CardContent>
             <Link href="/author/articles/new">
-              <Button>
-                Yeni Makale Oluştur
-              </Button>
+              <Button>Yeni Makale Oluştur</Button>
             </Link>
           </CardContent>
         </Card>

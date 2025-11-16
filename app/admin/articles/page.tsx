@@ -1,4 +1,3 @@
- 
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
@@ -73,7 +72,7 @@ export default function ArticlesPage() {
     try {
       const params = new URLSearchParams()
       if (statusFilter) params.append("status", statusFilter)
-      
+
       const response = await fetch(`/api/articles?${params.toString()}`)
       if (response.ok) {
         const data = await response.json()
@@ -112,9 +111,10 @@ export default function ArticlesPage() {
     }
   }
 
-  const filteredArticles = articles.filter((article) =>
-    article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    article.slug.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredArticles = articles.filter(
+    (article) =>
+      article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.slug.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   return (
@@ -122,9 +122,7 @@ export default function ArticlesPage() {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Makale Yönetimi</h1>
-          <p className="text-muted-foreground mt-2">
-            Tüm makaleleri yönetin
-          </p>
+          <p className="text-muted-foreground mt-2">Tüm makaleleri yönetin</p>
         </div>
         <Button onClick={() => router.push("/admin/articles/new")}>
           <Plus className="mr-2 h-4 w-4" />
@@ -176,13 +174,13 @@ export default function ArticlesPage() {
       </Card>
 
       {loading ? (
-        <div className="text-center py-12">
+        <div className="py-12 text-center">
           <p className="text-muted-foreground">Yükleniyor...</p>
         </div>
       ) : filteredArticles.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+            <FileText className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
             <p className="text-muted-foreground">Henüz makale oluşturulmamış</p>
             <Button className="mt-4" onClick={() => router.push("/admin/articles/new")}>
               İlk Makaleyi Oluştur
@@ -196,34 +194,28 @@ export default function ArticlesPage() {
               <CardHeader>
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="mb-2 flex items-center gap-2">
                       <Badge variant={statusColors[article.status]}>
                         {statusLabels[article.status]}
                       </Badge>
-                      <Badge variant="outline">
-                        {typeLabels[article.type]}
-                      </Badge>
+                      <Badge variant="outline">{typeLabels[article.type]}</Badge>
                       {article.category && (
-                        <Badge variant="secondary">
-                          {article.category.name}
-                        </Badge>
+                        <Badge variant="secondary">{article.category.name}</Badge>
                       )}
                     </div>
-                    <CardTitle className="text-xl mb-2">{article.title}</CardTitle>
+                    <CardTitle className="mb-2 text-xl">{article.title}</CardTitle>
                     <CardDescription className="space-y-1">
-                      <div>
-                        Yazar: {article.author.name || article.author.email}
-                      </div>
+                      <div>Yazar: {article.author.name || article.author.email}</div>
                       <div className="flex items-center gap-4 text-xs">
                         <span>{article._count.likes} beğeni</span>
                         <span>{article._count.comments} yorum</span>
                         <span>{article._count.bookmarks} kayıt</span>
                       </div>
                       {article.tags && article.tags.length > 0 && (
-                        <div className="flex gap-1 mt-2">
+                        <div className="mt-2 flex gap-1">
                           {article.tags.map((tag) => (
                             <Badge key={tag.id} variant="outline" className="text-xs">
-                              {tag?.name || 'Etiket'}
+                              {tag?.name || "Etiket"}
                             </Badge>
                           ))}
                         </div>
@@ -247,11 +239,7 @@ export default function ArticlesPage() {
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDelete(article.id)}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => handleDelete(article.id)}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>

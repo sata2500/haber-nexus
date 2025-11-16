@@ -78,22 +78,18 @@ export function CommentSection({ articleId }: CommentSectionProps) {
 
   return (
     <section className="mt-12 border-t pt-8">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold flex items-center gap-2">
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="flex items-center gap-2 text-2xl font-bold">
           <MessageSquare className="h-6 w-6" />
           Yorumlar ({comments.length})
         </h2>
-        
+
         {status === "authenticated" && !showForm && (
-          <Button onClick={() => setShowForm(true)}>
-            Yorum Yap
-          </Button>
+          <Button onClick={() => setShowForm(true)}>Yorum Yap</Button>
         )}
-        
+
         {status !== "authenticated" && (
-          <Button onClick={handleCommentClick}>
-            Yorum Yapmak İçin Giriş Yapın
-          </Button>
+          <Button onClick={handleCommentClick}>Yorum Yapmak İçin Giriş Yapın</Button>
         )}
       </div>
 
@@ -111,19 +107,15 @@ export function CommentSection({ articleId }: CommentSectionProps) {
       {/* Comments List */}
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <Loader2 className="text-primary h-8 w-8 animate-spin" />
         </div>
       ) : comments.length === 0 ? (
-        <div className="text-center py-12 bg-muted/50 rounded-lg">
-          <MessageSquare className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-          <h3 className="text-lg font-semibold mb-2">Henüz yorum yok</h3>
-          <p className="text-muted-foreground mb-4">
-            İlk yorumu yapan siz olun!
-          </p>
+        <div className="bg-muted/50 rounded-lg py-12 text-center">
+          <MessageSquare className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
+          <h3 className="mb-2 text-lg font-semibold">Henüz yorum yok</h3>
+          <p className="text-muted-foreground mb-4">İlk yorumu yapan siz olun!</p>
           {status === "authenticated" && !showForm && (
-            <Button onClick={() => setShowForm(true)}>
-              İlk Yorumu Yap
-            </Button>
+            <Button onClick={() => setShowForm(true)}>İlk Yorumu Yap</Button>
           )}
         </div>
       ) : (

@@ -39,20 +39,15 @@ export function ArticleActions({
         showLabel={showLabels}
         size={size}
       />
-      
+
       <BookmarkButton
         articleId={articleId}
         initialBookmarked={initialBookmarked}
         showLabel={showLabels}
         size={size}
       />
-      
-      <ShareButton
-        title={articleTitle}
-        url={articleUrl}
-        showLabel={showLabels}
-        size={size}
-      />
+
+      <ShareButton title={articleTitle} url={articleUrl} showLabel={showLabels} size={size} />
     </div>
   )
 }

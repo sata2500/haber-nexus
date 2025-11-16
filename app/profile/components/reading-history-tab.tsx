@@ -19,14 +19,10 @@ export function ReadingHistoryTab({ userId }: ReadingHistoryTabProps) {
   const fetchReadingHistory = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await fetch(
-        `/api/users/${userId}/reading-history?page=${page}&limit=10`
-      )
+      const response = await fetch(`/api/users/${userId}/reading-history?page=${page}&limit=10`)
       if (response.ok) {
         const data = await response.json()
-        setHistory((prev) =>
-          page === 1 ? data.history : [...prev, ...data.history]
-        )
+        setHistory((prev) => (page === 1 ? data.history : [...prev, ...data.history]))
         setHasMore(data.pagination.page < data.pagination.totalPages)
       }
     } catch (error) {
@@ -43,19 +39,17 @@ export function ReadingHistoryTab({ userId }: ReadingHistoryTabProps) {
   if (loading && page === 1) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="text-primary h-8 w-8 animate-spin" />
       </div>
     )
   }
 
   if (history.length === 0) {
     return (
-      <div className="text-center py-12">
-        <Clock className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-        <h3 className="text-lg font-semibold mb-2">Henüz okuma geçmişi yok</h3>
-        <p className="text-muted-foreground">
-          Okuduğunuz makaleler burada görünecek
-        </p>
+      <div className="py-12 text-center">
+        <Clock className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
+        <h3 className="mb-2 text-lg font-semibold">Henüz okuma geçmişi yok</h3>
+        <p className="text-muted-foreground">Okuduğunuz makaleler burada görünecek</p>
       </div>
     )
   }
@@ -80,11 +74,9 @@ export function ReadingHistoryTab({ userId }: ReadingHistoryTabProps) {
             value: new Date(item.readAt),
           }}
           additionalInfo={
-            <div className="text-sm text-muted-foreground mt-2">
+            <div className="text-muted-foreground mt-2 text-sm">
               Okuma süresi: {formatReadingTime(item.readDuration)}
-              {item.progress < 100 && (
-                <span className="ml-2">• İlerleme: %{item.progress}</span>
-              )}
+              {item.progress < 100 && <span className="ml-2">• İlerleme: %{item.progress}</span>}
             </div>
           }
         />
@@ -92,11 +84,7 @@ export function ReadingHistoryTab({ userId }: ReadingHistoryTabProps) {
 
       {hasMore && (
         <div className="flex justify-center pt-4">
-          <Button
-            onClick={() => setPage((p) => p + 1)}
-            disabled={loading}
-            variant="outline"
-          >
+          <Button onClick={() => setPage((p) => p + 1)} disabled={loading} variant="outline">
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

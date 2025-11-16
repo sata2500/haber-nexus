@@ -7,27 +7,18 @@ import { prisma } from "@/lib/prisma"
  * GET /api/users/[id]/reading-history
  * Kullanıcının okuma geçmişini getirir
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
     const { id } = await params
 
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Oturum açmanız gerekiyor" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Oturum açmanız gerekiyor" }, { status: 401 })
     }
 
     // Kullanıcı sadece kendi okuma geçmişini görebilir
     if (session.user.id !== id) {
-      return NextResponse.json(
-        { error: "Bu okuma geçmişini görme yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu okuma geçmişini görme yetkiniz yok" }, { status: 403 })
     }
 
     const { searchParams } = new URL(request.url)
@@ -72,9 +63,7 @@ export async function GET(
     })
 
     // Sadece yayınlanmış makaleleri filtrele
-    const filteredHistory = history.filter(
-      (item) => item.article.status === "PUBLISHED"
-    )
+    const filteredHistory = history.filter((item) => item.article.status === "PUBLISHED")
 
     return NextResponse.json({
       history: filteredHistory.map((item) => ({
@@ -104,10 +93,7 @@ export async function GET(
     })
   } catch (error: unknown) {
     console.error("Error fetching reading history:", error)
-    return NextResponse.json(
-      { error: "Okuma geçmişi alınırken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Okuma geçmişi alınırken bir hata oluştu" }, { status: 500 })
   }
 }
 
@@ -115,36 +101,24 @@ export async function GET(
  * POST /api/users/[id]/reading-history
  * Okuma kaydı ekler veya günceller
  */
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
     const { id } = await params
 
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Oturum açmanız gerekiyor" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Oturum açmanız gerekiyor" }, { status: 401 })
     }
 
     if (session.user.id !== id) {
-      return NextResponse.json(
-        { error: "Bu işlemi yapma yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu işlemi yapma yetkiniz yok" }, { status: 403 })
     }
 
     const body = await request.json()
     const { articleId, readDuration, progress, completed } = body
 
     if (!articleId) {
-      return NextResponse.json(
-        { error: "Makale ID gerekli" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Makale ID gerekli" }, { status: 400 })
     }
 
     // Makale var mı kontrol et
@@ -153,10 +127,7 @@ export async function POST(
     })
 
     if (!article) {
-      return NextResponse.json(
-        { error: "Makale bulunamadı" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "Makale bulunamadı" }, { status: 404 })
     }
 
     // Okuma kaydını ekle veya güncelle
@@ -188,9 +159,6 @@ export async function POST(
     })
   } catch (error: unknown) {
     console.error("Error saving reading history:", error)
-    return NextResponse.json(
-      { error: "Okuma kaydı eklenirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Okuma kaydı eklenirken bir hata oluştu" }, { status: 500 })
   }
 }

@@ -17,21 +17,26 @@ interface HybridEditorProps {
 
 // Initialize turndown service for HTML to Markdown conversion
 const turndownService = new TurndownService({
-  headingStyle: 'atx',
-  codeBlockStyle: 'fenced',
-  emDelimiter: '*',
+  headingStyle: "atx",
+  codeBlockStyle: "fenced",
+  emDelimiter: "*",
 })
 
-export function HybridEditor({ value, onChange, placeholder, minHeight = "400px" }: HybridEditorProps) {
-  const [mode, setMode] = useState<'markdown' | 'wysiwyg'>('markdown')
+export function HybridEditor({
+  value,
+  onChange,
+  placeholder,
+  minHeight = "400px",
+}: HybridEditorProps) {
+  const [mode, setMode] = useState<"markdown" | "wysiwyg">("markdown")
   const [markdownContent, setMarkdownContent] = useState(value)
-  const [htmlContent, setHtmlContent] = useState('')
+  const [htmlContent, setHtmlContent] = useState("")
 
   const switchToWysiwyg = async () => {
     // Convert markdown to HTML
     const html = await marked(markdownContent)
     setHtmlContent(html)
-    setMode('wysiwyg')
+    setMode("wysiwyg")
   }
 
   const switchToMarkdown = () => {
@@ -39,7 +44,7 @@ export function HybridEditor({ value, onChange, placeholder, minHeight = "400px"
     const markdown = turndownService.turndown(htmlContent)
     setMarkdownContent(markdown)
     onChange(markdown)
-    setMode('markdown')
+    setMode("markdown")
   }
 
   const handleMarkdownChange = (newValue: string) => {
@@ -60,31 +65,29 @@ export function HybridEditor({ value, onChange, placeholder, minHeight = "400px"
         <div className="flex gap-2">
           <Button
             type="button"
-            variant={mode === 'markdown' ? 'default' : 'outline'}
+            variant={mode === "markdown" ? "default" : "outline"}
             size="sm"
-            onClick={() => mode === 'wysiwyg' && switchToMarkdown()}
+            onClick={() => mode === "wysiwyg" && switchToMarkdown()}
           >
-            <Code className="h-4 w-4 mr-2" />
+            <Code className="mr-2 h-4 w-4" />
             Markdown
           </Button>
           <Button
             type="button"
-            variant={mode === 'wysiwyg' ? 'default' : 'outline'}
+            variant={mode === "wysiwyg" ? "default" : "outline"}
             size="sm"
-            onClick={() => mode === 'markdown' && switchToWysiwyg()}
+            onClick={() => mode === "markdown" && switchToWysiwyg()}
           >
-            <Eye className="h-4 w-4 mr-2" />
+            <Eye className="mr-2 h-4 w-4" />
             Zengin Editör
           </Button>
         </div>
-        <p className="text-xs text-muted-foreground">
-          {mode === 'markdown' 
-            ? 'Markdown formatında yazın' 
-            : 'Görsel editör ile düzenleyin'}
+        <p className="text-muted-foreground text-xs">
+          {mode === "markdown" ? "Markdown formatında yazın" : "Görsel editör ile düzenleyin"}
         </p>
       </div>
 
-      {mode === 'markdown' ? (
+      {mode === "markdown" ? (
         <MarkdownEditor
           value={markdownContent}
           onChange={handleMarkdownChange}
@@ -100,9 +103,9 @@ export function HybridEditor({ value, onChange, placeholder, minHeight = "400px"
         />
       )}
 
-      <p className="text-xs text-muted-foreground">
-        💡 İpucu: Markdown ve Zengin Editör arasında geçiş yapabilirsiniz. 
-        İçerik otomatik olarak dönüştürülür.
+      <p className="text-muted-foreground text-xs">
+        💡 İpucu: Markdown ve Zengin Editör arasında geçiş yapabilirsiniz. İçerik otomatik olarak
+        dönüştürülür.
       </p>
     </div>
   )

@@ -3,14 +3,14 @@
 import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { 
-  Heart, 
-  Bookmark, 
-  MessageSquare, 
-  Clock, 
+import {
+  Heart,
+  Bookmark,
+  MessageSquare,
+  Clock,
   TrendingUp,
   BookOpen,
-  CheckCircle
+  CheckCircle,
 } from "lucide-react"
 
 interface UserStats {
@@ -56,11 +56,11 @@ export function OverviewTab({ userId }: OverviewTabProps) {
   }, [fetchStats])
 
   if (loading) {
-    return <div className="text-center py-12">Yükleniyor...</div>
+    return <div className="py-12 text-center">Yükleniyor...</div>
   }
 
   if (!stats) {
-    return <div className="text-center py-12">İstatistikler yüklenemedi</div>
+    return <div className="py-12 text-center">İstatistikler yüklenemedi</div>
   }
 
   const statCards = [
@@ -108,29 +108,27 @@ export function OverviewTab({ userId }: OverviewTabProps) {
     },
   ]
 
-  const completionRate = stats.totalReads > 0 
-    ? Math.round((stats.completedReads / stats.totalReads) * 100)
-    : 0
+  const completionRate =
+    stats.totalReads > 0 ? Math.round((stats.completedReads / stats.totalReads) * 100) : 0
 
-  const avgReadingTime = stats.totalReads > 0
-    ? Math.round(stats.totalReadingTimeMinutes / stats.totalReads)
-    : 0
+  const avgReadingTime =
+    stats.totalReads > 0 ? Math.round(stats.totalReadingTimeMinutes / stats.totalReads) : 0
 
   return (
     <div className="space-y-6">
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {statCards.map((stat) => {
           const Icon = stat.icon
           return (
             <Card key={stat.title}>
               <CardContent className="pt-6">
                 <div className="flex items-center gap-4">
-                  <div className={`p-3 rounded-lg ${stat.bgColor}`}>
+                  <div className={`rounded-lg p-3 ${stat.bgColor}`}>
                     <Icon className={`h-6 w-6 ${stat.color}`} />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">{stat.title}</p>
+                    <p className="text-muted-foreground text-sm">{stat.title}</p>
                     <p className="text-2xl font-bold">{stat.value}</p>
                   </div>
                 </div>
@@ -141,7 +139,7 @@ export function OverviewTab({ userId }: OverviewTabProps) {
       </div>
 
       {/* Reading Insights */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle className="text-base">Tamamlanma Oranı</CardTitle>
@@ -152,13 +150,13 @@ export function OverviewTab({ userId }: OverviewTabProps) {
                 <span className="text-3xl font-bold">{completionRate}%</span>
                 <CheckCircle className="h-8 w-8 text-green-600" />
               </div>
-              <div className="w-full bg-muted rounded-full h-2">
-                <div 
-                  className="bg-green-600 h-2 rounded-full transition-all"
+              <div className="bg-muted h-2 w-full rounded-full">
+                <div
+                  className="h-2 rounded-full bg-green-600 transition-all"
                   style={{ width: `${completionRate}%` }}
                 />
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 {stats.completedReads} / {stats.totalReads} makale tamamlandı
               </p>
             </div>
@@ -175,9 +173,7 @@ export function OverviewTab({ userId }: OverviewTabProps) {
                 <span className="text-3xl font-bold">{avgReadingTime} dk</span>
                 <Clock className="h-8 w-8 text-orange-600" />
               </div>
-              <p className="text-sm text-muted-foreground">
-                Makale başına ortalama okuma süresi
-              </p>
+              <p className="text-muted-foreground text-sm">Makale başına ortalama okuma süresi</p>
             </div>
           </CardContent>
         </Card>
@@ -194,13 +190,11 @@ export function OverviewTab({ userId }: OverviewTabProps) {
         <CardContent>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Okunan Makale</span>
+              <span className="text-muted-foreground text-sm">Okunan Makale</span>
               <span className="text-lg font-semibold">{stats.readsLastWeek}</span>
             </div>
             {stats.readsLastWeek > 0 && (
-              <div className="text-sm text-green-600">
-                ↑ Harika! Okumaya devam edin
-              </div>
+              <div className="text-sm text-green-600">↑ Harika! Okumaya devam edin</div>
             )}
           </div>
         </CardContent>
@@ -217,9 +211,7 @@ export function OverviewTab({ userId }: OverviewTabProps) {
               {stats.topCategories.map((category, index) => (
                 <div key={category.slug} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="text-lg font-bold text-muted-foreground">
-                      #{index + 1}
-                    </span>
+                    <span className="text-muted-foreground text-lg font-bold">#{index + 1}</span>
                     <Badge variant="secondary">{category.name}</Badge>
                   </div>
                   <span className="text-sm font-medium">{category.count} makale</span>
@@ -235,16 +227,14 @@ export function OverviewTab({ userId }: OverviewTabProps) {
         <Card className="border-primary">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-full bg-primary/10">
-                <MessageSquare className="h-5 w-5 text-primary" />
+              <div className="bg-primary/10 rounded-full p-2">
+                <MessageSquare className="text-primary h-5 w-5" />
               </div>
               <div>
                 <p className="font-semibold">
                   {stats.unreadNotifications} okunmamış bildiriminiz var
                 </p>
-                <p className="text-sm text-muted-foreground">
-                  Bildirimlerinizi kontrol edin
-                </p>
+                <p className="text-muted-foreground text-sm">Bildirimlerinizi kontrol edin</p>
               </div>
             </div>
           </CardContent>

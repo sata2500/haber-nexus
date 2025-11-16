@@ -13,12 +13,9 @@ const changePasswordSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session || !session.user) {
-      return NextResponse.json(
-        { error: "Yetkilendirme gerekli" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Yetkilendirme gerekli" }, { status: 401 })
     }
 
     const body = await request.json()
@@ -37,16 +34,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify current password
-    const isPasswordValid = await bcrypt.compare(
-      validatedData.currentPassword,
-      user.password
-    )
+    const isPasswordValid = await bcrypt.compare(validatedData.currentPassword, user.password)
 
     if (!isPasswordValid) {
-      return NextResponse.json(
-        { error: "Mevcut şifre yanlış" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Mevcut şifre yanlış" }, { status: 400 })
     }
 
     // Hash new password
@@ -61,16 +52,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true })
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: error.issues[0].message },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: error.issues[0].message }, { status: 400 })
     }
 
     console.error("Error changing password:", error)
-    return NextResponse.json(
-      { error: "Şifre değiştirilirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Şifre değiştirilirken bir hata oluştu" }, { status: 500 })
   }
 }

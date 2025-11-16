@@ -121,13 +121,21 @@ Analiz:
 
     return {
       topics: Array.isArray(result.topics)
-        ? result.topics.map((topic: { name?: string; count?: number; trend?: string; score?: number; relatedTags?: string[] }) => ({
-            name: topic.name || "",
-            count: topic.count || 0,
-            trend: topic.trend || "stable",
-            score: Math.max(0, Math.min(1, topic.score ?? 0.5)),
-            relatedTags: Array.isArray(topic.relatedTags) ? topic.relatedTags : [],
-          }))
+        ? result.topics.map(
+            (topic: {
+              name?: string
+              count?: number
+              trend?: string
+              score?: number
+              relatedTags?: string[]
+            }) => ({
+              name: topic.name || "",
+              count: topic.count || 0,
+              trend: topic.trend || "stable",
+              score: Math.max(0, Math.min(1, topic.score ?? 0.5)),
+              relatedTags: Array.isArray(topic.relatedTags) ? topic.relatedTags : [],
+            })
+          )
         : [],
       recommendations: Array.isArray(result.recommendations) ? result.recommendations : [],
       insights: Array.isArray(result.insights) ? result.insights : [],
@@ -190,10 +198,7 @@ export async function getPersonalizedRecommendations(
     take: 20,
   })
 
-  const readArticles = [
-    ...userLikes.map((l) => l.article),
-    ...userBookmarks.map((b) => b.article),
-  ]
+  const readArticles = [...userLikes.map((l) => l.article), ...userBookmarks.map((b) => b.article)]
 
   if (readArticles.length === 0) {
     // No history, return popular articles
@@ -213,13 +218,11 @@ export async function getPersonalizedRecommendations(
   }
 
   // Extract user interests
-  const userInterests = readArticles
-    .flatMap((a) => a.tags.map((t) => t.name))
-    .join(", ")
+  const userInterests = readArticles.flatMap((a) => a.tags.map((t) => t.name)).join(", ")
 
-  const userCategories = [...new Set(readArticles.map((a) => a.category?.name).filter(Boolean))].join(
-    ", "
-  )
+  const userCategories = [
+    ...new Set(readArticles.map((a) => a.category?.name).filter(Boolean)),
+  ].join(", ")
 
   // Get candidate articles (not read yet)
   const readArticleIds = readArticles.map((a) => a.id)
@@ -290,7 +293,7 @@ Sadece JSON yanıtı ver, başka açıklama ekleme.
     }
 
     type Recommendation = { articleId: string; score: number; reason: string }
-    
+
     const recommendations: Recommendation[] = result.recommendations
       .map((rec: { index?: number; score?: number; reason?: string }): Recommendation | null => {
         if (!rec.index) return null
@@ -323,10 +326,7 @@ Sadece JSON yanıtı ver, başka açıklama ekleme.
 /**
  * Suggest content ideas based on trends
  */
-export async function suggestContentIdeas(options?: {
-  category?: string
-  count?: number
-}): Promise<
+export async function suggestContentIdeas(options?: { category?: string; count?: number }): Promise<
   Array<{
     title: string
     description: string
@@ -383,12 +383,19 @@ Sadece JSON yanıtı ver, başka açıklama ekleme.
       throw new Error("Invalid ideas format")
     }
 
-    return result.ideas.map((idea: { title?: string; description?: string; keywords?: string[]; estimatedInterest?: number }) => ({
-      title: idea.title || "",
-      description: idea.description || "",
-      keywords: Array.isArray(idea.keywords) ? idea.keywords : [],
-      estimatedInterest: Math.max(0, Math.min(1, idea.estimatedInterest ?? 0.5)),
-    }))
+    return result.ideas.map(
+      (idea: {
+        title?: string
+        description?: string
+        keywords?: string[]
+        estimatedInterest?: number
+      }) => ({
+        title: idea.title || "",
+        description: idea.description || "",
+        keywords: Array.isArray(idea.keywords) ? idea.keywords : [],
+        estimatedInterest: Math.max(0, Math.min(1, idea.estimatedInterest ?? 0.5)),
+      })
+    )
   } catch (error) {
     console.error("Error suggesting content ideas:", error)
     return []

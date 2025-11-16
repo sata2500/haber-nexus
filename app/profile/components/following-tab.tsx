@@ -39,14 +39,10 @@ export function FollowingTab({ userId }: FollowingTabProps) {
   const fetchFollowedAuthors = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await fetch(
-        `/api/users/${userId}/followed-authors?page=${page}&limit=10`
-      )
+      const response = await fetch(`/api/users/${userId}/followed-authors?page=${page}&limit=10`)
       if (response.ok) {
         const data = await response.json()
-        setFollows((prev) =>
-          page === 1 ? data.follows : [...prev, ...data.follows]
-        )
+        setFollows((prev) => (page === 1 ? data.follows : [...prev, ...data.follows]))
         setHasMore(data.pagination.page < data.pagination.totalPages)
       }
     } catch (error) {
@@ -79,19 +75,17 @@ export function FollowingTab({ userId }: FollowingTabProps) {
   if (loading && page === 1) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="text-primary h-8 w-8 animate-spin" />
       </div>
     )
   }
 
   if (follows.length === 0) {
     return (
-      <div className="text-center py-12">
-        <Users className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-        <h3 className="text-lg font-semibold mb-2">Henüz takip edilen yazar yok</h3>
-        <p className="text-muted-foreground">
-          Takip ettiğiniz yazarlar burada görünecek
-        </p>
+      <div className="py-12 text-center">
+        <Users className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
+        <h3 className="mb-2 text-lg font-semibold">Henüz takip edilen yazar yok</h3>
+        <p className="text-muted-foreground">Takip ettiğiniz yazarlar burada görünecek</p>
       </div>
     )
   }
@@ -101,11 +95,11 @@ export function FollowingTab({ userId }: FollowingTabProps) {
       {follows.map((follow) => (
         <Card key={follow.id}>
           <CardContent className="pt-6">
-            <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex flex-col gap-6 md:flex-row">
               {/* Author Info */}
-              <div className="flex items-start gap-4 flex-1">
+              <div className="flex flex-1 items-start gap-4">
                 {follow.author.image ? (
-                  <div className="relative w-16 h-16 flex-shrink-0">
+                  <div className="relative h-16 w-16 flex-shrink-0">
                     <Image
                       src={follow.author.image}
                       alt={follow.author.name || "Yazar"}
@@ -114,25 +108,21 @@ export function FollowingTab({ userId }: FollowingTabProps) {
                     />
                   </div>
                 ) : (
-                  <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-                    <Users className="h-8 w-8 text-muted-foreground" />
+                  <div className="bg-muted flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full">
+                    <Users className="text-muted-foreground h-8 w-8" />
                   </div>
                 )}
 
                 <div className="flex-1 space-y-2">
                   <div>
-                    <h3 className="text-lg font-semibold">
-                      {follow.author.name || "İsimsiz"}
-                    </h3>
+                    <h3 className="text-lg font-semibold">{follow.author.name || "İsimsiz"}</h3>
                     {follow.author.username && (
-                      <p className="text-sm text-muted-foreground">
-                        @{follow.author.username}
-                      </p>
+                      <p className="text-muted-foreground text-sm">@{follow.author.username}</p>
                     )}
                   </div>
 
                   {follow.author.bio && (
-                    <p className="text-sm text-muted-foreground line-clamp-2">
+                    <p className="text-muted-foreground line-clamp-2 text-sm">
                       {follow.author.bio}
                     </p>
                   )}
@@ -140,15 +130,15 @@ export function FollowingTab({ userId }: FollowingTabProps) {
                   {/* Author Stats */}
                   {follow.author.authorProfile && (
                     <div className="flex flex-wrap items-center gap-4 text-sm">
-                      <div className="flex items-center gap-1 text-muted-foreground">
+                      <div className="text-muted-foreground flex items-center gap-1">
                         <FileText className="h-4 w-4" />
                         <span>{follow.author.authorProfile.totalArticles} makale</span>
                       </div>
-                      <div className="flex items-center gap-1 text-muted-foreground">
+                      <div className="text-muted-foreground flex items-center gap-1">
                         <Eye className="h-4 w-4" />
                         <span>{follow.author.authorProfile.totalViews} görüntülenme</span>
                       </div>
-                      <div className="flex items-center gap-1 text-muted-foreground">
+                      <div className="text-muted-foreground flex items-center gap-1">
                         <Heart className="h-4 w-4" />
                         <span>{follow.author.authorProfile.totalLikes} beğeni</span>
                       </div>
@@ -174,21 +164,17 @@ export function FollowingTab({ userId }: FollowingTabProps) {
 
               {/* Recent Articles */}
               {follow.author.recentArticles && follow.author.recentArticles.length > 0 && (
-                <div className="md:w-64 space-y-2">
-                  <h4 className="text-sm font-semibold text-muted-foreground">
-                    Son Makaleler
-                  </h4>
+                <div className="space-y-2 md:w-64">
+                  <h4 className="text-muted-foreground text-sm font-semibold">Son Makaleler</h4>
                   <div className="space-y-2">
                     {follow.author.recentArticles.map((article) => (
                       <Link
                         key={article.id}
                         href={`/articles/${article.slug}`}
-                        className="block p-2 rounded-md hover:bg-muted transition-colors"
+                        className="hover:bg-muted block rounded-md p-2 transition-colors"
                       >
-                        <p className="text-sm font-medium line-clamp-2">
-                          {article.title}
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="line-clamp-2 text-sm font-medium">{article.title}</p>
+                        <p className="text-muted-foreground mt-1 text-xs">
                           {new Date(article.publishedAt).toLocaleDateString("tr-TR")}
                         </p>
                       </Link>
@@ -203,11 +189,7 @@ export function FollowingTab({ userId }: FollowingTabProps) {
 
       {hasMore && (
         <div className="flex justify-center pt-4">
-          <Button
-            onClick={() => setPage((p) => p + 1)}
-            disabled={loading}
-            variant="outline"
-          >
+          <Button onClick={() => setPage((p) => p + 1)} disabled={loading} variant="outline">
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -49,7 +49,9 @@ export async function parseRssFeed(url: string): Promise<RssFeedData> {
     }
   } catch (error) {
     console.error(`Error parsing RSS feed ${url}:`, error)
-    throw new Error(`Failed to parse RSS feed: ${error instanceof Error ? error.message : "Unknown error"}`)
+    throw new Error(
+      `Failed to parse RSS feed: ${error instanceof Error ? error.message : "Unknown error"}`
+    )
   }
 }
 
@@ -81,7 +83,7 @@ export async function validateRssFeed(url: string): Promise<{
 export function extractTextFromHtml(html: string): string {
   // Remove HTML tags
   let text = html.replace(/<[^>]*>/g, " ")
-  
+
   // Decode HTML entities
   text = text
     .replace(/&nbsp;/g, " ")
@@ -90,10 +92,10 @@ export function extractTextFromHtml(html: string): string {
     .replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
-  
+
   // Remove extra whitespace
   text = text.replace(/\s+/g, " ").trim()
-  
+
   return text
 }
 
@@ -107,16 +109,14 @@ export function cleanRssContent(item: RssItem): {
 } {
   // Clean title
   const title = item.title.trim()
-  
+
   // Clean content
   let content = item.content || item.contentSnippet || ""
   content = extractTextFromHtml(content)
-  
+
   // Create excerpt (first 200 characters)
-  const excerpt = content.length > 200 
-    ? content.substring(0, 200).trim() + "..."
-    : content
-  
+  const excerpt = content.length > 200 ? content.substring(0, 200).trim() + "..." : content
+
   return {
     title,
     content,
@@ -127,10 +127,7 @@ export function cleanRssContent(item: RssItem): {
 /**
  * Check if RSS item is duplicate
  */
-export function isDuplicateItem(
-  item: RssItem,
-  existingGuids: string[]
-): boolean {
+export function isDuplicateItem(item: RssItem, existingGuids: string[]): boolean {
   if (!item.guid) return false
   return existingGuids.includes(item.guid)
 }
@@ -138,16 +135,13 @@ export function isDuplicateItem(
 /**
  * Filter recent RSS items
  */
-export function filterRecentItems(
-  items: RssItem[],
-  maxAgeHours: number = 24
-): RssItem[] {
+export function filterRecentItems(items: RssItem[], maxAgeHours: number = 24): RssItem[] {
   const cutoffDate = new Date()
   cutoffDate.setHours(cutoffDate.getHours() - maxAgeHours)
-  
+
   return items.filter((item) => {
     if (!item.pubDate) return true // Include if no date
-    
+
     const itemDate = new Date(item.pubDate)
     return itemDate >= cutoffDate
   })

@@ -20,9 +20,9 @@ export default async function ProfileEditPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-12">
+      <main className="container mx-auto flex-1 px-4 py-12">
         <EditClient initialData={initialData} />
       </main>
       <Footer />

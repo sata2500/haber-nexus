@@ -52,7 +52,7 @@ export function CommentItem({
         {/* Avatar */}
         <div className="flex-shrink-0">
           {comment.user.image ? (
-            <div className="relative w-10 h-10">
+            <div className="relative h-10 w-10">
               <Image
                 src={comment.user.image}
                 alt={comment.user.name || "User"}
@@ -61,8 +61,8 @@ export function CommentItem({
               />
             </div>
           ) : (
-            <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-              <User className="h-5 w-5 text-muted-foreground" />
+            <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-full">
+              <User className="text-muted-foreground h-5 w-5" />
             </div>
           )}
         </div>
@@ -70,17 +70,13 @@ export function CommentItem({
         {/* Content */}
         <div className="flex-1 space-y-2">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-sm">
-              {comment.user.name || "Anonim"}
-            </span>
-            <span className="text-xs text-muted-foreground">
+            <span className="text-sm font-semibold">{comment.user.name || "Anonim"}</span>
+            <span className="text-muted-foreground text-xs">
               {formatDistanceToNow(new Date(comment.createdAt))}
             </span>
           </div>
 
-          <p className="text-sm text-foreground whitespace-pre-wrap">
-            {comment.content}
-          </p>
+          <p className="text-foreground text-sm whitespace-pre-wrap">{comment.content}</p>
 
           {/* Actions */}
           {!isReply && status === "authenticated" && (
@@ -91,7 +87,7 @@ export function CommentItem({
                 onClick={() => setShowReplyForm(!showReplyForm)}
                 className="h-7 text-xs"
               >
-                <Reply className="h-3 w-3 mr-1" />
+                <Reply className="mr-1 h-3 w-3" />
                 Yanıtla
               </Button>
             </div>
@@ -99,7 +95,7 @@ export function CommentItem({
 
           {/* Reply Form */}
           {showReplyForm && (
-            <div className="mt-3 p-3 bg-muted/50 rounded-md">
+            <div className="bg-muted/50 mt-3 rounded-md p-3">
               <CommentForm
                 articleId={articleId}
                 parentId={comment.id}

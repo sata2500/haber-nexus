@@ -7,26 +7,17 @@ import { prisma } from "@/lib/prisma"
  * GET /api/users/[id]/analytics
  * Kullanıcının detaylı okuma analizlerini getirir
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
     const { id } = await params
 
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Oturum açmanız gerekiyor" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Oturum açmanız gerekiyor" }, { status: 401 })
     }
 
     if (session.user.id !== id) {
-      return NextResponse.json(
-        { error: "Bu analizleri görme yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu analizleri görme yetkiniz yok" }, { status: 403 })
     }
 
     // Son 30 günlük okuma trendi
@@ -155,7 +146,13 @@ export async function GET(
       },
     })
 
-    const authorCount: Record<string, { author: { id: string; name: string | null; username?: string | null; image?: string | null }; count: number }> = {}
+    const authorCount: Record<
+      string,
+      {
+        author: { id: string; name: string | null; username?: string | null; image?: string | null }
+        count: number
+      }
+    > = {}
     topAuthors.forEach((read) => {
       const authorId = read.article.author.id
       if (!authorCount[authorId]) {
@@ -208,9 +205,6 @@ export async function GET(
     })
   } catch (error: unknown) {
     console.error("Error fetching user analytics:", error)
-    return NextResponse.json(
-      { error: "Analizler alınırken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Analizler alınırken bir hata oluştu" }, { status: 500 })
   }
 }

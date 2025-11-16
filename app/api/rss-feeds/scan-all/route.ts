@@ -11,10 +11,7 @@ export async function POST() {
   try {
     const session = await getServerSession(authOptions)
     if (!session || !["ADMIN", "SUPER_ADMIN"].includes(session.user.role)) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     // Run scan for all feeds
@@ -23,8 +20,8 @@ export async function POST() {
     const totalFound = results.reduce((sum, r) => sum + r.itemsFound, 0)
     const totalProcessed = results.reduce((sum, r) => sum + r.itemsProcessed, 0)
     const totalPublished = results.reduce((sum, r) => sum + r.itemsPublished, 0)
-    const successCount = results.filter(r => r.status === "SUCCESS").length
-    const failedCount = results.filter(r => r.status === "FAILED").length
+    const successCount = results.filter((r) => r.status === "SUCCESS").length
+    const failedCount = results.filter((r) => r.status === "FAILED").length
 
     return NextResponse.json({
       success: true,
@@ -41,9 +38,6 @@ export async function POST() {
     })
   } catch (error: unknown) {
     console.error("Error scanning all RSS feeds:", error)
-    return NextResponse.json(
-      { error: "Failed to scan RSS feeds" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to scan RSS feeds" }, { status: 500 })
   }
 }

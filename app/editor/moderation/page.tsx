@@ -1,4 +1,3 @@
- 
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
@@ -26,14 +25,14 @@ const STATUS_LABELS: Record<string, string> = {
   PENDING: "Beklemede",
   APPROVED: "Onaylandı",
   REJECTED: "Reddedildi",
-  FLAGGED: "İşaretlendi"
+  FLAGGED: "İşaretlendi",
 }
 
 const STATUS_COLORS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   PENDING: "secondary",
   APPROVED: "default",
   REJECTED: "destructive",
-  FLAGGED: "outline"
+  FLAGGED: "outline",
 }
 
 export default function ModerationPage() {
@@ -45,7 +44,7 @@ export default function ModerationPage() {
     try {
       const params = new URLSearchParams()
       if (statusFilter) params.append("status", statusFilter)
-      
+
       const response = await fetch(`/api/editor/comments?${params.toString()}`)
       if (response.ok) {
         const data = await response.json()
@@ -98,7 +97,7 @@ export default function ModerationPage() {
           <CardTitle>Filtreleme</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex flex-wrap gap-2">
             <Button
               variant={statusFilter === "PENDING" ? "default" : "outline"}
               size="sm"
@@ -132,16 +131,14 @@ export default function ModerationPage() {
       </Card>
 
       {loading ? (
-        <div className="text-center py-12">
+        <div className="py-12 text-center">
           <p className="text-muted-foreground">Yükleniyor...</p>
         </div>
       ) : comments.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <MessageSquare className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-            <p className="text-muted-foreground">
-              Bu kategoride yorum bulunamadı
-            </p>
+            <MessageSquare className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
+            <p className="text-muted-foreground">Bu kategoride yorum bulunamadı</p>
           </CardContent>
         </Card>
       ) : (
@@ -151,7 +148,7 @@ export default function ModerationPage() {
               <CardHeader>
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2 flex-wrap">
+                    <div className="mb-2 flex flex-wrap items-center gap-2">
                       <Badge variant={STATUS_COLORS[comment.status]}>
                         {STATUS_LABELS[comment.status]}
                       </Badge>
@@ -163,16 +160,14 @@ export default function ModerationPage() {
                       )}
                     </div>
                     <CardDescription className="mb-3">
-                      <span className="flex items-center gap-1 mb-1">
+                      <span className="mb-1 flex items-center gap-1">
                         <User className="h-3 w-3" />
                         {comment.user.name || comment.user.email}
                       </span>
-                      <span className="text-xs">
-                        Makale: {comment.article.title}
-                      </span>
+                      <span className="text-xs">Makale: {comment.article.title}</span>
                     </CardDescription>
                     <p className="text-sm">{comment.content}</p>
-                    <p className="text-xs text-muted-foreground mt-2">
+                    <p className="text-muted-foreground mt-2 text-xs">
                       {new Date(comment.createdAt).toLocaleString("tr-TR")}
                     </p>
                   </div>

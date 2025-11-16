@@ -99,12 +99,12 @@ export async function enhancedScanRssFeed(
     // Quality filtering: Select high-quality items
     const qualityConfig = getQualityFilterConfig()
     const qualityFiltered = filterByQuality(itemsToProcess, qualityConfig)
-    const itemsFiltered = itemsToProcess.length - qualityFiltered.length
-    
+    itemsFiltered = itemsToProcess.length - qualityFiltered.length
+
     console.error(
       `[Enhanced Scanner] Quality filter: ${qualityFiltered.length} items passed (${itemsFiltered} filtered out)`
     )
-    
+
     // Use quality-filtered items
     itemsToProcess = qualityFiltered.map((r) => r.item)
 
@@ -232,7 +232,7 @@ export async function enhancedScanRssFeed(
             `[Enhanced Scanner] Duplicate article detected: "${processed.title}" (${duplicateCheck.reason})`
           )
           itemsDuplicate++
-          
+
           // Mark RssItem as processed but don't create article
           await prisma.rssItem.update({
             where: { id: rssItem.id },
@@ -242,7 +242,7 @@ export async function enhancedScanRssFeed(
               articleId: duplicateCheck.existingArticle?.id,
             },
           })
-          
+
           continue
         }
 

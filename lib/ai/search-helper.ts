@@ -11,12 +11,12 @@ export interface SearchResult {
 
 /**
  * Perform web search using Google Custom Search API or similar
- * 
+ *
  * Note: This is a placeholder implementation. In production, you would:
  * 1. Set up Google Custom Search API or similar service
  * 2. Add API key to environment variables
  * 3. Implement actual API calls
- * 
+ *
  * For now, we'll use a simple fetch-based approach to get basic results
  */
 export async function searchWeb(queries: string[]): Promise<SearchResult[]> {
@@ -69,8 +69,7 @@ export function formatResearchFindings(results: SearchResult[]): string {
 
   return results
     .map(
-      (result, i) =>
-        `**Kaynak ${i + 1}: ${result.title}**\nURL: ${result.url}\n\n${result.snippet}`
+      (result, i) => `**Kaynak ${i + 1}: ${result.title}**\nURL: ${result.url}\n\n${result.snippet}`
     )
     .join("\n\n---\n\n")
 }

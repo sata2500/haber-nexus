@@ -11,20 +11,14 @@ export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const { searchParams } = new URL(request.url)
     const articleId = searchParams.get("articleId")
 
     if (!articleId) {
-      return NextResponse.json(
-        { error: "Article ID is required" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Article ID is required" }, { status: 400 })
     }
 
     const readingHistory = await prisma.readingHistory.findUnique({
@@ -39,10 +33,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ readingHistory })
   } catch (error: unknown) {
     console.error("Error fetching reading history:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch reading history" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to fetch reading history" }, { status: 500 })
   }
 }
 
@@ -54,10 +45,7 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const body = await request.json()
@@ -65,24 +53,15 @@ export async function POST(request: NextRequest) {
 
     // Validation
     if (!articleId) {
-      return NextResponse.json(
-        { error: "Article ID is required" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Article ID is required" }, { status: 400 })
     }
 
     if (typeof readDuration !== "number" || readDuration < 0) {
-      return NextResponse.json(
-        { error: "Invalid read duration" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Invalid read duration" }, { status: 400 })
     }
 
     if (typeof progress !== "number" || progress < 0 || progress > 100) {
-      return NextResponse.json(
-        { error: "Invalid progress value (must be 0-100)" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Invalid progress value (must be 0-100)" }, { status: 400 })
     }
 
     // Check if article exists
@@ -91,10 +70,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (!article) {
-      return NextResponse.json(
-        { error: "Article not found" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "Article not found" }, { status: 404 })
     }
 
     // Rate limiting: Check last save time
@@ -159,9 +135,6 @@ export async function POST(request: NextRequest) {
     })
   } catch (error: unknown) {
     console.error("Error saving reading history:", error)
-    return NextResponse.json(
-      { error: "Failed to save reading history" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to save reading history" }, { status: 500 })
   }
 }

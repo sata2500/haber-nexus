@@ -1,4 +1,3 @@
- 
 "use client"
 
 import { useState, useEffect } from "react"
@@ -19,7 +18,7 @@ export default function NewArticlePage() {
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState<Category[]>([])
   const [saveType, setSaveType] = useState<"draft" | "publish">("draft")
-  
+
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -125,12 +124,9 @@ export default function NewArticlePage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <div className="mx-auto max-w-5xl space-y-6">
       <div className="flex items-center justify-between">
-        <Button
-          variant="ghost"
-          onClick={() => router.back()}
-        >
+        <Button variant="ghost" onClick={() => router.back()}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Geri
         </Button>
@@ -187,7 +183,7 @@ export default function NewArticlePage() {
                 placeholder="makale-slug"
                 required
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 URL&apos;de kullanılacak benzersiz tanımlayıcı (otomatik oluşturuldu)
               </p>
             </div>
@@ -196,12 +192,12 @@ export default function NewArticlePage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Özet</label>
               <textarea
-                className="w-full min-h-[80px] px-3 py-2 border rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring"
+                className="focus:ring-ring min-h-[80px] w-full resize-none rounded-md border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
                 value={formData.excerpt}
                 onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                 placeholder="Makalenizin kısa bir özeti (opsiyonel)..."
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Bu özet, makale listelerinde ve sosyal medya paylaşımlarında görünecektir
               </p>
             </div>
@@ -212,7 +208,7 @@ export default function NewArticlePage() {
                 İçerik <span className="text-destructive">*</span>
               </label>
               <textarea
-                className="w-full min-h-[400px] px-3 py-2 border rounded-md text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-ring"
+                className="focus:ring-ring min-h-[400px] w-full resize-none rounded-md border px-3 py-2 font-mono text-sm focus:ring-2 focus:outline-none"
                 value={formData.content}
                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                 placeholder="Makale içeriğinizi buraya yazın...
@@ -234,19 +230,20 @@ Markdown formatını kullanabilirsiniz:
 ![Görsel açıklaması](gorsel-url.jpg)"
                 required
               />
-              <p className="text-xs text-muted-foreground">
-                Markdown formatında yazabilirsiniz. Başlıklar, listeler, linkler ve görseller desteklenir.
+              <p className="text-muted-foreground text-xs">
+                Markdown formatında yazabilirsiniz. Başlıklar, listeler, linkler ve görseller
+                desteklenir.
               </p>
             </div>
 
             {/* Kategori ve Tür */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-medium">
                   Kategori <span className="text-destructive">*</span>
                 </label>
                 <select
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="focus:ring-ring w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
                   value={formData.categoryId}
                   onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
                   required
@@ -258,7 +255,7 @@ Markdown formatını kullanabilirsiniz:
                     </option>
                   ))}
                 </select>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   Makalenizin hangi kategoriye ait olduğunu seçin
                 </p>
               </div>
@@ -266,7 +263,7 @@ Markdown formatını kullanabilirsiniz:
               <div className="space-y-2">
                 <label className="text-sm font-medium">Makale Türü</label>
                 <select
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="focus:ring-ring w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
                   value={formData.type}
                   onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                 >
@@ -295,7 +292,7 @@ Markdown formatını kullanabilirsiniz:
                 onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
                 placeholder="teknoloji, yazılım, yapay zeka (virgülle ayırın)"
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Makalenizle ilgili etiketler ekleyin (virgülle ayırarak)
               </p>
             </div>
@@ -321,7 +318,7 @@ Markdown formatını kullanabilirsiniz:
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Meta Açıklama</label>
                   <textarea
-                    className="w-full min-h-[60px] px-3 py-2 border rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring"
+                    className="focus:ring-ring min-h-[60px] w-full resize-none rounded-md border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
                     value={formData.metaDescription}
                     onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })}
                     placeholder="Arama motorlarında görünecek açıklama (boş bırakılırsa özet kullanılır)"
@@ -344,11 +341,13 @@ Markdown formatını kullanabilirsiniz:
               <CardContent className="pt-6">
                 <div className="flex items-start gap-3">
                   <div className="flex-1">
-                    <h4 className="font-medium text-sm mb-1">Yayınlama Seçenekleri</h4>
-                    <p className="text-xs text-muted-foreground">
-                      <strong>Taslak Kaydet:</strong> Makalenizi daha sonra düzenlemek üzere taslak olarak kaydedin.
+                    <h4 className="mb-1 text-sm font-medium">Yayınlama Seçenekleri</h4>
+                    <p className="text-muted-foreground text-xs">
+                      <strong>Taslak Kaydet:</strong> Makalenizi daha sonra düzenlemek üzere taslak
+                      olarak kaydedin.
                       <br />
-                      <strong>Yayınla:</strong> Makalenizi hemen yayınlayın ve okuyucularla paylaşın.
+                      <strong>Yayınla:</strong> Makalenizi hemen yayınlayın ve okuyucularla
+                      paylaşın.
                     </p>
                   </div>
                 </div>

@@ -18,19 +18,19 @@ export function ReadingStatsWidget({ userId }: ReadingStatsWidgetProps) {
 
   useEffect(() => {
     const fetchStats = async () => {
-    try {
-      const response = await fetch(`/api/users/${userId}/stats`)
-      if (response.ok) {
-        const data = await response.json()
-        setStats(data)
+      try {
+        const response = await fetch(`/api/users/${userId}/stats`)
+        if (response.ok) {
+          const data = await response.json()
+          setStats(data)
+        }
+      } catch (error) {
+        console.error("Error fetching stats:", error)
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error("Error fetching stats:", error)
-    } finally {
-      setLoading(false)
     }
-  }
-    
+
     fetchStats()
   }, [userId])
 
@@ -38,9 +38,8 @@ export function ReadingStatsWidget({ userId }: ReadingStatsWidgetProps) {
     return null
   }
 
-  const completionRate = stats.totalReads > 0
-    ? Math.round((stats.completedReads / stats.totalReads) * 100)
-    : 0
+  const completionRate =
+    stats.totalReads > 0 ? Math.round((stats.completedReads / stats.totalReads) * 100) : 0
 
   const miniStats = [
     {
@@ -70,7 +69,7 @@ export function ReadingStatsWidget({ userId }: ReadingStatsWidgetProps) {
   ]
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
       {miniStats.map((stat) => {
         const Icon = stat.icon
         return (
@@ -80,7 +79,7 @@ export function ReadingStatsWidget({ userId }: ReadingStatsWidgetProps) {
                 <Icon className={`h-5 w-5 ${stat.color}`} />
                 <div>
                   <p className="text-lg font-bold">{stat.value}</p>
-                  <p className="text-xs text-muted-foreground">{stat.label}</p>
+                  <p className="text-muted-foreground text-xs">{stat.label}</p>
                 </div>
               </div>
             </CardContent>

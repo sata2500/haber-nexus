@@ -9,13 +9,13 @@ import { TableRow } from "@tiptap/extension-table-row"
 import { TableCell } from "@tiptap/extension-table-cell"
 import { TableHeader } from "@tiptap/extension-table-header"
 import Placeholder from "@tiptap/extension-placeholder"
-import { 
-  Bold, 
-  Italic, 
-  Strikethrough, 
-  Code, 
-  Heading1, 
-  Heading2, 
+import {
+  Bold,
+  Italic,
+  Strikethrough,
+  Code,
+  Heading1,
+  Heading2,
   Heading3,
   List,
   ListOrdered,
@@ -26,7 +26,7 @@ import {
   Image as ImageIcon,
   Table as TableIcon,
   Code2,
-  Minus
+  Minus,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useCallback, useEffect } from "react"
@@ -38,7 +38,12 @@ interface RichTextEditorProps {
   minHeight?: string
 }
 
-export function RichTextEditor({ value, onChange, placeholder, minHeight = "400px" }: RichTextEditorProps) {
+export function RichTextEditor({
+  value,
+  onChange,
+  placeholder,
+  minHeight = "400px",
+}: RichTextEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -48,19 +53,19 @@ export function RichTextEditor({ value, onChange, placeholder, minHeight = "400p
       }),
       Image.configure({
         HTMLAttributes: {
-          class: 'rounded-lg max-w-full h-auto',
+          class: "rounded-lg max-w-full h-auto",
         },
       }),
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: 'text-blue-600 hover:text-blue-800 underline',
+          class: "text-blue-600 hover:text-blue-800 underline",
         },
       }),
       Table.configure({
         resizable: true,
         HTMLAttributes: {
-          class: 'border-collapse table-auto w-full',
+          class: "border-collapse table-auto w-full",
         },
       }),
       TableRow,
@@ -73,7 +78,10 @@ export function RichTextEditor({ value, onChange, placeholder, minHeight = "400p
     content: value,
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto focus:outline-none min-h-[' + minHeight + '] p-4',
+        class:
+          "prose prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto focus:outline-none min-h-[" +
+          minHeight +
+          "] p-4",
       },
     },
     onUpdate: ({ editor }) => {
@@ -90,26 +98,26 @@ export function RichTextEditor({ value, onChange, placeholder, minHeight = "400p
   }, [editor, value])
 
   const addImage = useCallback(() => {
-    const url = window.prompt('Görsel URL\'si girin:')
+    const url = window.prompt("Görsel URL'si girin:")
     if (url && editor) {
       editor.chain().focus().setImage({ src: url }).run()
     }
   }, [editor])
 
   const setLink = useCallback(() => {
-    const previousUrl = editor?.getAttributes('link').href
-    const url = window.prompt('Link URL\'si girin:', previousUrl)
+    const previousUrl = editor?.getAttributes("link").href
+    const url = window.prompt("Link URL'si girin:", previousUrl)
 
     if (url === null) {
       return
     }
 
-    if (url === '') {
-      editor?.chain().focus().extendMarkRange('link').unsetLink().run()
+    if (url === "") {
+      editor?.chain().focus().extendMarkRange("link").unsetLink().run()
       return
     }
 
-    editor?.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
+    editor?.chain().focus().extendMarkRange("link").setLink({ href: url }).run()
   }, [editor])
 
   const addTable = useCallback(() => {
@@ -123,42 +131,42 @@ export function RichTextEditor({ value, onChange, placeholder, minHeight = "400p
   }
 
   return (
-    <div className="border rounded-md">
+    <div className="rounded-md border">
       {/* Toolbar */}
-      <div className="border-b bg-gray-50 dark:bg-gray-900 p-2 flex flex-wrap gap-1">
+      <div className="flex flex-wrap gap-1 border-b bg-gray-50 p-2 dark:bg-gray-900">
         <Button
           type="button"
-          variant={editor.isActive('bold') ? 'default' : 'ghost'}
+          variant={editor.isActive("bold") ? "default" : "ghost"}
           size="sm"
           onClick={() => editor.chain().focus().toggleBold().run()}
           title="Kalın (Ctrl+B)"
         >
           <Bold className="h-4 w-4" />
         </Button>
-        
+
         <Button
           type="button"
-          variant={editor.isActive('italic') ? 'default' : 'ghost'}
+          variant={editor.isActive("italic") ? "default" : "ghost"}
           size="sm"
           onClick={() => editor.chain().focus().toggleItalic().run()}
           title="İtalik (Ctrl+I)"
         >
           <Italic className="h-4 w-4" />
         </Button>
-        
+
         <Button
           type="button"
-          variant={editor.isActive('strike') ? 'default' : 'ghost'}
+          variant={editor.isActive("strike") ? "default" : "ghost"}
           size="sm"
           onClick={() => editor.chain().focus().toggleStrike().run()}
           title="Üstü Çizili"
         >
           <Strikethrough className="h-4 w-4" />
         </Button>
-        
+
         <Button
           type="button"
-          variant={editor.isActive('code') ? 'default' : 'ghost'}
+          variant={editor.isActive("code") ? "default" : "ghost"}
           size="sm"
           onClick={() => editor.chain().focus().toggleCode().run()}
           title="Kod"
@@ -166,31 +174,31 @@ export function RichTextEditor({ value, onChange, placeholder, minHeight = "400p
           <Code className="h-4 w-4" />
         </Button>
 
-        <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
+        <div className="mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600" />
 
         <Button
           type="button"
-          variant={editor.isActive('heading', { level: 1 }) ? 'default' : 'ghost'}
+          variant={editor.isActive("heading", { level: 1 }) ? "default" : "ghost"}
           size="sm"
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
           title="Başlık 1"
         >
           <Heading1 className="h-4 w-4" />
         </Button>
-        
+
         <Button
           type="button"
-          variant={editor.isActive('heading', { level: 2 }) ? 'default' : 'ghost'}
+          variant={editor.isActive("heading", { level: 2 }) ? "default" : "ghost"}
           size="sm"
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           title="Başlık 2"
         >
           <Heading2 className="h-4 w-4" />
         </Button>
-        
+
         <Button
           type="button"
-          variant={editor.isActive('heading', { level: 3 }) ? 'default' : 'ghost'}
+          variant={editor.isActive("heading", { level: 3 }) ? "default" : "ghost"}
           size="sm"
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           title="Başlık 3"
@@ -198,41 +206,41 @@ export function RichTextEditor({ value, onChange, placeholder, minHeight = "400p
           <Heading3 className="h-4 w-4" />
         </Button>
 
-        <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
+        <div className="mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600" />
 
         <Button
           type="button"
-          variant={editor.isActive('bulletList') ? 'default' : 'ghost'}
+          variant={editor.isActive("bulletList") ? "default" : "ghost"}
           size="sm"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           title="Madde İşaretli Liste"
         >
           <List className="h-4 w-4" />
         </Button>
-        
+
         <Button
           type="button"
-          variant={editor.isActive('orderedList') ? 'default' : 'ghost'}
+          variant={editor.isActive("orderedList") ? "default" : "ghost"}
           size="sm"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           title="Numaralı Liste"
         >
           <ListOrdered className="h-4 w-4" />
         </Button>
-        
+
         <Button
           type="button"
-          variant={editor.isActive('blockquote') ? 'default' : 'ghost'}
+          variant={editor.isActive("blockquote") ? "default" : "ghost"}
           size="sm"
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           title="Alıntı"
         >
           <Quote className="h-4 w-4" />
         </Button>
-        
+
         <Button
           type="button"
-          variant={editor.isActive('codeBlock') ? 'default' : 'ghost'}
+          variant={editor.isActive("codeBlock") ? "default" : "ghost"}
           size="sm"
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           title="Kod Bloğu"
@@ -240,38 +248,20 @@ export function RichTextEditor({ value, onChange, placeholder, minHeight = "400p
           <Code2 className="h-4 w-4" />
         </Button>
 
-        <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
+        <div className="mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600" />
 
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={setLink}
-          title="Link Ekle"
-        >
+        <Button type="button" variant="ghost" size="sm" onClick={setLink} title="Link Ekle">
           <LinkIcon className="h-4 w-4" />
         </Button>
-        
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={addImage}
-          title="Görsel Ekle"
-        >
+
+        <Button type="button" variant="ghost" size="sm" onClick={addImage} title="Görsel Ekle">
           <ImageIcon className="h-4 w-4" />
         </Button>
-        
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={addTable}
-          title="Tablo Ekle"
-        >
+
+        <Button type="button" variant="ghost" size="sm" onClick={addTable} title="Tablo Ekle">
           <TableIcon className="h-4 w-4" />
         </Button>
-        
+
         <Button
           type="button"
           variant="ghost"
@@ -282,7 +272,7 @@ export function RichTextEditor({ value, onChange, placeholder, minHeight = "400p
           <Minus className="h-4 w-4" />
         </Button>
 
-        <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
+        <div className="mx-1 h-6 w-px bg-gray-300 dark:bg-gray-600" />
 
         <Button
           type="button"
@@ -294,7 +284,7 @@ export function RichTextEditor({ value, onChange, placeholder, minHeight = "400p
         >
           <Undo className="h-4 w-4" />
         </Button>
-        
+
         <Button
           type="button"
           variant="ghost"

@@ -5,34 +5,25 @@ import { prisma } from "@/lib/prisma"
 
 /**
  * Kullanıcı Rol Değişikliği Bildirimi
- * 
+ *
  * Bu endpoint, bir kullanıcının rolü değiştirildiğinde
  * o kullanıcıya bir bildirim gönderir.
- * 
+ *
  * Admin kullanıcı rolünü değiştirdiğinde bu endpoint çağrılır
  * ve etkilenen kullanıcı bir bildirim alır.
  */
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session) {
-      return NextResponse.json(
-        { error: "Yetkilendirme gerekli" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Yetkilendirme gerekli" }, { status: 401 })
     }
 
     // Sadece admin rol değişikliği bildirebilir
     const userRole = session.user?.role
     if (!["ADMIN", "SUPER_ADMIN"].includes(userRole || "")) {
-      return NextResponse.json(
-        { error: "Bu işlem için yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu işlem için yetkiniz yok" }, { status: 403 })
     }
 
     const { id } = await params
@@ -50,15 +41,12 @@ export async function POST(
       },
     })
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
-      message: "Bildirim gönderildi" 
+      message: "Bildirim gönderildi",
     })
   } catch (error: unknown) {
     console.error("Error sending role change notification:", error)
-    return NextResponse.json(
-      { error: "Bildirim gönderilemedi" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Bildirim gönderilemedi" }, { status: 500 })
   }
 }

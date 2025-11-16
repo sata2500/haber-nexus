@@ -24,6 +24,7 @@ RSS tarama ve işleme mantığı detaylı olarak incelendi:
 - **Processor**: `lib/ai/processor.ts`
 
 **Bulgular**:
+
 - RSS tarama işlemi cron job ile tetikleniyor
 - Her RSS öğesi `processRssItem` fonksiyonu ile işleniyor
 - Makaleler veritabanına kaydediliyor
@@ -35,6 +36,7 @@ RSS tarama ve işleme mantığı detaylı olarak incelendi:
 Google'ın **Imagen 4** API'si detaylı olarak araştırıldı:
 
 **Teknik Özellikler**:
+
 - **Model**: `imagen-4.0-generate-001`
 - **Paket**: `@google/genai` (npm)
 - **Çözünürlük**: 1K-2K arası, aspect ratio kontrolü
@@ -42,6 +44,7 @@ Google'ın **Imagen 4** API'si detaylı olarak araştırıldı:
 - **Maliyet**: ~$0.039 per image (Paid tier)
 
 **Avantajlar**:
+
 - Mevcut `GOOGLE_API_KEY` ile çalışıyor
 - Yüksek kaliteli görseller
 - Hızlı üretim (~10-15 saniye)
@@ -77,11 +80,13 @@ export async function analyzeSourceImage(
 ```
 
 **Özellikler**:
+
 - Ürün kataloğu tespiti (BİM, A101, ŞOK, Migros, CarrefourSA)
 - İnfografik tespiti
 - Özel içerik koruması
 
 **Mantık**:
+
 - Başlık ve URL'de anahtar kelime taraması
 - Özel içerik tespit edilirse kaynak görsel korunur
 - Genel görseller için yeni görsel oluşturulur
@@ -97,16 +102,18 @@ export async function generateArticleImage(
 ```
 
 **Özellikler**:
+
 - Makale başlığı ve içeriğine uygun prompt oluşturma
 - Google Imagen 4 ile görsel üretimi
 - Base64 formatında data URL döndürme
 - Hata yönetimi ve fallback
 
 **Prompt Stratejisi**:
+
 ```
-profesyonel haber fotoğrafı, [içerik özeti], 
-gerçekçi ve bilgilendirici atmosfer, 
-yüksek kalite, 8K çözünürlük, 
+profesyonel haber fotoğrafı, [içerik özeti],
+gerçekçi ve bilgilendirici atmosfer,
+yüksek kalite, 8K çözünürlük,
 profesyonel aydınlatma, sinematik kompozisyon
 ```
 
@@ -120,6 +127,7 @@ export function insertImagesIntoContent(
 ```
 
 **Yerleştirme Stratejileri**:
+
 - `after-intro`: İlk paragraftan sonra
 - `mid-content`: İçeriğin ortasında
 - `before-conclusion`: Son paragraftan önce
@@ -140,6 +148,7 @@ export async function enrichArticleContent(
 ```
 
 **Analiz Kriterleri**:
+
 - İçerik derinliği
 - Eksik bilgiler
 - Somut örnek ihtiyacı
@@ -155,6 +164,7 @@ export async function searchWeb(query: string): Promise<SearchResult[]>
 ```
 
 **Özellikler**:
+
 - Otomatik arama sorgusu oluşturma
 - Web'de bilgi toplama
 - Kaynak URL'leri saklama
@@ -163,6 +173,7 @@ export async function searchWeb(query: string): Promise<SearchResult[]>
 #### 4.3 İçerik Zenginleştirme
 
 **Eklenen Bölümler**:
+
 - Detaylı açıklamalar
 - Somut örnekler
 - Uzman görüşleri
@@ -170,6 +181,7 @@ export async function searchWeb(query: string): Promise<SearchResult[]>
 - İstatistikler ve veriler
 
 **Örnek Sonuç**:
+
 - Orijinal: 1,422 karakter, 3 paragraf
 - Zenginleştirilmiş: 3,976 karakter, 13 paragraf
 - Büyüme: **%179.6**
@@ -188,6 +200,7 @@ export async function enhancedProcessRssItem(
 ```
 
 **Pipeline Adımları**:
+
 1. **Temel AI İşleme**: Başlık, özet, içerik, etiketler, SEO
 2. **İçerik Zenginleştirme**: Araştırma ve derinleştirme
 3. **Görsel İyileştirme**: Kaynak veya AI görseli seçimi
@@ -210,6 +223,7 @@ const processed = await enhancedProcessRssItem(item, {
 ```
 
 **Yeni Alanlar**:
+
 - `coverImage`: AI tarafından oluşturulan veya kaynak görsel
 - `coverImageAltText`: Görsel alt metni
 - `coverImageDescription`: Görsel açıklaması
@@ -225,6 +239,7 @@ const processed = await enhancedProcessRssItem(item, {
 **Haber Başlığı**: "Kış Aylarında Artan Yorgunluk ve Mutsuzluk Hissine Karşı Öneriler Sunuluyor"
 
 **Orijinal İçerik Sorunları**:
+
 - ❌ Yüzeysel bilgi
 - ❌ Somut öneriler eksik
 - ❌ Uzman görüşü yok
@@ -243,6 +258,7 @@ const processed = await enhancedProcessRssItem(item, {
 ```
 
 **Görsel Özellikleri**:
+
 - **Format**: PNG (data URL)
 - **Boyut**: 1.7 MB
 - **Tema**: Kış mevsiminde mutlu insan, sıcak renkler, doğal ışık
@@ -288,9 +304,10 @@ const processed = await enhancedProcessRssItem(item, {
 **Yeni Başlık**: "Kış Yorgunluğu ve Mutsuzluğa Son! Uzman Önerileri"
 
 **Meta Açıklama**:
+
 > "Kış aylarında artan yorgunluk ve mutsuzluğa karşı uzman önerilerini keşfedin. Egzersiz, beslenme, uyku ve sosyal bağlantılar ile kış depresyonunu yenin."
 
-**Anahtar Kelimeler**: 
+**Anahtar Kelimeler**:
 Kış yorgunluğu, kış mutsuzluğu, kış mevsimi, Ankara, yaşam tarzı önerileri, enerji düşüklüğü, ruh hali, fiziksel aktivite, dengeli beslenme, kaliteli uyku
 
 ---
@@ -299,29 +316,29 @@ Kış yorgunluğu, kış mutsuzluğu, kış mevsimi, Ankara, yaşam tarzı öner
 
 ### Yeni Modüller
 
-| Modül | Dosya | Satır Sayısı | Açıklama |
-|-------|-------|--------------|----------|
-| Vision Enhancer | `lib/ai/vision-enhancer.ts` | ~280 | Görsel işleme ve oluşturma |
-| Content Enricher | `lib/ai/content-enricher.ts` | ~210 | İçerik zenginleştirme |
-| Search Helper | `lib/ai/search-helper.ts` | ~80 | Araştırma desteği |
-| Enhanced Processor | `lib/ai/enhanced-processor.ts` | ~190 | Entegrasyon katmanı |
+| Modül              | Dosya                          | Satır Sayısı | Açıklama                   |
+| ------------------ | ------------------------------ | ------------ | -------------------------- |
+| Vision Enhancer    | `lib/ai/vision-enhancer.ts`    | ~280         | Görsel işleme ve oluşturma |
+| Content Enricher   | `lib/ai/content-enricher.ts`   | ~210         | İçerik zenginleştirme      |
+| Search Helper      | `lib/ai/search-helper.ts`      | ~80          | Araştırma desteği          |
+| Enhanced Processor | `lib/ai/enhanced-processor.ts` | ~190         | Entegrasyon katmanı        |
 
 **Toplam**: ~760 satır yeni kod
 
 ### Güncellemeler
 
-| Dosya | Değişiklik | Açıklama |
-|-------|------------|----------|
+| Dosya                         | Değişiklik                                  | Açıklama                        |
+| ----------------------------- | ------------------------------------------- | ------------------------------- |
 | `lib/rss/enhanced-scanner.ts` | `processRssItem` → `enhancedProcessRssItem` | Enhanced processor entegrasyonu |
-| `lib/ai/prompts.ts` | `generateImagePrompt` eklendi | Görsel prompt oluşturma |
-| `package.json` | `@google/genai@1.29.1` eklendi | Imagen API desteği |
+| `lib/ai/prompts.ts`           | `generateImagePrompt` eklendi               | Görsel prompt oluşturma         |
+| `package.json`                | `@google/genai@1.29.1` eklendi              | Imagen API desteği              |
 
 ### Test Scriptleri
 
-| Script | Dosya | Açıklama |
-|--------|-------|----------|
-| Imagen Test | `scripts/test-imagen.ts` | Google Imagen API testi |
-| Basic Test | `scripts/test-enhanced-processor.ts` | Temel işlem testi |
+| Script        | Dosya                                         | Açıklama                  |
+| ------------- | --------------------------------------------- | ------------------------- |
+| Imagen Test   | `scripts/test-imagen.ts`                      | Google Imagen API testi   |
+| Basic Test    | `scripts/test-enhanced-processor.ts`          | Temel işlem testi         |
 | Detailed Test | `scripts/test-enhanced-processor-detailed.ts` | Detaylı test ve raporlama |
 
 ---
@@ -331,16 +348,19 @@ Kış yorgunluğu, kış mutsuzluğu, kış mevsimi, Ankara, yaşam tarzı öner
 ### Google Imagen API Maliyeti
 
 **Fiyatlandırma** (Paid Tier):
+
 - **Görsel Üretimi**: $0.039 per image
 - **Ücretsiz Tier**: Sınırlı (günlük/aylık kota)
 
 **Örnek Senaryo**:
+
 - **Günlük RSS Tarama**: 100 haber
 - **Görsel Oluşturma Oranı**: %80 (kaynak görseli olmayan)
 - **Günlük Maliyet**: 80 × $0.039 = **$3.12**
 - **Aylık Maliyet**: $3.12 × 30 = **$93.60**
 
 **Optimizasyon Önerileri**:
+
 1. Kaynak görselleri mümkün olduğunca kullan
 2. Benzer haberlerde görselleri yeniden kullan
 3. Cache mekanizması ekle
@@ -349,6 +369,7 @@ Kış yorgunluğu, kış mutsuzluğu, kış mevsimi, Ankara, yaşam tarzı öner
 ### Gemini API Maliyeti
 
 **İçerik Zenginleştirme**:
+
 - **Model**: `gemini-2.0-flash-lite`
 - **Maliyet**: Çok düşük (ücretsiz tier'da dahil)
 
@@ -373,16 +394,16 @@ import { enhancedProcessRssItem } from "@/lib/ai/enhanced-processor"
 
 // RSS öğesini işle
 const result = await enhancedProcessRssItem(rssItem, {
-  enableVisionEnhancement: true,  // Görsel ekleme
-  enableContentEnrichment: true,  // İçerik zenginleştirme
+  enableVisionEnhancement: true, // Görsel ekleme
+  enableContentEnrichment: true, // İçerik zenginleştirme
   rewriteStyle: "news",
   minQualityScore: 0.7,
 })
 
 // Sonuç
-console.log(result.coverImage)        // Görsel URL'si
-console.log(result.enrichedContent)   // Zenginleştirilmiş içerik
-console.log(result.researchSources)   // Araştırma kaynakları
+console.log(result.coverImage) // Görsel URL'si
+console.log(result.enrichedContent) // Zenginleştirilmiş içerik
+console.log(result.researchSources) // Araştırma kaynakları
 ```
 
 ### 3. RSS Tarama ile Otomatik Kullanım
@@ -394,6 +415,7 @@ GET /api/cron/rss-scan
 ```
 
 **Ayarlar**:
+
 - `enableVisionEnhancement`: `true` (varsayılan)
 - `enableContentEnrichment`: `true` (varsayılan)
 
@@ -473,6 +495,7 @@ GET /api/cron/rss-scan
 HaberNexus projesine başarıyla **yapay zeka destekli görsel ekleme** ve **içerik zenginleştirme** özellikleri entegre edildi.
 
 **Öne Çıkan Başarılar**:
+
 - ✅ Google Imagen 4 API entegrasyonu
 - ✅ Otomatik profesyonel görsel oluşturma
 - ✅ İçerik zenginleştirme (%179.6 büyüme)
@@ -481,6 +504,7 @@ HaberNexus projesine başarıyla **yapay zeka destekli görsel ekleme** ve **iç
 - ✅ SEO iyileştirmeleri
 
 **Teknik Metrikler**:
+
 - **Yeni Modül**: 4 adet
 - **Yeni Kod**: ~760 satır
 - **Test Coverage**: Temel fonksiyonlar test edildi

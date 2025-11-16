@@ -12,22 +12,16 @@ const userUpdateSchema = z.object({
 })
 
 // GET - Kullanıcı detayı
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session) {
-      return NextResponse.json(
-        { error: "Yetkilendirme gerekli" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Yetkilendirme gerekli" }, { status: 401 })
     }
 
     const { id } = await params
-    
+
     const user = await prisma.user.findUnique({
       where: { id },
       select: {
@@ -55,35 +49,23 @@ export async function GET(
     })
 
     if (!user) {
-      return NextResponse.json(
-        { error: "Kullanıcı bulunamadı" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "Kullanıcı bulunamadı" }, { status: 404 })
     }
 
     return NextResponse.json(user)
   } catch (error: unknown) {
     console.error("Error fetching user:", error)
-    return NextResponse.json(
-      { error: "Kullanıcı yüklenirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Kullanıcı yüklenirken bir hata oluştu" }, { status: 500 })
   }
 }
 
 // PATCH - Kullanıcı güncelle
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session) {
-      return NextResponse.json(
-        { error: "Yetkilendirme gerekli" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Yetkilendirme gerekli" }, { status: 401 })
     }
 
     const { id } = await params
@@ -96,18 +78,12 @@ export async function PATCH(
     const isSelf = session.user?.id === id
 
     if (!isAdmin && !isSelf) {
-      return NextResponse.json(
-        { error: "Bu kullanıcıyı güncelleme yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu kullanıcıyı güncelleme yetkiniz yok" }, { status: 403 })
     }
 
     // Rol değişikliği sadece admin yapabilir
     if (validatedData.role && !isAdmin) {
-      return NextResponse.json(
-        { error: "Rol değiştirme yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Rol değiştirme yetkiniz yok" }, { status: 403 })
     }
 
     // Username değişiyorsa benzersizliğini kontrol et
@@ -120,10 +96,7 @@ export async function PATCH(
       })
 
       if (existingUser) {
-        return NextResponse.json(
-          { error: "Bu kullanıcı adı zaten kullanılıyor" },
-          { status: 400 }
-        )
+        return NextResponse.json({ error: "Bu kullanıcı adı zaten kullanılıyor" }, { status: 400 })
       }
     }
 
@@ -144,17 +117,11 @@ export async function PATCH(
     return NextResponse.json(user)
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Geçersiz veri", details: error.issues },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Geçersiz veri", details: error.issues }, { status: 400 })
     }
 
     console.error("Error updating user:", error)
-    return NextResponse.json(
-      { error: "Kullanıcı güncellenirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Kullanıcı güncellenirken bir hata oluştu" }, { status: 500 })
   }
 }
 
@@ -165,31 +132,22 @@ export async function DELETE(
 ) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session) {
-      return NextResponse.json(
-        { error: "Yetkilendirme gerekli" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Yetkilendirme gerekli" }, { status: 401 })
     }
 
     // Sadece admin kullanıcı silebilir
     const userRole = session.user?.role
     if (!["ADMIN", "SUPER_ADMIN"].includes(userRole || "")) {
-      return NextResponse.json(
-        { error: "Bu işlem için yetkiniz yok" },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Bu işlem için yetkiniz yok" }, { status: 403 })
     }
 
     const { id } = await params
 
     // Kendi hesabını silemesin
     if (session.user?.id === id) {
-      return NextResponse.json(
-        { error: "Kendi hesabınızı silemezsiniz" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Kendi hesabınızı silemezsiniz" }, { status: 400 })
     }
 
     await prisma.user.delete({
@@ -199,9 +157,6 @@ export async function DELETE(
     return NextResponse.json({ success: true })
   } catch (error: unknown) {
     console.error("Error deleting user:", error)
-    return NextResponse.json(
-      { error: "Kullanıcı silinirken bir hata oluştu" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Kullanıcı silinirken bir hata oluştu" }, { status: 500 })
   }
 }

@@ -51,6 +51,8 @@ const eslintConfig = defineConfig([
     "*.config.mjs",
     "*.config.ts",
     "prisma/migrations/**",
+    // Test scripts (console.log allowed)
+    "scripts/test-*.ts",
   ]),
 ])
 

@@ -14,7 +14,7 @@ import { DashboardWelcome } from "@/components/dashboard/dashboard-welcome"
  * Force dynamic rendering
  * Kategoriler her istekte güncel çekilir
  */
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic"
 
 async function getFeaturedArticle() {
   return await prisma.article.findFirst({
@@ -91,9 +91,9 @@ export default async function HomePage() {
   ])
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Header />
-      
+
       <main className="flex-1">
         {/* Dashboard Welcome Card */}
         <section className="container py-8">
@@ -104,10 +104,10 @@ export default async function HomePage() {
         {featuredArticle && (
           <section className="container py-8">
             <Card className="overflow-hidden border-2">
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid gap-6 md:grid-cols-2">
                 {/* Image */}
                 {featuredArticle.coverImage ? (
-                  <div className="aspect-video md:aspect-auto relative">
+                  <div className="relative aspect-video md:aspect-auto">
                     <Image
                       src={featuredArticle.coverImage}
                       alt={featuredArticle.title}
@@ -117,14 +117,14 @@ export default async function HomePage() {
                     />
                   </div>
                 ) : (
-                  <div className="bg-gradient-to-br from-primary/20 to-primary/5 aspect-video md:aspect-auto flex items-center justify-center">
-                    <div className="text-center p-8">
-                      <Sparkles className="h-16 w-16 mx-auto mb-4 text-primary" />
-                      <p className="text-sm text-muted-foreground">Öne Çıkan Haber</p>
+                  <div className="from-primary/20 to-primary/5 flex aspect-video items-center justify-center bg-gradient-to-br md:aspect-auto">
+                    <div className="p-8 text-center">
+                      <Sparkles className="text-primary mx-auto mb-4 h-16 w-16" />
+                      <p className="text-muted-foreground text-sm">Öne Çıkan Haber</p>
                     </div>
                   </div>
                 )}
-                
+
                 {/* Content */}
                 <CardHeader className="space-y-4">
                   <div className="flex items-center gap-2">
@@ -138,7 +138,7 @@ export default async function HomePage() {
                       </Badge>
                     )}
                   </div>
-                  <CardTitle className="text-3xl md:text-4xl leading-tight">
+                  <CardTitle className="text-3xl leading-tight md:text-4xl">
                     {featuredArticle.title}
                   </CardTitle>
                   {featuredArticle.excerpt && (
@@ -146,7 +146,7 @@ export default async function HomePage() {
                       {featuredArticle.excerpt}
                     </CardDescription>
                   )}
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                  <div className="text-muted-foreground flex items-center gap-4 text-sm">
                     <span>{featuredArticle.author.name || featuredArticle.author.email}</span>
                     <span className="flex items-center gap-1">
                       <Eye className="h-4 w-4" />
@@ -166,10 +166,10 @@ export default async function HomePage() {
 
         {/* Main Content Grid */}
         <section className="container py-12">
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid gap-8 lg:grid-cols-3">
             {/* Latest News - 2 columns */}
-            <div className="lg:col-span-2 space-y-6">
-              <div className="flex items-center justify-between mb-6">
+            <div className="space-y-6 lg:col-span-2">
+              <div className="mb-6 flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Son Haberler</h2>
               </div>
 
@@ -183,12 +183,12 @@ export default async function HomePage() {
                 <div className="grid gap-6">
                   {latestArticles.map((article) => {
                     const readingTime = Math.ceil(article.content.split(" ").length / 200)
-                    
+
                     return (
-                      <Card key={article.id} className="hover:shadow-md transition-shadow">
+                      <Card key={article.id} className="transition-shadow hover:shadow-md">
                         <CardHeader>
                           <div className="flex items-start justify-between gap-4">
-                            <div className="space-y-2 flex-1">
+                            <div className="flex-1 space-y-2">
                               <div className="flex items-center gap-2">
                                 {article.category && (
                                   <Badge variant="secondary">{article.category.name}</Badge>
@@ -200,16 +200,14 @@ export default async function HomePage() {
                                   </Badge>
                                 )}
                               </div>
-                              <CardTitle className="text-xl hover:text-primary transition-colors cursor-pointer">
-                                <Link href={`/articles/${article.slug}`}>
-                                  {article.title}
-                                </Link>
+                              <CardTitle className="hover:text-primary cursor-pointer text-xl transition-colors">
+                                <Link href={`/articles/${article.slug}`}>{article.title}</Link>
                               </CardTitle>
                               {article.excerpt && (
                                 <CardDescription>{article.excerpt}</CardDescription>
                               )}
                               <div className="flex items-center justify-between gap-4">
-                                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                                <div className="text-muted-foreground flex items-center gap-3 text-sm">
                                   <span>{article.author.name}</span>
                                   <span className="flex items-center gap-1">
                                     <Clock className="h-3 w-3" />
@@ -226,7 +224,7 @@ export default async function HomePage() {
                             </div>
                             {/* Thumbnail */}
                             {article.coverImage ? (
-                              <div className="relative w-24 h-24 shrink-0">
+                              <div className="relative h-24 w-24 shrink-0">
                                 <Image
                                   src={article.coverImage}
                                   alt={article.title}
@@ -235,8 +233,8 @@ export default async function HomePage() {
                                 />
                               </div>
                             ) : (
-                              <div className="w-24 h-24 rounded-md bg-muted flex items-center justify-center shrink-0">
-                                <span className="text-xs text-muted-foreground">Görsel</span>
+                              <div className="bg-muted flex h-24 w-24 shrink-0 items-center justify-center rounded-md">
+                                <span className="text-muted-foreground text-xs">Görsel</span>
                               </div>
                             )}
                           </div>
@@ -265,7 +263,7 @@ export default async function HomePage() {
                         <Badge
                           key={tag.id}
                           variant="secondary"
-                          className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
+                          className="hover:bg-primary hover:text-primary-foreground cursor-pointer transition-colors"
                         >
                           {tag.name}
                         </Badge>
@@ -279,15 +277,16 @@ export default async function HomePage() {
               <Card className="border-primary/20 bg-primary/5">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Sparkles className="h-5 w-5 text-primary" />
+                    <Sparkles className="text-primary h-5 w-5" />
                     AI Analizler
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <h4 className="font-medium text-sm">Günün Özeti</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Yapay zeka destekli haber analizimiz, bugünün en önemli gelişmelerini sizin için özetledi.
+                    <h4 className="text-sm font-medium">Günün Özeti</h4>
+                    <p className="text-muted-foreground text-sm">
+                      Yapay zeka destekli haber analizimiz, bugünün en önemli gelişmelerini sizin
+                      için özetledi.
                     </p>
                     <Button variant="outline" size="sm" className="w-full">
                       Detaylı Analiz
@@ -300,16 +299,14 @@ export default async function HomePage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Bülten</CardTitle>
-                  <CardDescription>
-                    Günlük haber özetini e-postanıza göndereceğiz
-                  </CardDescription>
+                  <CardDescription>Günlük haber özetini e-postanıza göndereceğiz</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
                     <input
                       type="email"
                       placeholder="E-posta adresiniz"
-                      className="w-full px-3 py-2 border rounded-md text-sm"
+                      className="w-full rounded-md border px-3 py-2 text-sm"
                     />
                     <Button className="w-full" size="sm">
                       Abone Ol
