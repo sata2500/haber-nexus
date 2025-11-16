@@ -1,325 +1,122 @@
-# HaberNexus Developer Guide
+# HaberNexus Geliştirme Kılavuzu
 
-This comprehensive guide will help you understand the project structure, development workflow, and best practices for contributing to HaberNexus.
+Bu doküman, HaberNexus projesinde hatasız, verimli ve standartlara uygun bir geliştirme süreci sağlamak için oluşturulmuş kapsamlı bir kılavuzdur. Projeye entegre edilen yeni araçlar, standartlar ve iş akışları hakkında detaylı bilgi içerir.
 
-## Table of Contents
+## 1. Felsefemiz: Sıfır Hata ve Yüksek Kalite
 
-1. [Project Structure](#project-structure)
-2. [Development Workflow](#development-workflow)
-3. [Code Quality](#code-quality)
-4. [Database Management](#database-management)
-5. [API Development](#api-development)
-6. [Component Development](#component-development)
-7. [Testing](#testing)
-8. [Deployment](#deployment)
+Projenin kod kalitesini en üst düzeye çıkarmak, hataları daha oluşmadan engellemek ve geliştirme süreçlerini otomatikleştirmek amacıyla profesyonel bir altyapı kurulmuştur. Bu sistem, her kod değişikliğinin belirli kalite standartlarını karşıladığından emin olur.
 
----
+## 2. Hızlı Başlangıç ve Kurulum
 
-## Project Structure
-
-```
-haber-nexus/
-├── app/                      # Next.js App Router pages and API routes
-│   ├── (auth)/              # Authentication pages (signin, signup)
-│   ├── admin/               # Admin dashboard pages
-│   ├── author/              # Author dashboard pages
-│   ├── editor/              # Editor dashboard pages
-│   ├── profile/             # User profile pages
-│   ├── api/                 # API routes
-│   │   ├── articles/        # Article CRUD endpoints
-│   │   ├── auth/            # Authentication endpoints
-│   │   ├── ai/              # AI-powered features
-│   │   └── ...              # Other API endpoints
-│   ├── articles/            # Public article pages
-│   ├── categories/          # Category pages
-│   └── layout.tsx           # Root layout
-├── components/              # React components
-│   ├── ui/                  # Shadcn/ui components
-│   ├── layout/              # Layout components (Header, Footer)
-│   ├── article/             # Article-related components
-│   ├── editor/              # Rich text editor components
-│   └── ...                  # Other components
-├── lib/                     # Utility functions and configurations
-│   ├── ai/                  # AI-related utilities
-│   ├── auth.ts              # NextAuth configuration
-│   ├── prisma.ts            # Prisma client instance
-│   ├── permissions.ts       # RBAC utilities
-│   └── ...                  # Other utilities
-├── prisma/                  # Prisma schema and migrations
-│   ├── schema.prisma        # Database schema
-│   └── migrations/          # Database migrations
-├── public/                  # Static assets
-├── scripts/                 # Utility scripts
-└── types/                   # TypeScript type definitions
-```
-
----
-
-## Development Workflow
-
-### 1. Setting Up Your Development Environment
+### 2.1. Projeyi Ayarlama
 
 ```bash
-# Clone the repository
+# 1. Repoyu klonlayın
 git clone https://github.com/sata2500/haber-nexus.git
 cd haber-nexus
 
-# Install dependencies
+# 2. Bağımlılıkları yükleyin
 pnpm install
 
-# Set up environment variables
+# 3. Ortam değişkenlerini ayarlayın
 cp .env.example .env
-# Edit .env with your configuration
+# .env dosyasını kendi bilgilerinizle düzenleyin
 
-# Run database migrations
+# 4. Veritabanı migrasyonlarını çalıştırın
 pnpm prisma migrate dev
 
-# Start development server
+# 5. Geliştirme sunucusunu başlatın
 pnpm dev
 ```
 
-### 2. Creating a New Feature
+### 2.2. Önemli: Editör Yapılandırması (VS Code)
 
-```bash
-# Create a new branch
-git checkout -b feature/your-feature-name
+Tüm otomasyonun editörünüzde de sorunsuz çalışması için aşağıdaki **VS Code eklentilerini** kurmanız şiddetle tavsiye edilir. Bu eklentiler `.vscode/extensions.json` dosyasında tanımlıdır ve VS Code size bunları kurmayı otomatik olarak önerecektir.
 
-# Make your changes
-# ...
+- **ESLint:** `dbaeumer.vscode-eslint` (Hataları anında gösterir)
+- **Prettier - Code formatter:** `esbenp.prettier-vscode` (Kod formatını otomatik düzeltir)
+- **Tailwind CSS IntelliSense:** `bradlc.vscode-tailwindcss` (Tailwind sınıflarını otomatik tamamlar)
+- **Prisma:** `prisma.prisma` (Prisma şeması için syntax highlighting ve formatlama)
+- **Error Lens:** `usernamehw.errorlens` (Hataları ve uyarıları satır içinde gösterir)
+- **Code Spell Checker:** `streetsidesoftware.code-spell-checker` (Yazım hatalarını denetler)
 
-# Run linting and type checking
-pnpm lint
-pnpm build
+Projedeki `.vscode/settings.json` dosyası sayesinde, **dosyayı her kaydettiğinizde (`formatOnSave`) kodunuz otomatik olarak formatlanacak ve ESLint hataları düzeltilecektir.**
 
-# Commit your changes
-git commit -m "feat: Add your feature description"
+## 3. Otomatik Kalite Kontrol Sistemi
 
-# Push to your fork
-git push origin feature/your-feature-name
-```
+Projede, kodun repoya kalitesiz veya hatalı bir şekilde gönderilmesini engelleyen çok aşamalı bir otomasyon sistemi bulunmaktadır.
 
-### 3. Available Scripts
+### 3.1. İş Akışı
 
-```bash
-pnpm dev           # Start development server
-pnpm build         # Build for production
-pnpm start         # Start production server
-pnpm lint          # Run ESLint
-pnpm lint:fix      # Fix ESLint errors automatically
-pnpm prisma:studio # Open Prisma Studio (database GUI)
-pnpm prisma:generate # Generate Prisma Client
-```
+1.  **Kod Yazarken:** VS Code, ESLint ve Prettier sayesinde sizi anlık olarak uyarır ve hataları düzeltir.
+2.  **`git commit` Anında:** `pre-commit` hook'u tetiklenir.
+    - **lint-staged:** Sadece `commit`'e eklenen dosyaları (`staged`) formatlar ve lint kurallarına göre denetler.
+    - **TypeScript Kontrolü:** Projenin tamamında tip hatası olup olmadığını kontrol eder (`tsc --noEmit`).
+    - **Sonuç:** Hata varsa `commit` işlemi engellenir. Hataları düzeltmeden devam edemezsiniz.
+3.  **`git push` Anında:** `pre-push` hook'u tetiklenir.
+    - **Tam Lint Kontrolü:** Projenin tamamında `pnpm lint` çalıştırılır.
+    - **Build Kontrolü:** Projenin canlıya alınabilir durumda olduğundan emin olmak için `pnpm build` çalıştırılır.
+    - **Sonuç:** Hata varsa `push` işlemi engellenir. Repoya bozuk kod gönderemezsiniz.
+4.  **Pull Request (PR) Açıldığında:** GitHub Actions tetiklenir.
+    - **CI (Sürekli Entegrasyon):** Sunucu ortamında tüm testler (lint, type-check, build) yeniden çalıştırılır.
+    - **PR Kalite Kontrolü:** PR başlığının standartlara uygunluğu ve kodda `console.log` gibi istenmeyen ifadelerin olup olmadığı kontrol edilir.
 
----
+### 3.2. Kullanılan Araçlar
 
-## Code Quality
+- **Husky & lint-staged:** Git hook'larını yönetir ve `commit` öncesi sadece ilgili dosyalarda işlem yapılmasını sağlar.
+- **ESLint & Prettier:** Kodun tutarlı, okunabilir ve hatasız olmasını sağlar.
+- **TypeScript (Strict Mode):** `tsconfig.json` dosyasındaki en katı kurallar sayesinde tip güvenliği en üst düzeyde tutulur.
+- **GitHub Actions:** Repodaki kodun kalitesini sunucu tarafında sürekli olarak denetler.
 
-### TypeScript Best Practices
+## 4. Hata Takibi ve Raporlama (Error Handling)
 
-1. **Avoid `any` types**: Always use proper type definitions
-2. **Use interfaces for object shapes**: Define clear interfaces for data structures
-3. **Leverage type inference**: Let TypeScript infer types when possible
-4. **Use strict mode**: The project uses `strict: true` in `tsconfig.json`
+Uygulama genelinde oluşabilecek hataları yakalamak ve yönetmek için merkezi bir sistem kurulmuştur.
 
-### ESLint Rules
+### 4.1. `ErrorBoundary` Component'i
 
-The project uses ESLint with the following key rules:
+Bu React component'i, render sırasında oluşan hataları yakalayarak tüm uygulamanın çökmesini engeller ve kullanıcıya anlamlı bir hata ekranı gösterir. Geliştirme modunda, hatanın teknik detayları da bu ekranda yer alır.
 
-- `@typescript-eslint/no-explicit-any`: Disallow `any` types
-- `@typescript-eslint/no-unused-vars`: Disallow unused variables
-- `react-hooks/rules-of-hooks`: Enforce React Hooks rules
-- `react-hooks/exhaustive-deps`: Enforce useEffect dependencies
+### 4.2. `errorLogger` Utility
 
-### Code Formatting
+`lib/error-logger.ts` dosyasındaki bu araç, hem client hem de server tarafında hataları merkezi bir şekilde loglamak için kullanılır.
 
-- Use **2 spaces** for indentation
-- Use **semicolons**
-- Use **double quotes** for strings
-- Max line length: **100 characters**
+- **Otomatik Hata Yakalama:** Tarayıcıdaki yakalanamayan tüm hataları ve Promise reddetmelerini otomatik olarak yakalar.
+- **Manuel Loglama:** `try-catch` blokları içinde istediğiniz hatayı ve ek bilgiyi loglayabilirsiniz:
 
----
+  ```ts
+  import { errorLogger } from "@/lib/error-logger"
 
-## Database Management
-
-### Prisma Workflow
-
-```bash
-# Create a new migration
-pnpm prisma migrate dev --name your-migration-name
-
-# Apply migrations to production
-pnpm prisma migrate deploy
-
-# Reset database (development only)
-pnpm prisma migrate reset
-
-# Generate Prisma Client after schema changes
-pnpm prisma generate
-
-# Open Prisma Studio
-pnpm prisma:studio
-```
-
-### Schema Best Practices
-
-1. **Use proper relations**: Define relations between models correctly
-2. **Add indexes**: Index frequently queried fields
-3. **Use enums**: Define enums for fixed sets of values
-4. **Add default values**: Set sensible defaults for fields
-
----
-
-## API Development
-
-### API Route Structure
-
-```typescript
-// app/api/example/route.ts
-import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
-import { prisma } from "@/lib/prisma"
-
-export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
-    }
-
-    const data = await prisma.example.findMany()
-    
-    return NextResponse.json(data)
-  } catch (error: unknown) {
-    console.error("Error:", error)
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    )
+    // Hata üretebilecek kod
+  } catch (error) {
+    errorLogger.error(error, { context: "Kullanıcı profili güncellenirken hata oluştu" })
   }
-}
-```
+  ```
 
-### Error Handling
+### 4.3. Geliştirici Hata Paneli (Dev Error Dashboard)
 
-Always use proper error handling:
+**Sadece geliştirme modunda**, ekranın sağ altında kırmızı bir hata ikonu belirir. Bu ikona tıklandığında, o ana kadar loglanmış tüm hataları (otomatik veya manuel) gösteren bir panel açılır. Bu panel, hataları anında görmenizi ve ayıklamanızı sağlar.
 
-```typescript
-try {
-  // Your code
-} catch (error: unknown) {
-  console.error("Error:", error)
-  return NextResponse.json(
-    { error: "Descriptive error message" },
-    { status: 500 }
-  )
-}
-```
+## 5. Güncellenmiş Scriptler
 
----
-
-## Component Development
-
-### Component Structure
-
-```typescript
-// components/example/example-component.tsx
-"use client"
-
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-
-interface ExampleComponentProps {
-  title: string
-  onAction?: () => void
-}
-
-export function ExampleComponent({ title, onAction }: ExampleComponentProps) {
-  const [state, setState] = useState<string>("")
-
-  return (
-    <div>
-      <h2>{title}</h2>
-      <Button onClick={onAction}>Click me</Button>
-    </div>
-  )
-}
-```
-
-### Best Practices
-
-1. **Use TypeScript interfaces** for props
-2. **Destructure props** in function parameters
-3. **Use proper naming**: PascalCase for components, camelCase for functions
-4. **Keep components small**: Split large components into smaller ones
-5. **Use React Hooks properly**: Follow the rules of hooks
-
----
-
-## Testing
-
-### Unit Testing (Coming Soon)
-
-The project will use **Jest** and **React Testing Library** for unit tests.
+`package.json` dosyasındaki kullanabileceğiniz bazı önemli scriptler:
 
 ```bash
-# Run tests (when implemented)
-pnpm test
-
-# Run tests in watch mode
-pnpm test:watch
-
-# Generate coverage report
-pnpm test:coverage
+pnpm dev           # Geliştirme sunucusunu başlatır
+pnpm build         # Projeyi production için build eder
+pnpm start         # Production sunucusunu başlatır
+pnpm lint          # Tüm projede ESLint kontrolü yapar
+pnpm lint:fix      # ESLint hatalarını otomatik düzeltir
+pnpm format        # Tüm projeyi Prettier ile formatlar
+pnpm format:check  # Formatlama hatalarını kontrol eder
+pnpm type-check    # TypeScript tip kontrolü yapar
+pnpm prepare       # Husky'yi kurar (genellikle otomatik çalışır)
 ```
 
----
+## 6. Proje Yapısı
 
-## Deployment
+Proje, Next.js App Router mimarisine uygun olarak modüler bir yapıda organize edilmiştir. Detaylı yapı için projenin dosya ağacını inceleyebilirsiniz.
 
-### Vercel Deployment
+Bu kılavuz, projenin kalitesini korumak ve geliştirme sürecini herkes için daha kolay hale getirmek amacıyla hazırlanmıştır. Bu standartlara uymak, uzun vadede daha sürdürülebilir ve hatasız bir proje geliştirmemizi sağlayacaktır.
 
-The project is configured for deployment on Vercel:
-
-1. **Connect your GitHub repository** to Vercel
-2. **Set environment variables** in Vercel dashboard
-3. **Deploy**: Vercel will automatically deploy on push to `main`
-
-### Environment Variables
-
-Required environment variables for production:
-
-```env
-DATABASE_URL=your_production_database_url
-AUTH_SECRET=your_production_auth_secret
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_API_KEY=your_google_api_key
-NEXTAUTH_URL=https://your-domain.com
-```
-
----
-
-## Additional Resources
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Prisma Documentation](https://www.prisma.io/docs)
-- [NextAuth.js Documentation](https://next-auth.js.org/)
-- [Shadcn/ui Documentation](https://ui.shadcn.com/)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-
----
-
-## Getting Help
-
-If you need help or have questions:
-
-1. Check the [GitHub Issues](https://github.com/sata2500/haber-nexus/issues)
-2. Read the [Contributing Guide](CONTRIBUTING.md)
-3. Contact the maintainers at [salihtanriseven@gmail.com](mailto:salihtanriseven@gmail.com)
-
-Happy coding! 🚀
+**Mutlu ve hatasız kodlamalar! 🚀**

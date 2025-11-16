@@ -6,13 +6,13 @@ import { useRouter } from "next/navigation"
 
 /**
  * Bildirim Bazlı Session Yenileme Hook'u
- * 
+ *
  * Bu hook, kullanıcıya rol değişikliği bildirimi geldiğinde
  * otomatik olarak session'ı yeniler ve sayfayı refresh eder.
- * 
+ *
  * Bu sayede kullanıcı rol değişikliğini anında görebilir ve
  * yeni yetkilerine hemen erişebilir.
- * 
+ *
  * @param notifications - Kullanıcının bildirimleri
  */
 interface Notification {
@@ -32,22 +32,21 @@ export function useNotificationSessionRefresh(notifications: Notification[] = []
     const latestNotification = notifications[0]
 
     // Eğer okunmamış bir rol değişikliği bildirimi varsa
-    if (
-      latestNotification.type === "ROLE_CHANGE" &&
-      !latestNotification.isRead
-    ) {
+    if (latestNotification.type === "ROLE_CHANGE" && !latestNotification.isRead) {
       // Session'ı hemen güncelle
       const refreshSession = async () => {
         try {
-          console.log("[Notification Session Refresh] Rol değişikliği bildirimi alındı, session güncelleniyor...")
-          
+          console.error(
+            "[Notification Session Refresh] Rol değişikliği bildirimi alındı, session güncelleniyor..."
+          )
+
           // Session'ı güncelle
           await update()
-          
+
           // Sayfayı yenile (server component'leri güncellemek için)
           router.refresh()
-          
-          console.log("[Notification Session Refresh] Session başarıyla güncellendi")
+
+          console.error("[Notification Session Refresh] Session başarıyla güncellendi")
         } catch (error) {
           console.error("[Notification Session Refresh] Session güncelleme hatası:", error)
         }
@@ -60,7 +59,7 @@ export function useNotificationSessionRefresh(notifications: Notification[] = []
 
 /**
  * Manuel Bildirim Session Refresh
- * 
+ *
  * Kullanıcı bir bildirimi okuduğunda manuel olarak session'ı yenilemek için kullanılır.
  */
 export function useManualNotificationRefresh() {

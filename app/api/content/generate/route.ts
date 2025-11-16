@@ -35,8 +35,8 @@ export async function POST(request: NextRequest) {
           return NextResponse.json({ error: "Topic is required" }, { status: 400 })
         }
 
-        console.log("Generating article for topic:", data.topic)
-        
+        console.error("Generating article for topic:", data.topic)
+
         // Generate article
         const generated = await generateArticle({
           topic: data.topic,
@@ -46,39 +46,42 @@ export async function POST(request: NextRequest) {
           includeResearch: data.includeResearch !== false,
           includeSources: data.includeSources !== false,
           targetAudience: data.targetAudience || "genel okuyucu",
-          keywords: data.keywords || []
+          keywords: data.keywords || [],
         })
 
-        console.log("Article generated successfully")
-        console.log("Content length:", generated.content?.length || 0)
-        console.log("Quality score:", generated.qualityScore)
-        
+        console.error("Article generated successfully")
+        console.error("Content length:", generated.content?.length || 0)
+        console.error("Quality score:", generated.qualityScore)
+
         // Create draft
         const draft = await prisma.contentDraft.create({
           data: {
             authorId: session.user.id,
             topic: data.topic,
             outline: generated.outline,
-            research: data.includeResearch && generated.sources ? JSON.parse(JSON.stringify({ sources: generated.sources })) : undefined,
+            research:
+              data.includeResearch && generated.sources
+                ? JSON.parse(JSON.stringify({ sources: generated.sources }))
+                : undefined,
             draft: generated.content,
-            
+
             aiGenerated: true,
             aiModel: generated.aiModel,
             aiPrompt: `Topic: ${data.topic}, Style: ${data.style || "news"}`,
-            
+
             status: "REVIEW",
-            
+
             qualityScore: generated.qualityScore,
             readabilityScore: generated.readabilityScore,
-            seoScore: generated.seoScore
-          }
+            seoScore: generated.seoScore,
+          },
         })
 
-        console.log("Draft created with ID:", draft.id)
-        
+        console.error("Draft created with ID:", draft.id)
+
         result = {
           draftId: draft.id,
-          ...generated
+          ...generated,
         }
         break
 
@@ -96,17 +99,10 @@ export async function POST(request: NextRequest) {
 
       case "expand_outline":
         if (!data.outline || !data.topic) {
-          return NextResponse.json(
-            { error: "Outline and topic are required" },
-            { status: 400 }
-          )
+          return NextResponse.json({ error: "Outline and topic are required" }, { status: 400 })
         }
 
-        const expanded = await expandOutline(
-          data.outline,
-          data.topic,
-          data.style || "news"
-        )
+        const expanded = await expandOutline(data.outline, data.topic, data.style || "news")
         result = { content: expanded }
         break
 
@@ -117,14 +113,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       action,
-      result
+      result,
     })
   } catch (error: unknown) {
     console.error("Content generation error:", error)
     return NextResponse.json(
       {
         error: "Failed to generate content",
-        details: error instanceof Error ? error.message : "Unknown error"
+        details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
     )

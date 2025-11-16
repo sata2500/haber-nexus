@@ -4,7 +4,7 @@ import { hash } from "bcrypt"
 const prisma = new PrismaClient()
 
 async function main() {
-  console.log("🌱 Seeding database...")
+  console.error("🌱 Seeding database...")
 
   // Create categories
   const categories = [
@@ -72,7 +72,7 @@ async function main() {
       update: {},
       create: category,
     })
-    console.log(`✅ Category created: ${category.name}`)
+    console.error(`✅ Category created: ${category.name}`)
   }
 
   // Create admin user
@@ -92,7 +92,7 @@ async function main() {
       emailVerified: new Date(),
     },
   })
-  console.log(`✅ Admin user created: ${adminEmail}`)
+  console.error(`✅ Admin user created: ${adminEmail}`)
 
   // Create sample tags
   const tags = [
@@ -109,10 +109,10 @@ async function main() {
       update: {},
       create: tag,
     })
-    console.log(`✅ Tag created: ${tag.name}`)
+    console.error(`✅ Tag created: ${tag.name}`)
   }
 
-  console.log("✅ Seeding completed!")
+  console.error("✅ Seeding completed!")
 }
 
 main()

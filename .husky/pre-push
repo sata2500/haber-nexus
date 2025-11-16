@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🚀 Running pre-push checks..."
+
+# Run full lint
+echo "📝 Running full ESLint check..."
+pnpm lint
+
+# Run build to ensure everything compiles
+echo "🔨 Running production build check..."
+pnpm build
+
+echo "✅ All pre-push checks passed! Ready to push."

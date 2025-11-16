@@ -23,7 +23,7 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
   let itemsProcessed = 0
   let itemsPublished = 0
 
-  console.log(`[RSS Scanner] Starting scan for feed: ${feedId}`)
+  console.error(`[RSS Scanner] Starting scan for feed: ${feedId}`)
 
   try {
     // Get feed configuration
@@ -44,17 +44,17 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
       throw new Error("RSS feed is not active")
     }
 
-    console.log(`[RSS Scanner] Feed found: ${feed.name}, URL: ${feed.url}`)
+    console.error(`[RSS Scanner] Feed found: ${feed.name}, URL: ${feed.url}`)
 
     // Parse RSS feed
-    console.log(`[RSS Scanner] Parsing RSS feed: ${feed.url}`)
+    console.error(`[RSS Scanner] Parsing RSS feed: ${feed.url}`)
     const feedData = await parseRssFeed(feed.url)
-    console.log(`[RSS Scanner] Feed parsed successfully. Total items: ${feedData.items.length}`)
-    
+    console.error(`[RSS Scanner] Feed parsed successfully. Total items: ${feedData.items.length}`)
+
     // Filter recent items (last 24 hours)
     const recentItems = filterRecentItems(feedData.items, 24)
     itemsFound = recentItems.length
-    console.log(`[RSS Scanner] Recent items (last 24h): ${itemsFound}`)
+    console.error(`[RSS Scanner] Recent items (last 24h): ${itemsFound}`)
 
     // Get existing article slugs to avoid duplicates
     const existingArticles = await prisma.article.findMany({
@@ -65,27 +65,27 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
         slug: true,
       },
     })
-    const existingSlugs = new Set(existingArticles.map(a => a.slug))
+    const existingSlugs = new Set(existingArticles.map((a) => a.slug))
 
-    console.log(`[RSS Scanner] Processing ${itemsFound} items from feed: ${feed.name}`)
-    
+    console.error(`[RSS Scanner] Processing ${itemsFound} items from feed: ${feed.name}`)
+
     // Process each item with timeout protection
     for (let i = 0; i < recentItems.length; i++) {
       const item = recentItems[i]
-      console.log(`[RSS Scanner] Processing item ${i + 1}/${recentItems.length}: ${item.title}`)
+      console.error(`[RSS Scanner] Processing item ${i + 1}/${recentItems.length}: ${item.title}`)
       try {
         // Process with AI with per-item timeout (2 minutes)
         const timeoutPromise = new Promise<never>((_, reject) => {
-          setTimeout(() => reject(new Error('Item processing timeout')), 120000)
+          setTimeout(() => reject(new Error("Item processing timeout")), 120000)
         })
-        
+
         const processed = await Promise.race([
           processRssItem(item, {
             rewriteStyle: "news",
             minQualityScore: feed.minQualityScore,
             generateNewContent: true,
           }),
-          timeoutPromise
+          timeoutPromise,
         ])
 
         // Check for duplicate slug
@@ -98,7 +98,7 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
         const tagIds: string[] = []
         for (const tagName of processed.tags) {
           const tagSlug = createSlug(tagName)
-          
+
           // Find or create tag
           const tag = await prisma.tag.upsert({
             where: { slug: tagSlug },
@@ -111,19 +111,19 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
               useCount: 1,
             },
           })
-          
+
           tagIds.push(tag.id)
         }
 
         // Get author using auto-assignment or default
         const authorId = await getAuthorForRssFeed(feedId, feed.categoryId || undefined)
-        
+
         if (!authorId) {
           console.error(`[RSS Scanner] No suitable author found for feed: ${feed.name}`)
           throw new Error("No suitable author found for article creation")
         }
-        
-        console.log(`[RSS Scanner] Author assigned: ${authorId}`)
+
+        console.error(`[RSS Scanner] Author assigned: ${authorId}`)
 
         // Determine status based on autoPublish setting
         const status = feed.autoPublish ? "PUBLISHED" : "DRAFT"
@@ -136,26 +136,26 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
             excerpt: processed.excerpt,
             content: processed.content,
             coverImage: null, // TODO: Extract image from content or use AI to generate
-            
+
             type: "NEWS",
             status,
             ...(feed.categoryId && { categoryId: feed.categoryId }),
-            
+
             authorId: authorId,
-            
+
             aiGenerated: true,
             aiSummary: processed.excerpt,
             aiTags: processed.tags,
             sourceRssId: feedId,
-            
+
             metaTitle: processed.metaTitle,
             metaDescription: processed.metaDescription,
             keywords: processed.keywords,
-            
+
             publishedAt: status === "PUBLISHED" ? new Date() : null,
-            
+
             tags: {
-              connect: tagIds.map(id => ({ id })),
+              connect: tagIds.map((id) => ({ id })),
             },
           },
         })
@@ -164,9 +164,11 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
         if (status === "PUBLISHED") {
           itemsPublished++
         }
-        
-        console.log(`[RSS Scanner] Progress: ${itemsProcessed}/${itemsFound} processed, ${itemsPublished} published`)
-        
+
+        console.error(
+          `[RSS Scanner] Progress: ${itemsProcessed}/${itemsFound} processed, ${itemsPublished} published`
+        )
+
         existingSlugs.add(processed.slug)
       } catch (itemError) {
         const errorMsg = itemError instanceof Error ? itemError.message : "Unknown error"
@@ -174,7 +176,7 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
         errors.push(`Failed to process item "${item.title}": ${errorMsg}`)
         console.error(`[RSS Scanner] Error processing item "${item.title}":`, {
           error: errorMsg,
-          stack: errorStack
+          stack: errorStack,
         })
       }
     }
@@ -186,15 +188,15 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
         lastScannedAt: new Date(),
         totalScans: { increment: 1 },
         totalArticles: { increment: itemsPublished },
-        successRate: errors.length === 0 ? 1.0 : Math.max(0, 1 - (errors.length / itemsFound)),
+        successRate: errors.length === 0 ? 1.0 : Math.max(0, 1 - errors.length / itemsFound),
       },
     })
 
     const duration = Date.now() - startTime
 
     // Create scan log
-    const status = errors.length === 0 ? "SUCCESS" : (itemsProcessed > 0 ? "PARTIAL" : "FAILED")
-    
+    const status = errors.length === 0 ? "SUCCESS" : itemsProcessed > 0 ? "PARTIAL" : "FAILED"
+
     await prisma.rssScanLog.create({
       data: {
         rssFeedId: feedId,
@@ -207,13 +209,13 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
       },
     })
 
-    console.log(`[RSS Scanner] Scan completed for feed ${feedId}:`, {
+    console.error(`[RSS Scanner] Scan completed for feed ${feedId}:`, {
       status,
       itemsFound,
       itemsProcessed,
       itemsPublished,
       duration: `${duration}ms`,
-      errors: errors.length
+      errors: errors.length,
     })
 
     return {
@@ -229,16 +231,16 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
     const duration = Date.now() - startTime
     const errorMsg = error instanceof Error ? error.message : "Unknown error"
     const errorStack = error instanceof Error ? error.stack : undefined
-    
+
     console.error(`[RSS Scanner] Fatal error during scan for feed ${feedId}:`, {
       error: errorMsg,
       stack: errorStack,
       itemsFound,
       itemsProcessed,
       itemsPublished,
-      duration: `${duration}ms`
+      duration: `${duration}ms`,
     })
-    
+
     // Create failed scan log
     try {
       await prisma.rssScanLog.create({

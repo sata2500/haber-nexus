@@ -20,18 +20,11 @@ interface ShareButtonProps {
   size?: "sm" | "md" | "lg"
 }
 
-export function ShareButton({
-  title,
-  url,
-  showLabel = true,
-  size = "md",
-}: ShareButtonProps) {
+export function ShareButton({ title, url, showLabel = true, size = "md" }: ShareButtonProps) {
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState(false)
 
-  const fullUrl = typeof window !== "undefined" 
-    ? `${window.location.origin}${url}`
-    : url
+  const fullUrl = typeof window !== "undefined" ? `${window.location.origin}${url}` : url
 
   const handleNativeShare = async () => {
     // Check if Web Share API is available
@@ -43,7 +36,7 @@ export function ShareButton({
         })
       } catch (error) {
         // User cancelled or error occurred
-        console.log("Share cancelled or failed:", error)
+        console.error("Share cancelled or failed:", error)
       }
     } else {
       // Fallback to dialog
@@ -99,9 +92,7 @@ export function ShareButton({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Makaleyi Paylaş</DialogTitle>
-            <DialogDescription>
-              Bu makaleyi sosyal medyada veya link ile paylaşın
-            </DialogDescription>
+            <DialogDescription>Bu makaleyi sosyal medyada veya link ile paylaşın</DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4">
@@ -110,41 +101,41 @@ export function ShareButton({
               <Button
                 variant="outline"
                 size="lg"
-                className="flex-col h-auto py-3"
+                className="h-auto flex-col py-3"
                 onClick={() => window.open(shareLinks.facebook, "_blank")}
               >
-                <Facebook className="h-6 w-6 mb-1 text-blue-600" />
+                <Facebook className="mb-1 h-6 w-6 text-blue-600" />
                 <span className="text-xs">Facebook</span>
               </Button>
 
               <Button
                 variant="outline"
                 size="lg"
-                className="flex-col h-auto py-3"
+                className="h-auto flex-col py-3"
                 onClick={() => window.open(shareLinks.twitter, "_blank")}
               >
-                <Twitter className="h-6 w-6 mb-1 text-sky-500" />
+                <Twitter className="mb-1 h-6 w-6 text-sky-500" />
                 <span className="text-xs">Twitter</span>
               </Button>
 
               <Button
                 variant="outline"
                 size="lg"
-                className="flex-col h-auto py-3"
+                className="h-auto flex-col py-3"
                 onClick={() => window.open(shareLinks.linkedin, "_blank")}
               >
-                <Linkedin className="h-6 w-6 mb-1 text-blue-700" />
+                <Linkedin className="mb-1 h-6 w-6 text-blue-700" />
                 <span className="text-xs">LinkedIn</span>
               </Button>
 
               <Button
                 variant="outline"
                 size="lg"
-                className="flex-col h-auto py-3"
+                className="h-auto flex-col py-3"
                 onClick={() => window.open(shareLinks.whatsapp, "_blank")}
               >
                 <svg
-                  className="h-6 w-6 mb-1 text-green-600"
+                  className="mb-1 h-6 w-6 text-green-600"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -156,17 +147,8 @@ export function ShareButton({
 
             {/* Copy Link */}
             <div className="flex items-center gap-2">
-              <Input
-                value={fullUrl}
-                readOnly
-                className="flex-1"
-              />
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handleCopyLink}
-                className="shrink-0"
-              >
+              <Input value={fullUrl} readOnly className="flex-1" />
+              <Button variant="outline" size="icon" onClick={handleCopyLink} className="shrink-0">
                 {copied ? (
                   <Check className="h-4 w-4 text-green-600" />
                 ) : (
@@ -174,11 +156,7 @@ export function ShareButton({
                 )}
               </Button>
             </div>
-            {copied && (
-              <p className="text-sm text-green-600 text-center">
-                Link kopyalandı!
-              </p>
-            )}
+            {copied && <p className="text-center text-sm text-green-600">Link kopyalandı!</p>}
           </div>
         </DialogContent>
       </Dialog>

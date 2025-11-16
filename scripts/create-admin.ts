@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs"
 const prisma = new PrismaClient()
 
 async function main() {
-  console.log("Admin hesabı oluşturuluyor...")
+  console.error("Admin hesabı oluşturuluyor...")
 
   const email = process.env.ADMIN_EMAIL || "admin@habernexus.com"
   const password = process.env.ADMIN_PASSWORD || "admin123456"
@@ -16,17 +16,17 @@ async function main() {
   })
 
   if (existingAdmin) {
-    console.log(`Admin hesabı zaten mevcut: ${email}`)
-    
+    console.error(`Admin hesabı zaten mevcut: ${email}`)
+
     // Update to SUPER_ADMIN if not already
     if (existingAdmin.role !== "SUPER_ADMIN") {
       await prisma.user.update({
         where: { email },
         data: { role: "SUPER_ADMIN" },
       })
-      console.log(`Kullanıcı SUPER_ADMIN rolüne yükseltildi: ${email}`)
+      console.error(`Kullanıcı SUPER_ADMIN rolüne yükseltildi: ${email}`)
     }
-    
+
     return
   }
 
@@ -44,11 +44,11 @@ async function main() {
     },
   })
 
-  console.log("✅ Admin hesabı başarıyla oluşturuldu!")
-  console.log("Email:", email)
-  console.log("Şifre:", password)
-  console.log("Rol:", admin.role)
-  console.log("\n⚠️  Güvenlik için şifrenizi değiştirmeniz önerilir!")
+  console.error("✅ Admin hesabı başarıyla oluşturuldu!")
+  console.error("Email:", email)
+  console.error("Şifre:", password)
+  console.error("Rol:", admin.role)
+  console.error("\n⚠️  Güvenlik için şifrenizi değiştirmeniz önerilir!")
 }
 
 main()

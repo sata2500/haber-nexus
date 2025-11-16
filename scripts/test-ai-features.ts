@@ -16,95 +16,101 @@ gelecekte birçok sektörde devrim yaratacağını öngörüyor.
 `
 
 async function testBasicFeatures() {
-  console.log("🧪 Testing Basic AI Features...\n")
+  console.error("🧪 Testing Basic AI Features...\n")
 
   try {
     // Test 1: Text Generation
-    console.log("1️⃣ Testing Text Generation...")
+    console.error("1️⃣ Testing Text Generation...")
     const generated = await generateText("Yapay zeka hakkında kısa bir paragraf yaz")
-    console.log("✅ Generated:", generated.substring(0, 100) + "...\n")
+    console.error("✅ Generated:", generated.substring(0, 100) + "...\n")
 
     // Test 2: Summarization
-    console.log("2️⃣ Testing Summarization...")
+    console.error("2️⃣ Testing Summarization...")
     const summary = await summarizeContent(testContent, { style: "brief", maxLength: 50 })
-    console.log("✅ Summary:", summary, "\n")
+    console.error("✅ Summary:", summary, "\n")
 
     // Test 3: Tag Generation
-    console.log("3️⃣ Testing Tag Generation...")
+    console.error("3️⃣ Testing Tag Generation...")
     const tags = await generateTags(testContent, { maxTags: 5 })
-    console.log("✅ Tags:", tags.join(", "), "\n")
+    console.error("✅ Tags:", tags.join(", "), "\n")
 
-    console.log("✅ Basic features test completed!\n")
+    console.error("✅ Basic features test completed!\n")
   } catch {
     // Error handled
   }
 }
 
 async function testAdvancedFeatures() {
-  console.log("🧪 Testing Advanced AI Features...\n")
+  console.error("🧪 Testing Advanced AI Features...\n")
 
   try {
     // Test 1: Sentiment Analysis
-    console.log("1️⃣ Testing Sentiment Analysis...")
+    console.error("1️⃣ Testing Sentiment Analysis...")
     const sentiment = await analyzeSentiment(testContent)
-    console.log("✅ Sentiment:", {
-      type: sentiment.sentiment,
-      score: sentiment.score.toFixed(2),
-      confidence: sentiment.confidence.toFixed(2),
-      mainEmotion: Object.entries(sentiment.emotions)
-        .sort(([, a], [, b]) => b - a)[0][0]
-    }, "\n")
+    console.error(
+      "✅ Sentiment:",
+      {
+        type: sentiment.sentiment,
+        score: sentiment.score.toFixed(2),
+        confidence: sentiment.confidence.toFixed(2),
+        mainEmotion: Object.entries(sentiment.emotions).sort(([, a], [, b]) => b - a)[0][0],
+      },
+      "\n"
+    )
 
     // Test 2: Content Moderation
-    console.log("2️⃣ Testing Content Moderation...")
+    console.error("2️⃣ Testing Content Moderation...")
     const moderation = await moderateContent(testContent)
-    console.log("✅ Moderation:", {
-      safe: moderation.safe,
-      recommendation: moderation.recommendation,
-      highestCategory: Object.entries(moderation.categories)
-        .sort(([, a], [, b]) => b - a)[0]
-    }, "\n")
+    console.error(
+      "✅ Moderation:",
+      {
+        safe: moderation.safe,
+        recommendation: moderation.recommendation,
+        highestCategory: Object.entries(moderation.categories).sort(([, a], [, b]) => b - a)[0],
+      },
+      "\n"
+    )
 
     // Test 3: Translation
-    console.log("3️⃣ Testing Translation...")
+    console.error("3️⃣ Testing Translation...")
     const translation = await translateContent(testContent, "en")
-    console.log("✅ Translation (EN):", translation.translatedText.substring(0, 100) + "...\n")
+    console.error("✅ Translation (EN):", translation.translatedText.substring(0, 100) + "...\n")
 
-    console.log("✅ Advanced features test completed!\n")
+    console.error("✅ Advanced features test completed!\n")
   } catch {
     // Error handled
   }
 }
 
 async function testErrorHandling() {
-  console.log("🧪 Testing Error Handling...\n")
+  console.error("🧪 Testing Error Handling...\n")
 
   try {
     // Test with invalid input
-    console.log("1️⃣ Testing with empty content...")
+    console.error("1️⃣ Testing with empty content...")
     try {
       await summarizeContent("")
-      console.log("❌ Should have thrown an error\n")
+      console.error("❌ Should have thrown an error\n")
     } catch {
-      console.log("✅ Correctly handled empty content\n")
+      console.error("✅ Correctly handled empty content\n")
     }
 
     // Test with very long content
-    console.log("2️⃣ Testing with very long content...")
+    console.error("2️⃣ Testing with very long content...")
     const longContent = testContent.repeat(100)
     const summary = await summarizeContent(longContent, { maxLength: 100 })
-    console.log("✅ Handled long content:", summary.length, "characters\n")
+    console.error("✅ Handled long content:", summary.length, "characters\n")
 
-    console.log("✅ Error handling test completed!\n")
+    console.error("✅ Error handling test completed!\n")
   } catch {
     // Error handled
   }
 }
 
 async function runAllTests() {
-  console.log("=" .repeat(60))
-  console.log("🚀 HaberNexus AI Features Test Suite")
-  console.log("=" .repeat(60) + "\n")
+  console.error("=".repeat(60))
+  console.error("🚀 HaberNexus AI Features Test Suite")
+  console.error("=".repeat(60) + "\n")
 
   const startTime = Date.now()
 
@@ -114,9 +120,9 @@ async function runAllTests() {
 
   const duration = ((Date.now() - startTime) / 1000).toFixed(2)
 
-  console.log("=" .repeat(60))
-  console.log(`✅ All tests completed in ${duration}s`)
-  console.log("=" .repeat(60))
+  console.error("=".repeat(60))
+  console.error(`✅ All tests completed in ${duration}s`)
+  console.error("=".repeat(60))
 }
 
 // Run tests

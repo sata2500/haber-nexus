@@ -19,23 +19,23 @@ export interface GeneratedContent {
   excerpt: string
   content: string
   outline: string[]
-  
+
   // SEO
   metaTitle: string
   metaDescription: string
   keywords: string[]
   tags: string[]
-  
+
   // Quality
   qualityScore: number
   readabilityScore: number
   seoScore: number
-  
+
   // Metadata
   wordCount: number
   estimatedReadTime: number // minutes
   sources?: ResearchSource[]
-  
+
   // AI Metadata
   aiGenerated: true
   aiModel: string
@@ -64,30 +64,30 @@ export async function generateArticle(
     includeResearch = true,
     includeSources = true,
     targetAudience = "genel okuyucu",
-    keywords = []
+    keywords = [],
   } = options
 
-  console.log("[generateArticle] Starting for topic:", topic)
-  
+  console.error("[generateArticle] Starting for topic:", topic)
+
   // Step 1: Research (if enabled)
   let researchData = ""
   let sources: ResearchSource[] = []
-  
+
   if (includeResearch) {
-    console.log("[generateArticle] Conducting research...")
+    console.error("[generateArticle] Conducting research...")
     const research = await conductResearch(topic)
     researchData = research.summary
     sources = research.sources
-    console.log("[generateArticle] Research completed. Sources:", sources.length)
+    console.error("[generateArticle] Research completed. Sources:", sources.length)
   }
 
   // Step 2: Create outline
-  console.log("[generateArticle] Creating outline...")
+  console.error("[generateArticle] Creating outline...")
   const outline = await createOutline(topic, style, researchData)
-  console.log("[generateArticle] Outline created with", outline.length, "items")
+  console.error("[generateArticle] Outline created with", outline.length, "items")
 
   // Step 3: Generate content
-  console.log("[generateArticle] Generating content...")
+  console.error("[generateArticle] Generating content...")
   const content = await generateContentFromOutline(
     topic,
     outline,
@@ -97,7 +97,7 @@ export async function generateArticle(
     researchData,
     targetAudience
   )
-  console.log("[generateArticle] Content generated. Length:", content.length, "characters")
+  console.error("[generateArticle] Content generated. Length:", content.length, "characters")
 
   // Step 4: Generate title
   const title = await generateSeoTitle(content)
@@ -132,23 +132,23 @@ export async function generateArticle(
     excerpt,
     content,
     outline,
-    
+
     metaTitle,
     metaDescription,
     keywords: allKeywords,
     tags,
-    
+
     qualityScore,
     readabilityScore,
     seoScore,
-    
+
     wordCount,
     estimatedReadTime,
     sources: includeSources ? sources : undefined,
-    
+
     aiGenerated: true,
     aiModel: "gemini-2.5-flash",
-    generatedAt: new Date()
+    generatedAt: new Date(),
   }
 }
 
@@ -191,29 +191,31 @@ Sadece JSON yanıtı ver, başka açıklama ekleme.
 
   try {
     const response = await generateText(prompt, { temperature: 0.4 })
-    
+
     const jsonMatch = response.match(/\{[\s\S]*\}/)
     if (!jsonMatch) {
       throw new Error("No JSON found in response")
     }
-    
+
     const research = JSON.parse(jsonMatch[0])
-    
+
     return {
       summary: research.summary || "",
-      sources: (research.sources || []).map((s: { title?: string; url?: string; excerpt?: string; reliability?: number }) => ({
-        title: s.title || "",
-        url: s.url || "",
-        excerpt: s.excerpt || "",
-        reliability: Math.max(0, Math.min(1, s.reliability ?? 0.5)),
-        isUsed: false
-      }))
+      sources: (research.sources || []).map(
+        (s: { title?: string; url?: string; excerpt?: string; reliability?: number }) => ({
+          title: s.title || "",
+          url: s.url || "",
+          excerpt: s.excerpt || "",
+          reliability: Math.max(0, Math.min(1, s.reliability ?? 0.5)),
+          isUsed: false,
+        })
+      ),
     }
   } catch (error) {
     console.error("Research error:", error)
     return {
       summary: "",
-      sources: []
+      sources: [],
     }
   }
 }
@@ -256,22 +258,17 @@ Sadece JSON yanıtı ver.
 
   try {
     const response = await generateText(prompt, { temperature: 0.5 })
-    
+
     const jsonMatch = response.match(/\{[\s\S]*\}/)
     if (!jsonMatch) {
       throw new Error("No JSON found in response")
     }
-    
+
     const result = JSON.parse(jsonMatch[0])
     return Array.isArray(result.outline) ? result.outline : []
   } catch (error) {
     console.error("Outline creation error:", error)
-    return [
-      "1. Giriş",
-      "2. Ana Konu",
-      "3. Detaylar",
-      "4. Sonuç"
-    ]
+    return ["1. Giriş", "2. Ana Konu", "3. Detaylar", "4. Sonuç"]
   }
 }
 
@@ -290,7 +287,7 @@ async function generateContentFromOutline(
   const lengthGuide = {
     short: "300-500 kelime",
     medium: "800-1200 kelime",
-    long: "1500-2500 kelime"
+    long: "1500-2500 kelime",
   }
 
   const styleGuide = {
@@ -298,14 +295,14 @@ async function generateContentFromOutline(
     blog: "Kişisel, samimi, hikaye anlatımı",
     analysis: "Derinlemesine, analitik, detaylı",
     interview: "Soru-cevap formatında, diyalog tarzı",
-    opinion: "Görüş bildiren, argümanlı, ikna edici"
+    opinion: "Görüş bildiren, argümanlı, ikna edici",
   }
 
   const toneGuide = {
     formal: "Resmi, akademik dil",
     casual: "Günlük, rahat dil",
     professional: "Profesyonel, iş dili",
-    friendly: "Samimi, sıcak dil"
+    friendly: "Samimi, sıcak dil",
   }
 
   const prompt = `
@@ -336,7 +333,7 @@ Makale:
 
   const content = await generateText(prompt, {
     temperature: 0.7,
-    maxTokens: length === "long" ? 8192 : length === "medium" ? 4096 : 2048
+    maxTokens: length === "long" ? 8192 : length === "medium" ? 4096 : 2048,
   })
 
   return content.trim()
@@ -364,24 +361,24 @@ ${content.substring(0, 1000)}...
  */
 async function calculateQualityScore(content: string): Promise<number> {
   try {
-    console.log("[Quality] Calculating quality score...")
+    console.error("[Quality] Calculating quality score...")
     const moderation = await moderateContent(content)
-    console.log("[Quality] Moderation:", moderation.safe ? "safe" : "unsafe")
+    console.error("[Quality] Moderation:", moderation.safe ? "safe" : "unsafe")
     const factCheck = await checkFactAccuracy(content)
-    console.log("[Quality] Fact check score:", factCheck.overallScore)
-    
+    console.error("[Quality] Fact check score:", factCheck.overallScore)
+
     let score = 0.5
-    
+
     // Moderation score (40%)
     if (moderation.safe) {
       score += 0.4
     } else {
       score += 0.2
     }
-    
+
     // Fact check score (30%)
     score += factCheck.overallScore * 0.3
-    
+
     // Length score (15%)
     const wordCount = content.split(/\s+/).length
     if (wordCount >= 500 && wordCount <= 2500) {
@@ -389,7 +386,7 @@ async function calculateQualityScore(content: string): Promise<number> {
     } else if (wordCount >= 300) {
       score += 0.1
     }
-    
+
     // Structure score (15%)
     const hasParagraphs = content.split("\n\n").length >= 3
     const hasHeadings = /^#+\s/m.test(content) || /^[A-ZÇĞİÖŞÜ\s]+$/m.test(content)
@@ -398,9 +395,9 @@ async function calculateQualityScore(content: string): Promise<number> {
     } else if (hasParagraphs || hasHeadings) {
       score += 0.1
     }
-    
+
     const finalScore = Math.max(0, Math.min(1, score))
-    console.log("[Quality] Final quality score:", finalScore)
+    console.error("[Quality] Final quality score:", finalScore)
     return finalScore
   } catch (error) {
     console.error("[Quality] Quality score calculation error:", error)
@@ -413,13 +410,13 @@ async function calculateQualityScore(content: string): Promise<number> {
  */
 async function calculateReadabilityScore(content: string): Promise<number> {
   // Simple readability metrics
-  const sentences = content.split(/[.!?]+/).filter(s => s.trim().length > 0)
+  const sentences = content.split(/[.!?]+/).filter((s) => s.trim().length > 0)
   const words = content.split(/\s+/)
   const avgWordsPerSentence = words.length / sentences.length
-  
+
   // Ideal: 15-20 words per sentence
   let score = 50
-  
+
   if (avgWordsPerSentence >= 15 && avgWordsPerSentence <= 20) {
     score = 90
   } else if (avgWordsPerSentence >= 10 && avgWordsPerSentence <= 25) {
@@ -429,17 +426,17 @@ async function calculateReadabilityScore(content: string): Promise<number> {
   } else {
     score = 50 // Too long
   }
-  
+
   // Paragraph length check
-  const paragraphs = content.split("\n\n").filter(p => p.trim().length > 0)
+  const paragraphs = content.split("\n\n").filter((p) => p.trim().length > 0)
   const avgWordsPerParagraph = words.length / paragraphs.length
-  
+
   if (avgWordsPerParagraph >= 50 && avgWordsPerParagraph <= 150) {
     score += 10
   } else if (avgWordsPerParagraph >= 30 && avgWordsPerParagraph <= 200) {
     score += 5
   }
-  
+
   return Math.min(100, score)
 }
 
@@ -448,11 +445,11 @@ async function calculateReadabilityScore(content: string): Promise<number> {
  */
 async function calculateSeoScore(content: string, keywords: string[]): Promise<number> {
   let score = 0
-  
+
   // Keyword density (30 points)
   const wordCount = content.split(/\s+/).length
   let keywordCount = 0
-  keywords.forEach(keyword => {
+  keywords.forEach((keyword) => {
     const regex = new RegExp(keyword, "gi")
     const matches = content.match(regex)
     if (matches) {
@@ -467,7 +464,7 @@ async function calculateSeoScore(content: string, keywords: string[]): Promise<n
   } else if (density > 0) {
     score += 10
   }
-  
+
   // Content length (20 points)
   if (wordCount >= 800 && wordCount <= 2500) {
     score += 20
@@ -476,21 +473,21 @@ async function calculateSeoScore(content: string, keywords: string[]): Promise<n
   } else if (wordCount >= 300) {
     score += 10
   }
-  
+
   // Headings (20 points)
   const hasHeadings = /^#+\s/m.test(content) || /^[A-ZÇĞİÖŞÜ\s]+$/m.test(content)
   if (hasHeadings) {
     score += 20
   }
-  
+
   // Paragraphs (15 points)
-  const paragraphs = content.split("\n\n").filter(p => p.trim().length > 0)
+  const paragraphs = content.split("\n\n").filter((p) => p.trim().length > 0)
   if (paragraphs.length >= 3) {
     score += 15
   } else if (paragraphs.length >= 2) {
     score += 10
   }
-  
+
   // Links potential (15 points) - check for URLs or link indicators
   const hasLinks = /https?:\/\//.test(content) || /\[.*\]\(.*\)/.test(content)
   if (hasLinks) {
@@ -498,7 +495,7 @@ async function calculateSeoScore(content: string, keywords: string[]): Promise<n
   } else {
     score += 5 // Potential for internal links
   }
-  
+
   return Math.min(100, score)
 }
 
@@ -507,41 +504,45 @@ async function calculateSeoScore(content: string, keywords: string[]): Promise<n
  */
 function createSlug(text: string): string {
   const turkishMap: Record<string, string> = {
-    'ç': 'c', 'Ç': 'c',
-    'ğ': 'g', 'Ğ': 'g',
-    'ı': 'i', 'I': 'i', 'İ': 'i',
-    'ö': 'o', 'Ö': 'o',
-    'ş': 's', 'Ş': 's',
-    'ü': 'u', 'Ü': 'u',
+    ç: "c",
+    Ç: "c",
+    ğ: "g",
+    Ğ: "g",
+    ı: "i",
+    I: "i",
+    İ: "i",
+    ö: "o",
+    Ö: "o",
+    ş: "s",
+    Ş: "s",
+    ü: "u",
+    Ü: "u",
   }
 
   let slug = text.toLowerCase()
-  
+
   Object.entries(turkishMap).forEach(([turkish, latin]) => {
-    slug = slug.replace(new RegExp(turkish, 'g'), latin)
+    slug = slug.replace(new RegExp(turkish, "g"), latin)
   })
-  
+
   slug = slug
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
     .trim()
-  
+
   if (slug.length > 100) {
     slug = slug.substring(0, 100)
-    slug = slug.replace(/-$/, '')
+    slug = slug.replace(/-$/, "")
   }
-  
+
   return slug
 }
 
 /**
  * Improve existing content
  */
-export async function improveContent(
-  content: string,
-  improvements: string[]
-): Promise<string> {
+export async function improveContent(content: string, improvements: string[]): Promise<string> {
   const prompt = `
 Aşağıdaki içeriği şu iyileştirmelerle yeniden yaz:
 

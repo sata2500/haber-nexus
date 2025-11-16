@@ -7,15 +7,17 @@ export default function ContentCreatorPage() {
   const router = useRouter()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
-  
+
   // Form state
   const [topic, setTopic] = useState("")
   const [style, setStyle] = useState<"news" | "blog" | "analysis" | "interview" | "opinion">("news")
-  const [tone, setTone] = useState<"formal" | "casual" | "professional" | "friendly">("professional")
+  const [tone, setTone] = useState<"formal" | "casual" | "professional" | "friendly">(
+    "professional"
+  )
   const [length, setLength] = useState<"short" | "medium" | "long">("medium")
   const [includeResearch, setIncludeResearch] = useState(true)
   const [keywords, setKeywords] = useState("")
-  
+
   // Generated content
   const [draftId, setDraftId] = useState<string>("")
   const [generatedContent, setGeneratedContent] = useState<{
@@ -51,9 +53,12 @@ export default function ContentCreatorPage() {
             tone,
             length,
             includeResearch,
-            keywords: keywords.split(",").map(k => k.trim()).filter(Boolean)
-          }
-        })
+            keywords: keywords
+              .split(",")
+              .map((k) => k.trim())
+              .filter(Boolean),
+          },
+        }),
       })
 
       if (!response.ok) {
@@ -61,20 +66,21 @@ export default function ContentCreatorPage() {
       }
 
       const data = await response.json()
-      console.log("Content generation response:", data)
-      
+      console.error("Content generation response:", data)
+
       if (!data.success || !data.result) {
         throw new Error(data.error || "İçerik oluşturulamadı")
       }
-      
+
       setGeneratedContent(data.result)
       setDraftId(data.result.draftId)
-      console.log("Draft ID:", data.result.draftId)
-      console.log("Content length:", data.result.content?.length || 0)
+      console.error("Draft ID:", data.result.draftId)
+      console.error("Content length:", data.result.content?.length || 0)
       setStep(2)
     } catch (error) {
       console.error("Generation error:", error)
-      const errorMessage = error instanceof Error ? error.message : "İçerik oluşturulurken bir hata oluştu"
+      const errorMessage =
+        error instanceof Error ? error.message : "İçerik oluşturulurken bir hata oluştu"
       alert(errorMessage)
     } finally {
       setLoading(false)
@@ -90,8 +96,8 @@ export default function ContentCreatorPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          publishNow: true
-        })
+          publishNow: true,
+        }),
       })
 
       if (!response.ok) {
@@ -116,23 +122,36 @@ export default function ContentCreatorPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-gray-100">🤖 AI İçerik Oluşturucu</h1>
+    <div className="container mx-auto max-w-4xl px-4 py-8">
+      <h1 className="mb-8 text-3xl font-bold text-gray-900 dark:text-gray-100">
+        🤖 AI İçerik Oluşturucu
+      </h1>
 
       {/* Progress Steps */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
-          <div className={`flex items-center ${step >= 1 ? "text-blue-600 dark:text-blue-400" : "text-gray-400 dark:text-gray-600"}`}>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step >= 1 ? "bg-blue-600 dark:bg-blue-500 text-white" : "bg-gray-300 dark:bg-gray-700 text-gray-600 dark:text-gray-400"}`}>
+          <div
+            className={`flex items-center ${step >= 1 ? "text-blue-600 dark:text-blue-400" : "text-gray-400 dark:text-gray-600"}`}
+          >
+            <div
+              className={`flex h-8 w-8 items-center justify-center rounded-full ${step >= 1 ? "bg-blue-600 text-white dark:bg-blue-500" : "bg-gray-300 text-gray-600 dark:bg-gray-700 dark:text-gray-400"}`}
+            >
               1
             </div>
             <span className="ml-2 font-medium">Konu Belirleme</span>
           </div>
-          <div className="flex-1 h-1 mx-4 bg-gray-300 dark:bg-gray-700">
-            <div className={`h-full ${step >= 2 ? "bg-blue-600 dark:bg-blue-500" : ""}`} style={{ width: step >= 2 ? "100%" : "0%" }}></div>
+          <div className="mx-4 h-1 flex-1 bg-gray-300 dark:bg-gray-700">
+            <div
+              className={`h-full ${step >= 2 ? "bg-blue-600 dark:bg-blue-500" : ""}`}
+              style={{ width: step >= 2 ? "100%" : "0%" }}
+            ></div>
           </div>
-          <div className={`flex items-center ${step >= 2 ? "text-blue-600 dark:text-blue-400" : "text-gray-400 dark:text-gray-600"}`}>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step >= 2 ? "bg-blue-600 dark:bg-blue-500 text-white" : "bg-gray-300 dark:bg-gray-700 text-gray-600 dark:text-gray-400"}`}>
+          <div
+            className={`flex items-center ${step >= 2 ? "text-blue-600 dark:text-blue-400" : "text-gray-400 dark:text-gray-600"}`}
+          >
+            <div
+              className={`flex h-8 w-8 items-center justify-center rounded-full ${step >= 2 ? "bg-blue-600 text-white dark:bg-blue-500" : "bg-gray-300 text-gray-600 dark:bg-gray-700 dark:text-gray-400"}`}
+            >
               2
             </div>
             <span className="ml-2 font-medium">İçerik Önizleme</span>
@@ -142,9 +161,9 @@ export default function ContentCreatorPage() {
 
       {/* Step 1: Topic Input */}
       {step === 1 && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
+        <div className="space-y-6 rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
           <div>
-            <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
+            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-100">
               Konu *
             </label>
             <input
@@ -152,19 +171,21 @@ export default function ContentCreatorPage() {
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
               placeholder="Örn: Yapay zeka etiği ve geleceği"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 placeholder-gray-500 focus:border-transparent focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
+              <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-100">
                 Stil
               </label>
               <select
                 value={style}
-                onChange={(e) => setStyle(e.target.value as "news" | "blog" | "analysis" | "interview" | "opinion")}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                onChange={(e) =>
+                  setStyle(e.target.value as "news" | "blog" | "analysis" | "interview" | "opinion")
+                }
+                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
               >
                 <option value="news">Haber</option>
                 <option value="blog">Blog</option>
@@ -175,13 +196,15 @@ export default function ContentCreatorPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
+              <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-100">
                 Ton
               </label>
               <select
                 value={tone}
-                onChange={(e) => setTone(e.target.value as "formal" | "casual" | "professional" | "friendly")}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                onChange={(e) =>
+                  setTone(e.target.value as "formal" | "casual" | "professional" | "friendly")
+                }
+                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
               >
                 <option value="formal">Resmi</option>
                 <option value="casual">Günlük</option>
@@ -192,14 +215,14 @@ export default function ContentCreatorPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
+            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-100">
               Uzunluk
             </label>
             <div className="flex space-x-4">
               {[
                 { value: "short", label: "Kısa (300-500 kelime)" },
                 { value: "medium", label: "Orta (800-1200 kelime)" },
-                { value: "long", label: "Uzun (1500-2500 kelime)" }
+                { value: "long", label: "Uzun (1500-2500 kelime)" },
               ].map((option) => (
                 <label key={option.value} className="flex items-center">
                   <input
@@ -216,7 +239,7 @@ export default function ContentCreatorPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
+            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-100">
               Anahtar Kelimeler (virgülle ayırın)
             </label>
             <input
@@ -224,7 +247,7 @@ export default function ContentCreatorPage() {
               value={keywords}
               onChange={(e) => setKeywords(e.target.value)}
               placeholder="yapay zeka, etik, teknoloji"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
             />
           </div>
 
@@ -244,14 +267,14 @@ export default function ContentCreatorPage() {
           <div className="flex justify-end space-x-4">
             <button
               onClick={() => router.back()}
-              className="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100"
+              className="rounded-lg border border-gray-300 px-6 py-2 text-gray-900 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-100 dark:hover:bg-gray-700"
             >
               İptal
             </button>
             <button
               onClick={handleGenerate}
               disabled={loading || !topic.trim()}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="rounded-lg bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
             >
               {loading ? "Oluşturuluyor..." : "🤖 İçerik Oluştur"}
             </button>
@@ -263,8 +286,10 @@ export default function ContentCreatorPage() {
       {step === 2 && generatedContent && (
         <div className="space-y-6">
           {/* Quality Scores */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Kalite Skorları</h2>
+          <div className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
+            <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-gray-100">
+              Kalite Skorları
+            </h2>
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">Genel Kalite</div>
@@ -288,15 +313,19 @@ export default function ContentCreatorPage() {
           </div>
 
           {/* Content Preview */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-gray-100">{generatedContent.title}</h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">{generatedContent.excerpt}</p>
-            
+          <div className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
+            <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-gray-100">
+              {generatedContent.title}
+            </h2>
+            <p className="mb-4 text-gray-600 dark:text-gray-400">{generatedContent.excerpt}</p>
+
             <div className="prose dark:prose-invert max-w-none">
-              <div className="whitespace-pre-wrap text-gray-900 dark:text-gray-100">{generatedContent.content}</div>
+              <div className="whitespace-pre-wrap text-gray-900 dark:text-gray-100">
+                {generatedContent.content}
+              </div>
             </div>
 
-            <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <div className="mt-6 border-t border-gray-200 pt-6 dark:border-gray-700">
               <div className="text-sm text-gray-600 dark:text-gray-400">
                 <strong>Kelime Sayısı:</strong> {generatedContent.wordCount} |{" "}
                 <strong>Okuma Süresi:</strong> {generatedContent.estimatedReadTime} dakika
@@ -304,7 +333,10 @@ export default function ContentCreatorPage() {
               <div className="mt-2">
                 <strong className="text-sm text-gray-600 dark:text-gray-400">Etiketler:</strong>{" "}
                 {generatedContent.tags?.map((tag: string) => (
-                  <span key={tag} className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs px-2 py-1 rounded mr-2">
+                  <span
+                    key={tag}
+                    className="mr-2 inline-block rounded bg-blue-100 px-2 py-1 text-xs text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                  >
                     {tag}
                   </span>
                 ))}
@@ -316,20 +348,20 @@ export default function ContentCreatorPage() {
           <div className="flex justify-end space-x-4">
             <button
               onClick={() => setStep(1)}
-              className="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100"
+              className="rounded-lg border border-gray-300 px-6 py-2 text-gray-900 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-100 dark:hover:bg-gray-700"
             >
               Geri
             </button>
             <button
               onClick={handleSaveDraft}
-              className="px-6 py-2 border border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20"
+              className="rounded-lg border border-blue-600 px-6 py-2 text-blue-600 hover:bg-blue-50 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-900/20"
             >
               Taslak Olarak Kaydet
             </button>
             <button
               onClick={handlePublish}
               disabled={loading}
-              className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400"
+              className="rounded-lg bg-green-600 px-6 py-2 text-white hover:bg-green-700 disabled:bg-gray-400"
             >
               {loading ? "Yayınlanıyor..." : "✅ Yayınla"}
             </button>

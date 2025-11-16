@@ -61,7 +61,7 @@ export default function EditDraftPageImproved() {
   const [formData, setFormData] = useState({
     topic: "",
     draft: "",
-    status: "DRAFT"
+    status: "DRAFT",
   })
 
   const fetchDraft = useCallback(async () => {
@@ -75,10 +75,10 @@ export default function EditDraftPageImproved() {
       setFormData({
         topic: draftData.topic,
         draft: draftData.draft || "",
-        status: draftData.status
+        status: draftData.status,
       })
-      console.log("Draft loaded:", draftData)
-      console.log("Draft content length:", (draftData.draft || "").length)
+      console.error("Draft loaded:", draftData)
+      console.error("Draft content length:", (draftData.draft || "").length)
     } catch (error) {
       console.error("Fetch error:", error)
       alert("Taslak yüklenemedi")
@@ -98,13 +98,13 @@ export default function EditDraftPageImproved() {
       const response = await fetch(`/api/drafts/${draftId}`, {
         method: "PATCH",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           topic: formData.topic,
           draft: formData.draft,
-          status: formData.status
-        })
+          status: formData.status,
+        }),
       })
 
       if (!response.ok) throw new Error("Failed to save")
@@ -127,12 +127,12 @@ export default function EditDraftPageImproved() {
       const response = await fetch(`/api/drafts/${draftId}/publish`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           topic: formData.topic,
-          draft: formData.draft
-        })
+          draft: formData.draft,
+        }),
       })
 
       if (!response.ok) throw new Error("Failed to publish")
@@ -153,7 +153,7 @@ export default function EditDraftPageImproved() {
 
     try {
       const response = await fetch(`/api/drafts/${draftId}`, {
-        method: "DELETE"
+        method: "DELETE",
       })
 
       if (!response.ok) throw new Error("Failed to delete")
@@ -173,7 +173,7 @@ export default function EditDraftPageImproved() {
       GENERATING: "bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200",
       REVIEW: "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200",
       APPROVED: "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200",
-      PUBLISHED: "bg-green-600 text-white"
+      PUBLISHED: "bg-green-600 text-white",
     }
 
     const labels: Record<string, string> = {
@@ -182,21 +182,17 @@ export default function EditDraftPageImproved() {
       GENERATING: "Oluşturuluyor",
       REVIEW: "İnceleme",
       APPROVED: "Onaylandı",
-      PUBLISHED: "Yayınlandı"
+      PUBLISHED: "Yayınlandı",
     }
 
-    return (
-      <Badge className={colors[status] || colors.DRAFT}>
-        {labels[status] || status}
-      </Badge>
-    )
+    return <Badge className={colors[status] || colors.DRAFT}>{labels[status] || status}</Badge>
   }
 
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="py-12 text-center">
+          <div className="inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-blue-600"></div>
           <p className="mt-4 text-gray-600 dark:text-gray-400">Yükleniyor...</p>
         </div>
       </div>
@@ -215,19 +211,15 @@ export default function EditDraftPageImproved() {
   const charCount = formData.draft.length
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
-      <Button
-        variant="ghost"
-        onClick={() => router.push("/admin/drafts")}
-        className="mb-6"
-      >
+    <div className="container mx-auto max-w-7xl px-4 py-8">
+      <Button variant="ghost" onClick={() => router.push("/admin/drafts")} className="mb-6">
         <ArrowLeft className="mr-2 h-4 w-4" />
         Geri
       </Button>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
         {/* Main Content */}
-        <div className="lg:col-span-3 space-y-6">
+        <div className="space-y-6 lg:col-span-3">
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -246,13 +238,21 @@ export default function EditDraftPageImproved() {
                     size="sm"
                     onClick={() => setPreviewMode(!previewMode)}
                   >
-                    {previewMode ? <><Eye className="h-4 w-4 mr-2" /> Önizleme</> : <><Edit className="h-4 w-4 mr-2" /> Düzenle</>}
+                    {previewMode ? (
+                      <>
+                        <Eye className="mr-2 h-4 w-4" /> Önizleme
+                      </>
+                    ) : (
+                      <>
+                        <Edit className="mr-2 h-4 w-4" /> Düzenle
+                      </>
+                    )}
                   </Button>
                 </div>
               </div>
               <CardDescription>
-                Oluşturulma: {new Date(draft.createdAt).toLocaleDateString("tr-TR")} | 
-                Yazar: {draft.author?.name || draft.author?.email || "Bilinmiyor"}
+                Oluşturulma: {new Date(draft.createdAt).toLocaleDateString("tr-TR")} | Yazar:{" "}
+                {draft.author?.name || draft.author?.email || "Bilinmiyor"}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -273,13 +273,13 @@ export default function EditDraftPageImproved() {
                   <label className="text-sm font-medium">
                     İçerik Taslağı <span className="text-destructive">*</span>
                   </label>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-muted-foreground text-xs">
                     {wordCount} kelime | {charCount} karakter
                   </div>
                 </div>
-                
+
                 {previewMode ? (
-                  <div className="w-full min-h-[400px] px-4 py-3 border rounded-md prose dark:prose-invert max-w-none bg-gray-50 dark:bg-gray-900">
+                  <div className="prose dark:prose-invert min-h-[400px] w-full max-w-none rounded-md border bg-gray-50 px-4 py-3 dark:bg-gray-900">
                     {formData.draft ? (
                       <ReactMarkdown>{formData.draft}</ReactMarkdown>
                     ) : (
@@ -288,7 +288,7 @@ export default function EditDraftPageImproved() {
                   </div>
                 ) : (
                   <textarea
-                    className="w-full min-h-[400px] px-3 py-2 border rounded-md text-sm font-mono resize-y"
+                    className="min-h-[400px] w-full resize-y rounded-md border px-3 py-2 font-mono text-sm"
                     value={formData.draft}
                     onChange={(e) => setFormData({ ...formData, draft: e.target.value })}
                     placeholder="Taslak içeriğinizi buraya yazın..."
@@ -299,7 +299,7 @@ export default function EditDraftPageImproved() {
               <div className="space-y-2">
                 <label className="text-sm font-medium">Durum</label>
                 <select
-                  className="w-full px-3 py-2 border rounded-md text-sm"
+                  className="w-full rounded-md border px-3 py-2 text-sm"
                   value={formData.status}
                   onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                   disabled={previewMode}
@@ -310,17 +310,17 @@ export default function EditDraftPageImproved() {
                 </select>
               </div>
 
-              <div className="flex gap-3 pt-4 border-t">
+              <div className="flex gap-3 border-t pt-4">
                 <Button onClick={handleSave} disabled={saving || previewMode}>
-                  <Save className="h-4 w-4 mr-2" />
+                  <Save className="mr-2 h-4 w-4" />
                   {saving ? "Kaydediliyor..." : "Kaydet"}
                 </Button>
                 <Button onClick={handlePublish} disabled={publishing} variant="default">
-                  <Send className="h-4 w-4 mr-2" />
+                  <Send className="mr-2 h-4 w-4" />
                   {publishing ? "Yayınlanıyor..." : "Makale Olarak Yayınla"}
                 </Button>
                 <Button onClick={handleDelete} variant="destructive">
-                  <Trash2 className="h-4 w-4 mr-2" />
+                  <Trash2 className="mr-2 h-4 w-4" />
                   Sil
                 </Button>
               </div>
@@ -329,7 +329,7 @@ export default function EditDraftPageImproved() {
         </div>
 
         {/* Sidebar */}
-        <div className="lg:col-span-1 space-y-6">
+        <div className="space-y-6 lg:col-span-1">
           {/* Quality Scores */}
           {(draft.qualityScore || draft.readabilityScore || draft.seoScore) && (
             <Card>
@@ -339,11 +339,11 @@ export default function EditDraftPageImproved() {
               <CardContent className="space-y-3">
                 {draft.qualityScore !== null && (
                   <div>
-                    <div className="text-xs text-muted-foreground mb-1">Genel Kalite</div>
+                    <div className="text-muted-foreground mb-1 text-xs">Genel Kalite</div>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-blue-600 dark:bg-blue-500" 
+                      <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+                        <div
+                          className="h-full bg-blue-600 dark:bg-blue-500"
                           style={{ width: `${Math.round(draft.qualityScore * 100)}%` }}
                         />
                       </div>
@@ -355,11 +355,11 @@ export default function EditDraftPageImproved() {
                 )}
                 {draft.readabilityScore !== null && (
                   <div>
-                    <div className="text-xs text-muted-foreground mb-1">Okunabilirlik</div>
+                    <div className="text-muted-foreground mb-1 text-xs">Okunabilirlik</div>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-green-600 dark:bg-green-500" 
+                      <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+                        <div
+                          className="h-full bg-green-600 dark:bg-green-500"
                           style={{ width: `${Math.round(draft.readabilityScore)}%` }}
                         />
                       </div>
@@ -371,11 +371,11 @@ export default function EditDraftPageImproved() {
                 )}
                 {draft.seoScore !== null && (
                   <div>
-                    <div className="text-xs text-muted-foreground mb-1">SEO Skoru</div>
+                    <div className="text-muted-foreground mb-1 text-xs">SEO Skoru</div>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-purple-600 dark:bg-purple-500" 
+                      <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+                        <div
+                          className="h-full bg-purple-600 dark:bg-purple-500"
                           style={{ width: `${Math.round(draft.seoScore)}%` }}
                         />
                       </div>
@@ -405,7 +405,7 @@ export default function EditDraftPageImproved() {
                 {draft.aiPrompt && (
                   <div>
                     <span className="text-muted-foreground">Prompt:</span>
-                    <p className="mt-1 text-xs bg-gray-100 dark:bg-gray-800 p-2 rounded">
+                    <p className="mt-1 rounded bg-gray-100 p-2 text-xs dark:bg-gray-800">
                       {draft.aiPrompt}
                     </p>
                   </div>
@@ -422,24 +422,24 @@ export default function EditDraftPageImproved() {
               </CardHeader>
               <CardContent className="space-y-2">
                 {draft.sources.slice(0, 5).map((source) => (
-                  <div key={source.id} className="text-sm border-l-2 border-blue-500 pl-2">
-                    <a 
-                      href={source.url} 
-                      target="_blank" 
+                  <div key={source.id} className="border-l-2 border-blue-500 pl-2 text-sm">
+                    <a
+                      href={source.url}
+                      target="_blank"
                       rel="noopener noreferrer"
-                      className="font-medium hover:underline text-blue-600 dark:text-blue-400"
+                      className="font-medium text-blue-600 hover:underline dark:text-blue-400"
                     >
                       {source.title}
                     </a>
                     {source.excerpt && (
-                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                      <p className="text-muted-foreground mt-1 line-clamp-2 text-xs">
                         {source.excerpt}
                       </p>
                     )}
                   </div>
                 ))}
                 {draft.sources.length > 5 && (
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     +{draft.sources.length - 5} kaynak daha
                   </p>
                 )}
@@ -455,20 +455,18 @@ export default function EditDraftPageImproved() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <h4 className="font-medium text-sm">{draft.article.title}</h4>
-                  <p className="text-xs text-muted-foreground">
-                    Durum: {draft.article.status}
-                  </p>
+                  <h4 className="text-sm font-medium">{draft.article.title}</h4>
+                  <p className="text-muted-foreground text-xs">Durum: {draft.article.status}</p>
                   <div className="flex gap-2">
                     <Link href={`/articles/${draft.article.slug}`}>
                       <Button size="sm" variant="outline">
-                        <Eye className="h-3 w-3 mr-1" />
+                        <Eye className="mr-1 h-3 w-3" />
                         Görüntüle
                       </Button>
                     </Link>
                     <Link href={`/admin/articles/${draft.article.id}/edit`}>
                       <Button size="sm" variant="outline">
-                        <Edit className="h-3 w-3 mr-1" />
+                        <Edit className="mr-1 h-3 w-3" />
                         Düzenle
                       </Button>
                     </Link>
