@@ -272,6 +272,12 @@ export async function enhancedScanRssFeed(
     }
 
     // Update feed stats
+    // Calculate success rate: (items processed successfully) / (new items found)
+    const successRate =
+      itemsNew === 0
+        ? 1.0 // No new items found is not a failure
+        : itemsProcessed / itemsNew
+
     await prisma.rssFeed.update({
       where: { id: feedId },
       data: {
@@ -279,7 +285,7 @@ export async function enhancedScanRssFeed(
         lastItemDate: latestItemDate,
         totalScans: { increment: 1 },
         totalArticles: { increment: itemsPublished },
-        successRate: errors.length === 0 ? 1.0 : Math.max(0, 1 - errors.length / itemsNew),
+        successRate,
       },
     })
 

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma"
-import { parseRssFeed, filterRecentItems } from "./parser"
+import { parseRssFeed } from "./parser"
 import { processRssItem, createSlug } from "../ai/processor"
 import { getAuthorForRssFeed } from "./auto-author-assignment"
 
@@ -51,10 +51,10 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
     const feedData = await parseRssFeed(feed.url)
     console.error(`[RSS Scanner] Feed parsed successfully. Total items: ${feedData.items.length}`)
 
-    // Filter recent items (last 24 hours)
-    const recentItems = filterRecentItems(feedData.items, 24)
-    itemsFound = recentItems.length
-    console.error(`[RSS Scanner] Recent items (last 24h): ${itemsFound}`)
+    // Process all items (no time filter for better coverage)
+    const itemsToProcess = feedData.items
+    itemsFound = itemsToProcess.length
+    console.error(`[RSS Scanner] Items to process: ${itemsFound}`)
 
     // Get existing article slugs to avoid duplicates
     const existingArticles = await prisma.article.findMany({
@@ -70,9 +70,11 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
     console.error(`[RSS Scanner] Processing ${itemsFound} items from feed: ${feed.name}`)
 
     // Process each item with timeout protection
-    for (let i = 0; i < recentItems.length; i++) {
-      const item = recentItems[i]
-      console.error(`[RSS Scanner] Processing item ${i + 1}/${recentItems.length}: ${item.title}`)
+    for (let i = 0; i < itemsToProcess.length; i++) {
+      const item = itemsToProcess[i]
+      console.error(
+        `[RSS Scanner] Processing item ${i + 1}/${itemsToProcess.length}: ${item.title}`
+      )
       try {
         // Process with AI with per-item timeout (2 minutes)
         const timeoutPromise = new Promise<never>((_, reject) => {
@@ -182,13 +184,19 @@ export async function scanRssFeed(feedId: string): Promise<ScanResult> {
     }
 
     // Update feed stats
+    // Calculate success rate: (items processed successfully) / (items found)
+    const successRate =
+      itemsFound === 0
+        ? 1.0 // No items found is not a failure
+        : itemsProcessed / itemsFound
+
     await prisma.rssFeed.update({
       where: { id: feedId },
       data: {
         lastScannedAt: new Date(),
         totalScans: { increment: 1 },
         totalArticles: { increment: itemsPublished },
-        successRate: errors.length === 0 ? 1.0 : Math.max(0, 1 - errors.length / itemsFound),
+        successRate,
       },
     })
 
