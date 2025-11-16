@@ -19,11 +19,11 @@ jobs:
       - name: Run Database Cleanup
         run: |
           echo "Starting database cleanup..."
-          RESPONSE=$(curl -X POST \
+          RESPONSE=$(curl -L -X POST \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
             -H "Content-Type: application/json" \
             -w "\nHTTP_STATUS:%{http_code}" \
-            https://habernexus.com/api/cron/cleanup)
+            https://www.habernexus.com/api/cron/cleanup)
           
           HTTP_STATUS=$(echo "$RESPONSE" | grep "HTTP_STATUS:" | cut -d: -f2)
           BODY=$(echo "$RESPONSE" | sed '/HTTP_STATUS:/d')

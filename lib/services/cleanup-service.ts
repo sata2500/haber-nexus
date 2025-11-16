@@ -25,7 +25,8 @@ export async function cleanupRssScanLogs(retentionDays: number = 30): Promise<Cl
     const cutoffDate = new Date()
     cutoffDate.setDate(cutoffDate.getDate() - retentionDays)
 
-    // Count items to be deleted
+    // Count items before deletion
+    const countBefore = await prisma.rssScanLog.count()
     const toDelete = await prisma.rssScanLog.count({
       where: {
         createdAt: {
@@ -33,6 +34,10 @@ export async function cleanupRssScanLogs(retentionDays: number = 30): Promise<Cl
         },
       },
     })
+
+    console.error(
+      `[Cleanup Service] Found ${toDelete} RSS scan logs to delete (out of ${countBefore} total)`
+    )
 
     // Delete old scan logs
     const result = await prisma.rssScanLog.deleteMany({
@@ -42,6 +47,8 @@ export async function cleanupRssScanLogs(retentionDays: number = 30): Promise<Cl
         },
       },
     })
+
+    console.error(`[Cleanup Service] Deleted ${result.count} RSS scan logs`)
 
     const duration = Date.now() - startTime
 

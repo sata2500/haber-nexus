@@ -19,11 +19,11 @@ jobs:
       - name: Scan RSS Feeds
         run: |
           echo "Starting RSS feed scan..."
-          RESPONSE=$(curl -X POST \
+          RESPONSE=$(curl -L -X POST \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
             -H "Content-Type: application/json" \
             -w "\nHTTP_STATUS:%{http_code}" \
-            https://habernexus.com/api/cron/rss-scan)
+            https://www.habernexus.com/api/cron/rss-scan)
           
           HTTP_STATUS=$(echo "$RESPONSE" | grep "HTTP_STATUS:" | cut -d: -f2)
           BODY=$(echo "$RESPONSE" | sed '/HTTP_STATUS:/d')

@@ -25,8 +25,13 @@ function generateUrlHash(url: string): string {
 
 /**
  * Enhanced RSS feed scanner with duplicate detection and incremental scanning
+ * @param feedId - RSS feed ID to scan
+ * @param retryCount - Current retry attempt (default: 0)
  */
-export async function enhancedScanRssFeed(feedId: string): Promise<EnhancedScanResult> {
+export async function enhancedScanRssFeed(
+  feedId: string,
+  retryCount: number = 0
+): Promise<EnhancedScanResult> {
   const startTime = Date.now()
   const errors: string[] = []
   let itemsFound = 0
@@ -58,11 +63,22 @@ export async function enhancedScanRssFeed(feedId: string): Promise<EnhancedScanR
 
     console.error(`[Enhanced Scanner] Feed found: ${feed.name}, URL: ${feed.url}`)
 
-    // Parse RSS feed
+    // Parse RSS feed with retry logic
     console.error(`[Enhanced Scanner] Parsing RSS feed: ${feed.url}`)
-    const feedData = await parseRssFeed(feed.url)
-    itemsFound = feedData.items.length
-    console.error(`[Enhanced Scanner] Feed parsed successfully. Total items: ${itemsFound}`)
+    let feedData
+    try {
+      feedData = await parseRssFeed(feed.url)
+      itemsFound = feedData.items.length
+      console.error(`[Enhanced Scanner] Feed parsed successfully. Total items: ${itemsFound}`)
+    } catch (parseError) {
+      // Retry once if parsing fails
+      if (retryCount < 1) {
+        console.error(`[Enhanced Scanner] Parse failed, retrying... (attempt ${retryCount + 1})`)
+        await new Promise((resolve) => setTimeout(resolve, 2000)) // Wait 2 seconds
+        return enhancedScanRssFeed(feedId, retryCount + 1)
+      }
+      throw parseError
+    }
 
     // Incremental scanning: Filter items newer than lastItemDate
     let itemsToProcess = feedData.items

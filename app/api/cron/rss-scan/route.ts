@@ -26,10 +26,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
+    const startTime = Date.now()
     console.error("[Cron RSS Scan] Starting automated RSS scan")
+    console.error(`[Cron RSS Scan] Request from: ${request.headers.get("user-agent")}`)
 
     // Run enhanced scan for all active feeds
     const results = await scanAllFeedsEnhanced()
+
+    const totalDuration = Date.now() - startTime
+    console.error(`[Cron RSS Scan] Completed in ${totalDuration}ms`)
 
     // Calculate summary statistics
     const summary = {
@@ -48,18 +53,25 @@ export async function POST(request: NextRequest) {
 
     console.error("[Cron RSS Scan] Automated RSS scan completed:", summary)
 
-    return NextResponse.json({
-      success: true,
-      message: "RSS scan completed successfully",
-      summary,
-      results: results.map((r) => ({
-        feedId: r.feedId,
-        status: r.status,
-        itemsProcessed: r.itemsProcessed,
-        itemsPublished: r.itemsPublished,
-        errors: r.errors.length,
-      })),
-    })
+    return NextResponse.json(
+      {
+        success: true,
+        message: "RSS scan completed successfully",
+        summary,
+        results: results.map((r) => ({
+          feedId: r.feedId,
+          status: r.status,
+          itemsProcessed: r.itemsProcessed,
+          itemsPublished: r.itemsPublished,
+          errors: r.errors.length,
+        })),
+      },
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate",
+        },
+      }
+    )
   } catch (error: unknown) {
     console.error("[Cron RSS Scan] Error during automated scan:", error)
     return NextResponse.json(
