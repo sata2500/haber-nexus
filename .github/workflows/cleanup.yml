@@ -1,29 +1,29 @@
-name: RSS Feed Scanner
+name: Database Cleanup
 
 on:
-  # Run every 2 hours
+  # Run daily at 3 AM UTC
   schedule:
-    - cron: '0 */2 * * *'
+    - cron: '0 3 * * *'
   
   # Allow manual trigger
   workflow_dispatch:
 
 jobs:
-  scan-rss-feeds:
+  cleanup-database:
     runs-on: ubuntu-latest
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Scan RSS Feeds
+      - name: Run Database Cleanup
         run: |
-          echo "Starting RSS feed scan..."
+          echo "Starting database cleanup..."
           RESPONSE=$(curl -X POST \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
             -H "Content-Type: application/json" \
             -w "\nHTTP_STATUS:%{http_code}" \
-            https://habernexus.com/api/cron/rss-scan)
+            https://habernexus.com/api/cron/cleanup)
           
           HTTP_STATUS=$(echo "$RESPONSE" | grep "HTTP_STATUS:" | cut -d: -f2)
           BODY=$(echo "$RESPONSE" | sed '/HTTP_STATUS:/d')
@@ -32,22 +32,22 @@ jobs:
           echo "Response Body: $BODY"
           
           if [ "$HTTP_STATUS" -ne 200 ]; then
-            echo "❌ RSS scan failed with status $HTTP_STATUS"
+            echo "❌ Cleanup failed with status $HTTP_STATUS"
             exit 1
           fi
           
-          echo "✅ RSS scan completed successfully"
+          echo "✅ Cleanup completed successfully"
 
       - name: Parse Results
         if: success()
         run: |
-          echo "Parsing scan results..."
+          echo "Parsing cleanup results..."
           # Results are already printed in previous step
           echo "Check the logs above for detailed results"
 
       - name: Notify on Failure
         if: failure()
         run: |
-          echo "⚠️ RSS scan workflow failed!"
+          echo "⚠️ Cleanup workflow failed!"
           echo "Please check the logs and investigate the issue."
           # In production, you can add Slack/Discord/Email notifications here

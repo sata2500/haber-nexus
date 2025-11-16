@@ -166,6 +166,8 @@ model Article {
   aiTags          String[]
   sourceRssId     String?
   sourceRss       RssFeed?      @relation(fields: [sourceRssId], references: [id])
+  sourceGuid      String?       // Source RSS GUID for duplicate check
+  rssItem         RssItem?      @relation("ArticleRssItem")
   
   // SEO
   metaTitle       String?
@@ -213,6 +215,7 @@ model Article {
   @@index([detectedLanguage])
   @@index([editorId])
   @@index([submittedAt])
+  @@index([sourceGuid])
 }
 
 model ArticleTranslation {
@@ -449,6 +452,10 @@ model RssFeed {
   // Relations
   articles        Article[]
   scanLogs        RssScanLog[]
+  rssItems        RssItem[]        // RSS item cache
+  
+  // Incremental scanning
+  lastItemDate    DateTime?
   
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
@@ -754,4 +761,71 @@ model UserSettings {
   updatedAt             DateTime @updatedAt
   
   @@index([userId])
+}
+
+// ============================================
+// RSS AUTOMATION & CLEANUP
+// ============================================
+
+model RssItem {
+  id          String   @id @default(cuid())
+  rssFeedId   String
+  rssFeed     RssFeed  @relation(fields: [rssFeedId], references: [id], onDelete: Cascade)
+  
+  // Unique identifier
+  guid        String   // RSS item GUID
+  urlHash     String   @unique // URL hash for duplicate check
+  
+  // Content
+  title       String
+  link        String
+  description String?  @db.Text
+  pubDate     DateTime
+  
+  // Processing status
+  processed   Boolean  @default(false)
+  articleId   String?  @unique
+  article     Article? @relation("ArticleRssItem", fields: [articleId], references: [id])
+  
+  // Metadata
+  createdAt   DateTime @default(now())
+  processedAt DateTime?
+  
+  @@index([rssFeedId])
+  @@index([urlHash])
+  @@index([processed])
+  @@index([pubDate])
+  @@index([rssFeedId, pubDate])
+  @@unique([rssFeedId, guid])
+}
+
+model CleanupLog {
+  id              String      @id @default(cuid())
+  
+  type            CleanupType
+  status          String      // SUCCESS, FAILED, PARTIAL
+  
+  // Stats
+  itemsDeleted    Int         @default(0)
+  itemsKept       Int         @default(0)
+  
+  // Details
+  details         Json?
+  error           String?     @db.Text
+  
+  // Timing
+  duration        Int         // milliseconds
+  createdAt       DateTime    @default(now())
+  
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum CleanupType {
+  RSS_SCAN_LOGS
+  RSS_ITEMS
+  DRAFT_ARTICLES
+  ORPHANED_DATA
+  DATABASE_OPTIMIZE
 }
