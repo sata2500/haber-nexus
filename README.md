@@ -22,18 +22,18 @@ This project was initiated by **Salih TANRISEVEN** and is being developed in col
 
 ## 🚀 Technology Stack
 
-| Category          | Technology                                      | Description                                                 |
-| :---------------- | :---------------------------------------------- | :---------------------------------------------------------- |
-| **Framework**     | [Next.js](https://nextjs.org/) 16 (App Router)  | High performance and SEO with SSR, SSG, and ISR.            |
-| **Styling**       | [Tailwind CSS](https://tailwindcss.com/) v4     | Utility-first CSS for rapid and consistent design.          |
-| **UI Components** | [Shadcn/ui](https://ui.shadcn.com/)             | Accessible and customizable UI components.                  |
-| **Database**      | [PostgreSQL](https://www.postgresql.org/) (Neon)| Scalable and reliable relational database.                  |
-| **ORM**           | [Prisma](https://www.prisma.io/)                | Type-safe database operations and migration management.     |
-| **Authentication**| [NextAuth.js](https://next-auth.js.org/) (Auth.js)| Email/password and social (Google) login support.           |
-| **AI Provider**   | [Google Gemini API](https://ai.google.dev/)     | Text generation, analysis, and web research.                |
-| **Form Management**| [React Hook Form](https://react-hook-form.com/) | Performant and flexible form management.                    |
-| **Schema Validation**| [Zod](https://zod.dev/)                        | Type-safe schema validation.                                |
-| **Deployment**    | [Vercel](https://vercel.com/)                   | Optimized hosting and CI/CD for Next.js.                    |
+| Category              | Technology                                         | Description                                             |
+| :-------------------- | :------------------------------------------------- | :------------------------------------------------------ |
+| **Framework**         | [Next.js](https://nextjs.org/) 16 (App Router)     | High performance and SEO with SSR, SSG, and ISR.        |
+| **Styling**           | [Tailwind CSS](https://tailwindcss.com/) v4        | Utility-first CSS for rapid and consistent design.      |
+| **UI Components**     | [Shadcn/ui](https://ui.shadcn.com/)                | Accessible and customizable UI components.              |
+| **Database**          | [PostgreSQL](https://www.postgresql.org/) (Neon)   | Scalable and reliable relational database.              |
+| **ORM**               | [Prisma](https://www.prisma.io/)                   | Type-safe database operations and migration management. |
+| **Authentication**    | [NextAuth.js](https://next-auth.js.org/) (Auth.js) | Email/password and social (Google) login support.       |
+| **AI Provider**       | [Google Gemini API](https://ai.google.dev/)        | Text generation, analysis, and web research.            |
+| **Form Management**   | [React Hook Form](https://react-hook-form.com/)    | Performant and flexible form management.                |
+| **Schema Validation** | [Zod](https://zod.dev/)                            | Type-safe schema validation.                            |
+| **Deployment**        | [Vercel](https://vercel.com/)                      | Optimized hosting and CI/CD for Next.js.                |
 
 ---
 
@@ -113,6 +113,21 @@ Follow these steps to run the project on your local machine:
   - SEO and performance optimizations (Sitemap, ISR, Image Optimization).
   - Newsletter and email notifications.
   - Multi-language support (i18n).
+
+---
+
+## 📚 Documentation
+
+Comprehensive documentation is available in the `docs/` folder:
+
+- **[Developer Guide](docs/guides/DEVELOPER_GUIDE.md)** - Development processes and best practices
+- **[AI Features Guide](docs/guides/AI_FEATURES_GUIDE.md)** - AI features usage guide
+- **[Deployment Instructions](docs/deployment/DEPLOYMENT_INSTRUCTIONS.md)** - Step-by-step deployment guide
+- **[Development Roadmap](docs/plans/DEVELOPMENT_ROADMAP.md)** - Project roadmap
+- **[Reports](docs/reports/)** - Development and improvement reports
+- **[Analysis](docs/analysis/)** - Project analysis documents
+
+For a complete overview of all documentation, see [docs/README.md](docs/README.md).
 
 ---
 
