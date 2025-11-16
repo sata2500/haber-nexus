@@ -30,7 +30,7 @@ export async function generateText(prompt: string, options?: {
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
       const model = genAI.getGenerativeModel({ 
-        model: "gemini-2.5-flash",
+        model: "gemini-2.5-pro",  // Using Gemini 2.5 Pro (Free Tier)
         generationConfig: {
           temperature: options?.temperature ?? modelConfig.temperature,
           topP: modelConfig.topP,

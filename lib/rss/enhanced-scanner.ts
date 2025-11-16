@@ -1,7 +1,10 @@
 import { prisma } from "@/lib/prisma"
 import { parseRssFeed } from "./parser"
-import { processRssItem, createSlug } from "../ai/processor"
+import { createSlug } from "../ai/processor"
+import { enhancedProcessRssItem } from "../ai/enhanced-processor"
 import { getAuthorForRssFeed } from "./auto-author-assignment"
+import { checkDuplicate, addHashFields } from "../services/duplicate-checker"
+import { filterByQuality, getQualityFilterConfig } from "../services/quality-filter"
 import crypto from "crypto"
 
 export interface EnhancedScanResult {
@@ -10,6 +13,7 @@ export interface EnhancedScanResult {
   itemsFound: number
   itemsNew: number
   itemsDuplicate: number
+  itemsFiltered: number
   itemsProcessed: number
   itemsPublished: number
   errors: string[]
@@ -37,6 +41,7 @@ export async function enhancedScanRssFeed(
   let itemsFound = 0
   let itemsNew = 0
   let itemsDuplicate = 0
+  let itemsFiltered = 0
   let itemsProcessed = 0
   let itemsPublished = 0
 
@@ -90,6 +95,18 @@ export async function enhancedScanRssFeed(
         `[Enhanced Scanner] Incremental scan: ${itemsToProcess.length} new items since ${feed.lastItemDate}`
       )
     }
+
+    // Quality filtering: Select high-quality items
+    const qualityConfig = getQualityFilterConfig()
+    const qualityFiltered = filterByQuality(itemsToProcess, qualityConfig)
+    const itemsFiltered = itemsToProcess.length - qualityFiltered.length
+    
+    console.error(
+      `[Enhanced Scanner] Quality filter: ${qualityFiltered.length} items passed (${itemsFiltered} filtered out)`
+    )
+    
+    // Use quality-filtered items
+    itemsToProcess = qualityFiltered.map((r) => r.item)
 
     // Get existing URL hashes to detect duplicates
     const existingHashes = await prisma.rssItem.findMany({
@@ -166,10 +183,12 @@ export async function enhancedScanRssFeed(
         })
 
         const processed = await Promise.race([
-          processRssItem(item, {
+          enhancedProcessRssItem(item, {
             rewriteStyle: "news",
             minQualityScore: feed.minQualityScore,
             generateNewContent: true,
+            enableVisionEnhancement: true,
+            enableContentEnrichment: true,
           }),
           timeoutPromise,
         ])
@@ -202,17 +221,47 @@ export async function enhancedScanRssFeed(
           throw new Error("No suitable author found for article creation")
         }
 
+        // Check for duplicate articles before creating
+        const duplicateCheck = await checkDuplicate(processed.title, processed.content, {
+          rssGuid: guid,
+          rssFeedId: feedId,
+        })
+
+        if (duplicateCheck.isDuplicate) {
+          console.error(
+            `[Enhanced Scanner] Duplicate article detected: "${processed.title}" (${duplicateCheck.reason})`
+          )
+          itemsDuplicate++
+          
+          // Mark RssItem as processed but don't create article
+          await prisma.rssItem.update({
+            where: { id: rssItem.id },
+            data: {
+              processed: true,
+              processedAt: new Date(),
+              articleId: duplicateCheck.existingArticle?.id,
+            },
+          })
+          
+          continue
+        }
+
         // Determine status based on autoPublish setting
         const status = feed.autoPublish ? "PUBLISHED" : "DRAFT"
+
+        // Add hash fields for duplicate detection
+        const articleData = addHashFields({
+          slug: processed.slug,
+          title: processed.title,
+          content: processed.content,
+        })
 
         // Create article
         const article = await prisma.article.create({
           data: {
-            slug: processed.slug,
-            title: processed.title,
+            ...articleData,
             excerpt: processed.excerpt,
-            content: processed.content,
-            coverImage: null,
+            coverImage: processed.coverImage,
 
             type: "NEWS",
             status,
@@ -323,6 +372,7 @@ export async function enhancedScanRssFeed(
       itemsFound,
       itemsNew,
       itemsDuplicate,
+      itemsFiltered,
       itemsProcessed,
       itemsPublished,
       errors,
@@ -367,6 +417,7 @@ export async function enhancedScanRssFeed(
       itemsFound,
       itemsNew,
       itemsDuplicate,
+      itemsFiltered,
       itemsProcessed,
       itemsPublished,
       errors: [errorMsg],
@@ -416,6 +467,7 @@ export async function scanAllFeedsEnhanced(): Promise<EnhancedScanResult[]> {
           itemsFound: 0,
           itemsNew: 0,
           itemsDuplicate: 0,
+          itemsFiltered: 0,
           itemsProcessed: 0,
           itemsPublished: 0,
           errors: [result.reason instanceof Error ? result.reason.message : "Unknown error"],

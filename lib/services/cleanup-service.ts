@@ -116,9 +116,10 @@ export async function cleanupRssScanLogs(retentionDays: number = 30): Promise<Cl
 
 /**
  * Clean up old RSS items cache
- * @param retentionDays Number of days to keep (default: 7)
+ * Note: This only deletes RSS cache, not articles
+ * @param retentionDays Number of days to keep (default: 30, increased from 7)
  */
-export async function cleanupRssItems(retentionDays: number = 7): Promise<CleanupResult> {
+export async function cleanupRssItems(retentionDays: number = 30): Promise<CleanupResult> {
   const startTime = Date.now()
   console.error(`[Cleanup Service] Starting RSS items cleanup (retention: ${retentionDays} days)`)
 
@@ -212,9 +213,10 @@ export async function cleanupRssItems(retentionDays: number = 7): Promise<Cleanu
 
 /**
  * Clean up old unpublished draft articles
- * @param retentionDays Number of days to keep (default: 90)
+ * IMPORTANT: This function ONLY deletes DRAFT articles, never PUBLISHED articles
+ * @param retentionDays Number of days to keep (default: 180, increased from 90)
  */
-export async function cleanupDraftArticles(retentionDays: number = 90): Promise<CleanupResult> {
+export async function cleanupDraftArticles(retentionDays: number = 180): Promise<CleanupResult> {
   const startTime = Date.now()
   console.error(
     `[Cleanup Service] Starting draft articles cleanup (retention: ${retentionDays} days)`
@@ -404,10 +406,10 @@ export async function runAllCleanupTasks(): Promise<CleanupResult[]> {
   const results: CleanupResult[] = []
 
   // Run cleanup tasks sequentially to avoid database overload
-  results.push(await cleanupRssScanLogs(30))
-  results.push(await cleanupRssItems(7))
-  results.push(await cleanupDraftArticles(90))
-  results.push(await cleanupOrphanedData())
+  results.push(await cleanupRssScanLogs(30))  // RSS scan logs: 30 days
+  results.push(await cleanupRssItems(30))     // RSS items cache: 30 days (increased from 7)
+  results.push(await cleanupDraftArticles(180)) // Draft articles: 180 days (increased from 90)
+  results.push(await cleanupOrphanedData())   // Orphaned data: 1 day
 
   const totalDeleted = results.reduce((sum, r) => sum + r.itemsDeleted, 0)
   const totalDuration = results.reduce((sum, r) => sum + r.duration, 0)

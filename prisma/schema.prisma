@@ -169,6 +169,10 @@ model Article {
   sourceGuid      String?       // Source RSS GUID for duplicate check
   rssItem         RssItem?      @relation("ArticleRssItem")
   
+  // Duplicate Detection
+  titleHash       String?       // SHA-256 hash of normalized title
+  contentHash     String?       // SHA-256 hash of normalized content
+  
   // SEO
   metaTitle       String?
   metaDescription String?       @db.Text
@@ -215,7 +219,9 @@ model Article {
   @@index([detectedLanguage])
   @@index([editorId])
   @@index([submittedAt])
-  @@index([sourceGuid])
+  @@index([titleHash])
+  @@index([contentHash])
+  @@index([sourceRssId, sourceGuid])
 }
 
 model ArticleTranslation {

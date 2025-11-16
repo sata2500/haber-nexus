@@ -1,0 +1,3 @@
+
+# Test scripts (console.log allowed)
+scripts/test-*.ts
