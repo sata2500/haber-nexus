@@ -1,11 +1,10 @@
-import { eq } from "drizzle-orm";
+import { eq, desc, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, authors, categories, posts, InsertPost, Post, Author, Category } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
-// Lazily create the drizzle instance so local tooling can run without a DB.
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
@@ -89,4 +88,113 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Authors
+export async function getAllAuthors(): Promise<Author[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const result = await db.select().from(authors);
+  return result;
+}
+
+export async function getAuthorBySlug(slug: string): Promise<Author | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(authors).where(eq(authors.slug, slug)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+// Categories
+export async function getAllCategories(): Promise<Category[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const result = await db.select().from(categories);
+  return result;
+}
+
+export async function getCategoryBySlug(slug: string): Promise<Category | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(categories).where(eq(categories.slug, slug)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+// Posts
+export async function getAllPosts(limit = 20): Promise<Post[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const result = await db
+    .select()
+    .from(posts)
+    .where(eq(posts.published, true))
+    .orderBy(desc(posts.publishedAt))
+    .limit(limit);
+  
+  return result;
+}
+
+export async function getPostBySlug(slug: string): Promise<Post | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(posts).where(eq(posts.slug, slug)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getPostsByCategory(categoryId: number, limit = 20): Promise<Post[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const result = await db
+    .select()
+    .from(posts)
+    .where(and(eq(posts.categoryId, categoryId), eq(posts.published, true)))
+    .orderBy(desc(posts.publishedAt))
+    .limit(limit);
+  
+  return result;
+}
+
+export async function getPostsByAuthor(authorId: number, limit = 20): Promise<Post[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const result = await db
+    .select()
+    .from(posts)
+    .where(and(eq(posts.authorId, authorId), eq(posts.published, true)))
+    .orderBy(desc(posts.publishedAt))
+    .limit(limit);
+  
+  return result;
+}
+
+export async function createPost(post: InsertPost): Promise<Post> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(posts).values(post);
+  const insertedId = Number(result[0].insertId);
+  
+  const newPost = await db.select().from(posts).where(eq(posts.id, insertedId)).limit(1);
+  if (newPost.length === 0) throw new Error("Failed to retrieve created post");
+  
+  return newPost[0];
+}
+
+export async function incrementPostViewCount(postId: number): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  const post = await db.select().from(posts).where(eq(posts.id, postId)).limit(1);
+  if (post.length === 0) return;
+  
+  await db
+    .update(posts)
+    .set({ viewCount: (post[0].viewCount || 0) + 1 })
+    .where(eq(posts.id, postId));
+}

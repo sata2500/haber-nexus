@@ -1,42 +1,30 @@
+import { useRoute, Link } from "wouter";
 import { trpc } from "@/lib/trpc";
-import { Link } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Clock, Eye } from "lucide-react";
+import { Clock, Eye, ArrowLeft } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { tr } from "date-fns/locale";
+import { Button } from "@/components/ui/button";
 
-function PostCard({ post, featured = false }: { post: any; featured?: boolean }) {
+function PostCard({ post }: { post: any }) {
   const { data: author } = trpc.authors.getAll.useQuery(undefined, {
     select: (authors) => authors.find((a) => a.id === post.authorId),
-  });
-
-  const { data: category } = trpc.categories.getAll.useQuery(undefined, {
-    select: (categories) => categories.find((c) => c.id === post.categoryId),
   });
 
   return (
     <Link href={`/haber/${post.slug}`}>
       <a>
         <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
-          <div className={`relative ${featured ? "h-96" : "h-48"}`}>
+          <div className="relative h-48">
             <img
               src={post.featuredImageUrl || "https://placehold.co/1200x675/e2e8f0/64748b?text=HaberNexus"}
               alt={post.title}
               className="w-full h-full object-cover"
             />
-            {category && (
-              <div className="absolute top-4 left-4">
-                <span className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-semibold">
-                  {category.name}
-                </span>
-              </div>
-            )}
           </div>
           <CardContent className="p-6">
-            <h3 className={`font-bold mb-2 line-clamp-2 ${featured ? "text-2xl" : "text-lg"}`}>
-              {post.title}
-            </h3>
+            <h3 className="font-bold text-lg mb-2 line-clamp-2">{post.title}</h3>
             {post.excerpt && (
               <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
                 {post.excerpt}
@@ -78,12 +66,12 @@ function PostCard({ post, featured = false }: { post: any; featured?: boolean })
   );
 }
 
-function LoadingSkeleton({ featured = false }: { featured?: boolean }) {
+function LoadingSkeleton() {
   return (
     <Card className="overflow-hidden h-full">
-      <Skeleton className={`w-full ${featured ? "h-96" : "h-48"}`} />
+      <Skeleton className="w-full h-48" />
       <CardContent className="p-6">
-        <Skeleton className={`${featured ? "h-8" : "h-6"} w-3/4 mb-2`} />
+        <Skeleton className="h-6 w-3/4 mb-2" />
         <Skeleton className="h-4 w-full mb-4" />
         <div className="flex items-center justify-between">
           <Skeleton className="h-4 w-32" />
@@ -94,37 +82,80 @@ function LoadingSkeleton({ featured = false }: { featured?: boolean }) {
   );
 }
 
-export default function Home() {
-  const { data: posts, isLoading } = trpc.posts.getAll.useQuery({ limit: 13 });
+export default function CategoryPage() {
+  const [, params] = useRoute("/kategori/:slug");
+  const slug = params?.slug || "";
 
-  const featuredPost = posts?.[0];
-  const regularPosts = posts?.slice(1) || [];
+  const { data: category, isLoading: categoryLoading } = trpc.categories.getBySlug.useQuery({ slug });
+  const { data: posts, isLoading: postsLoading } = trpc.posts.getByCategory.useQuery(
+    { categoryId: category?.id || 0, limit: 20 },
+    { enabled: !!category }
+  );
+
+  if (categoryLoading) {
+    return (
+      <div className="container py-8">
+        <Skeleton className="h-12 w-64 mb-8" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <LoadingSkeleton key={i} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (!category) {
+    return (
+      <div className="container py-16 text-center">
+        <h1 className="text-3xl font-bold mb-4">Kategori Bulunamadı</h1>
+        <p className="text-muted-foreground mb-8">
+          Aradığınız kategori bulunamadı.
+        </p>
+        <Link href="/">
+          <a>
+            <Button>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Ana Sayfaya Dön
+            </Button>
+          </a>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="container py-8">
-      {/* Hero Section - Featured Post */}
-      <section className="mb-12">
-        <h2 className="text-3xl font-bold mb-6">Öne Çıkan Haber</h2>
-        {isLoading ? (
-          <LoadingSkeleton featured />
-        ) : featuredPost ? (
-          <PostCard post={featuredPost} featured />
-        ) : (
-          <div className="text-center py-12 text-muted-foreground">
-            Henüz haber bulunmamaktadır.
-          </div>
-        )}
-      </section>
+      {/* Back Button */}
+      <Link href="/">
+        <a>
+          <Button variant="ghost" className="mb-6">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Geri
+          </Button>
+        </a>
+      </Link>
 
-      {/* Latest News Grid */}
-      <section>
-        <h2 className="text-3xl font-bold mb-6">Son Haberler</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {isLoading
-            ? Array.from({ length: 6 }).map((_, i) => <LoadingSkeleton key={i} />)
-            : regularPosts.map((post) => <PostCard key={post.id} post={post} />)}
-        </div>
-      </section>
+      {/* Category Header */}
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold mb-2">{category.name}</h1>
+        {category.description && (
+          <p className="text-muted-foreground text-lg">{category.description}</p>
+        )}
+      </div>
+
+      {/* Posts Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {postsLoading
+          ? Array.from({ length: 6 }).map((_, i) => <LoadingSkeleton key={i} />)
+          : posts && posts.length > 0
+          ? posts.map((post) => <PostCard key={post.id} post={post} />)
+          : (
+            <div className="col-span-full text-center py-12 text-muted-foreground">
+              Bu kategoride henüz haber bulunmamaktadır.
+            </div>
+          )}
+      </div>
     </div>
   );
 }

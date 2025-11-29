@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: habernexus-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: habernexus
+      POSTGRES_USER: habernexus
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-habernexus_secure_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - habernexus-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U habernexus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Next.js Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: habernexus-app
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: mysql://${DB_USER:-habernexus}:${DB_PASSWORD:-habernexus_secure_password}@db:3306/${DB_NAME:-habernexus}
+      JWT_SECRET: ${JWT_SECRET:-your-jwt-secret-change-in-production}
+      VITE_APP_TITLE: HaberNexus
+      VITE_APP_LOGO: /logo.png
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - habernexus-network
+    volumes:
+      - ./uploads:/app/uploads
+
+  # Worker Service (AI Content Generator)
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: habernexus-worker
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: mysql://${DB_USER:-habernexus}:${DB_PASSWORD:-habernexus_secure_password}@db:3306/${DB_NAME:-habernexus}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - habernexus-network
+    volumes:
+      - ./uploads:/app/uploads
+
+networks:
+  habernexus-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

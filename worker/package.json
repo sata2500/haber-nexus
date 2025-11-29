@@ -1,0 +1,20 @@
+{
+  "name": "habernexus-worker",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AI-powered content generation worker for HaberNexus",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.44.5",
+    "mysql2": "^3.15.0",
+    "rss-parser": "^3.13.0",
+    "sharp": "^0.33.5"
+  }
+}
