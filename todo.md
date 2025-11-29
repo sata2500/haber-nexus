@@ -29,7 +29,7 @@
 - [x] Production-ready setup
 
 ## GitHub Integration
-- [ ] GitHub repository oluştur
-- [ ] Kodları push et
-- [ ] README.md hazırla
-- [ ] .gitignore yapılandır
+- [x] GitHub repository oluştur
+- [x] Kodları push et
+- [x] README.md hazırla
+- [x] .gitignore yapılandır
