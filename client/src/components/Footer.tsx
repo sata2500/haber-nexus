@@ -22,24 +22,18 @@ export default function Footer() {
             <h3 className="font-semibold mb-4">Hızlı Bağlantılar</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/">
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    Ana Sayfa
-                  </a>
+                <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">
+                  Ana Sayfa
                 </Link>
               </li>
               <li>
-                <Link href="/hakkimizda">
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    Hakkımızda
-                  </a>
+                <Link href="/hakkimizda" className="text-muted-foreground hover:text-primary transition-colors">
+                  Hakkımızda
                 </Link>
               </li>
               <li>
-                <Link href="/iletisim">
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    İletişim
-                  </a>
+                <Link href="/iletisim" className="text-muted-foreground hover:text-primary transition-colors">
+                  İletişim
                 </Link>
               </li>
             </ul>
@@ -50,17 +44,13 @@ export default function Footer() {
             <h3 className="font-semibold mb-4">Yasal</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/gizlilik">
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    Gizlilik Politikası
-                  </a>
+                <Link href="/gizlilik" className="text-muted-foreground hover:text-primary transition-colors">
+                  Gizlilik Politikası
                 </Link>
               </li>
               <li>
-                <Link href="/kullanim-kosullari">
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    Kullanım Koşulları
-                  </a>
+                <Link href="/kullanim-kosullari" className="text-muted-foreground hover:text-primary transition-colors">
+                  Kullanım Koşulları
                 </Link>
               </li>
             </ul>

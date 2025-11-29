@@ -36,12 +36,10 @@ export default function PostDetail() {
           Aradığınız haber bulunamadı veya kaldırılmış olabilir.
         </p>
         <Link href="/">
-          <a>
-            <Button>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Ana Sayfaya Dön
-            </Button>
-          </a>
+          <Button>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Ana Sayfaya Dön
+          </Button>
         </Link>
       </div>
     );
@@ -51,23 +49,19 @@ export default function PostDetail() {
     <article className="container py-8">
       {/* Back Button */}
       <Link href="/">
-        <a>
-          <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Geri
-          </Button>
-        </a>
+        <Button variant="ghost" className="mb-6">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Geri
+        </Button>
       </Link>
 
       {/* Category Badge */}
       {post.category && (
         <div className="mb-4">
           <Link href={`/kategori/${post.category.slug}`}>
-            <a>
-              <span className="bg-primary text-primary-foreground px-4 py-1.5 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity">
-                {post.category.name}
-              </span>
-            </a>
+            <span className="bg-primary text-primary-foreground px-4 py-1.5 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity cursor-pointer inline-block">
+              {post.category.name}
+            </span>
           </Link>
         </div>
       )}

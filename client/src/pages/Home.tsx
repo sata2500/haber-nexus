@@ -17,8 +17,7 @@ function PostCard({ post, featured = false }: { post: any; featured?: boolean })
 
   return (
     <Link href={`/haber/${post.slug}`}>
-      <a>
-        <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
+      <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full cursor-pointer">
           <div className={`relative ${featured ? "h-96" : "h-48"}`}>
             <img
               src={post.featuredImageUrl || "https://placehold.co/1200x675/e2e8f0/64748b?text=HaberNexus"}
@@ -73,7 +72,6 @@ function PostCard({ post, featured = false }: { post: any; featured?: boolean })
             </div>
           </CardContent>
         </Card>
-      </a>
     </Link>
   );
 }

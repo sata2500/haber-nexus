@@ -33,3 +33,6 @@
 - [x] Kodları push et
 - [x] README.md hazırla
 - [x] .gitignore yapılandır
+
+## Bug Fixes
+- [x] Fix nested anchor tag error in Navbar and Home components

@@ -14,8 +14,7 @@ function PostCard({ post }: { post: any }) {
 
   return (
     <Link href={`/haber/${post.slug}`}>
-      <a>
-        <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
+      <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full cursor-pointer">
           <div className="relative h-48">
             <img
               src={post.featuredImageUrl || "https://placehold.co/1200x675/e2e8f0/64748b?text=HaberNexus"}
@@ -61,7 +60,6 @@ function PostCard({ post }: { post: any }) {
             </div>
           </CardContent>
         </Card>
-      </a>
     </Link>
   );
 }
@@ -113,12 +111,10 @@ export default function CategoryPage() {
           Aradığınız kategori bulunamadı.
         </p>
         <Link href="/">
-          <a>
-            <Button>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Ana Sayfaya Dön
-            </Button>
-          </a>
+          <Button>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Ana Sayfaya Dön
+          </Button>
         </Link>
       </div>
     );
@@ -128,12 +124,10 @@ export default function CategoryPage() {
     <div className="container py-8">
       {/* Back Button */}
       <Link href="/">
-        <a>
-          <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Geri
-          </Button>
-        </a>
+        <Button variant="ghost" className="mb-6">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Geri
+        </Button>
       </Link>
 
       {/* Category Header */}
